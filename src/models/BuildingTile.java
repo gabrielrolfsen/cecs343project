@@ -1,11 +1,12 @@
+package models;
 
-public class Building_tile {
+public class BuildingTile {
 
 	private int type;
 
-	public Building_tile(int aType) {
+	public BuildingTile(final int aType) {
 
-		if (aType >= 1 && aType <= 14) // 14 types of building tiles
+		if (aType > 0 && aType < 15) // 14 types of building tiles
 		{
 			this.type = aType;
 		} else {
