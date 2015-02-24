@@ -1,67 +1,46 @@
+package models;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import utils.Constants;
+
 public class Image extends JFrame {
 
 	public Image() {
 
-		String input = JOptionPane
+		final String input = JOptionPane
 				.showInputDialog("Please choose your board: Greek, Norse or Egyptian:");
 		if (input.equalsIgnoreCase("Greek")) {
-			initGreek();
+			init(Constants.TYPE_GREEK, "Greek Board");
 		}
 
 		if (input.equalsIgnoreCase("Norse")) {
-			initNorse();
+			init(Constants.TYPE_NORSE, "Norse Board");
 		}
 
 		if (input.equalsIgnoreCase("Egyptian")) {
-			initEgypt();
+			init(Constants.TYPE_EGYPTIAN, "Egyptian Board");
 		}
 	}
 
-	public void initGreek() {
-
-		add(new GreekBoard());
-
+	public void init(final int Type, final String Title) {
+		add(new Board(Type));
 		pack();
-
-		setTitle("Greek Board");
+		setTitle(Title);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
+
 	}
 
-	public void initNorse() {
-
-		add(new NorseBoard());
-
-		pack();
-
-		setTitle("Norse Board");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-	}
-
-	public void initEgypt() {
-
-		add(new EgyptBoard());
-
-		pack();
-
-		setTitle("Egypt Board");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-	}
-
-	public static void main(String[] args) {
-	
+	public static void main(final String[] args) {
 
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				Image board = new Image();
+				final Image board = new Image();
 				board.setVisible(true);
 			}
 		});

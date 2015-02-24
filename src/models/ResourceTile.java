@@ -1,11 +1,20 @@
 package models;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
+import utils.Constants;
+
 public class ResourceTile {
 
 	private int type;
 	private int resource;
+	private final Icon icon;
 
-	public ResourceTile(final int aTerrain, final int aResource) {
+	public ResourceTile(final int aTerrain, final int aResource,
+			final String iconPath) {
+		this.icon = new ImageIcon(iconPath);
+
 		if (aTerrain < 0 && aTerrain > 5) // 6 terrain types
 		{
 			System.err.println(aTerrain
@@ -14,12 +23,37 @@ public class ResourceTile {
 			this.type = aTerrain;
 		}
 
-		if (aResource >= 1 && aResource <= 7) {
-			this.resource = aResource;
+		if (aResource < 0 && aResource > 7) {
+
+			System.err.println(aResource
+					+ " is not a valid code for resource type.");
 
 		} else {
-			System.err.println(aResource + " is not a valid resource type.");
+			this.resource = aResource;
 		}
+
+		setIcon();
+	}
+
+	private void setIcon() {
+		switch (type) {
+		case Constants.TYPE_DESERT:
+			break;
+		case Constants.TYPE_FOREST:
+			break;
+		case Constants.TYPE_FERTILE:
+			break;
+		case Constants.TYPE_HILLS:
+			break;
+		case Constants.TYPE_MOUNTAINS:
+			break;
+		case Constants.TYPE_SWAMP:
+			break;
+		}
+	}
+
+	public Icon getIcon() {
+		return this.icon;
 	}
 
 	public int getType() {

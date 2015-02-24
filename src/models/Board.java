@@ -7,7 +7,13 @@
  */
 package models;
 
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.util.ArrayList;
+
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 import utils.Constants;
 
@@ -15,11 +21,14 @@ import utils.Constants;
  * @author grolfsen
  *
  */
-public class Board {
+public class Board extends JPanel {
 
 	private final String owner = "N/A";
 	private int type = -1;
 	private int buildingsCounter = 0;
+
+	private Image BackgroundImage = null;
+	private ImageIcon icon = null;
 
 	private final ArrayList<Tile> productionArea = new ArrayList<Tile>();
 	private final ArrayList<Tile> cityArea = new ArrayList<Tile>();
@@ -41,6 +50,16 @@ public class Board {
 					+ " is not a valid code for board type.");
 			System.exit(1);
 		}
+		BackgroundImage = icon.getImage();
+		final int w = BackgroundImage.getWidth(this);
+		final int h = BackgroundImage.getHeight(this);
+
+		setPreferredSize(new Dimension(w, h));
+	}
+
+	@Override
+	public void paintComponent(final Graphics g) {
+		g.drawImage(BackgroundImage, 0, 0, null);
 	}
 
 	/**
@@ -104,6 +123,7 @@ public class Board {
 		productionArea.add(new Tile(Constants.TYPE_MOUNTAINS, 1, 3));
 		productionArea.add(new Tile(Constants.TYPE_MOUNTAINS, 2, 3));
 		productionArea.add(new Tile(Constants.TYPE_MOUNTAINS, 3, 3));
+		icon = new ImageIcon("/res/board_norse.png");
 	}
 
 	/**
@@ -127,6 +147,7 @@ public class Board {
 		productionArea.add(new Tile(Constants.TYPE_DESERT, 1, 3));
 		productionArea.add(new Tile(Constants.TYPE_SWAMP, 2, 3));
 		productionArea.add(new Tile(Constants.TYPE_SWAMP, 3, 3));
+		icon = new ImageIcon("res/board_egypt.png");
 	}
 
 	/**
@@ -150,6 +171,7 @@ public class Board {
 		productionArea.add(new Tile(Constants.TYPE_FERTILE, 1, 3));
 		productionArea.add(new Tile(Constants.TYPE_FOREST, 2, 3));
 		productionArea.add(new Tile(Constants.TYPE_SWAMP, 3, 3));
+		icon = new ImageIcon("res/board_greek.png");
 	}
 
 	/**
