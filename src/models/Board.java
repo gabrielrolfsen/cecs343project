@@ -20,13 +20,9 @@ public class Board {
 	private final String owner = "N/A";
 	private int type = -1;
 	private int buildingsCounter = 0;
-	// TODO: Change Type "Object" to correct type
-	private final Tile[] desertTiles = new Tile[10];
+
 	private final ArrayList<Tile> productionArea = new ArrayList<Tile>();
 	private final ArrayList<Tile> cityArea = new ArrayList<Tile>();
-
-	// private final Object[][] productionArea = new Object[3][3];
-	// private final Object[][] cityArea = new BuildingTile[3][3];
 
 	public Board(final int type) {
 		this.type = type;
@@ -110,78 +106,60 @@ public class Board {
 		productionArea.add(new Tile(Constants.TYPE_MOUNTAINS, 3, 3));
 	}
 
-	// TODO: implement this method - DO NOT remove the commented code
-	public boolean createEgyptBoard() {
-		// addDesertTile(0, 0);
-		// addHillsTile(1, 0);
-		// addFertileTile(2, 0);
-		// addHillsTile(3, 0);
-		// addDesertTile(0, 1);
-		// addDesertTile(1, 1);
-		// addFertileTile(2, 1);
-		// addFertileTile(3, 1);
-		// addForestTile(0, 2);
-		// addDesertTile(1, 2);
-		// addFertileTile(2, 2);
-		// addFertileTile(3, 2);
-		// addDesertTile(0, 3);
-		// addDesertTile(1, 3);
-		// addSwampTile(2, 3);
-		// addSwampTile(3, 3);
-		return false;
+	/**
+	 * Fills the production area of the Board with the Egypt Board configuration
+	 * of tiles.
+	 */
+	public void createEgyptBoard() {
+		productionArea.add(new Tile(Constants.TYPE_DESERT, 0, 0));
+		productionArea.add(new Tile(Constants.TYPE_HILLS, 1, 0));
+		productionArea.add(new Tile(Constants.TYPE_FERTILE, 2, 0));
+		productionArea.add(new Tile(Constants.TYPE_HILLS, 3, 0));
+		productionArea.add(new Tile(Constants.TYPE_DESERT, 0, 1));
+		productionArea.add(new Tile(Constants.TYPE_DESERT, 1, 1));
+		productionArea.add(new Tile(Constants.TYPE_FERTILE, 2, 1));
+		productionArea.add(new Tile(Constants.TYPE_FERTILE, 3, 1));
+		productionArea.add(new Tile(Constants.TYPE_FOREST, 0, 2));
+		productionArea.add(new Tile(Constants.TYPE_DESERT, 1, 2));
+		productionArea.add(new Tile(Constants.TYPE_FERTILE, 2, 2));
+		productionArea.add(new Tile(Constants.TYPE_FERTILE, 3, 2));
+		productionArea.add(new Tile(Constants.TYPE_DESERT, 0, 3));
+		productionArea.add(new Tile(Constants.TYPE_DESERT, 1, 3));
+		productionArea.add(new Tile(Constants.TYPE_SWAMP, 2, 3));
+		productionArea.add(new Tile(Constants.TYPE_SWAMP, 3, 3));
 	}
 
-	// TODO: implement this method - DO NOT remove the commented code
-	public boolean createGreekBoard() {
-		// addDesertTile(0, 0);
-		// addHillsTile(1, 0);
-		// addHillsTile(2, 0);
-		// addHillsTile(3, 0);
-		// addHillsTile(0, 1);
-		// addHillsTile(1, 1);
-		// addHillsTile(2, 1);
-		// addHillsTile(3, 1);
-		// addHillsTile(0, 2);
-		// addMountainsTile(1, 2);
-		// addFertileTile(2, 2);
-		// addForestTile(3, 2);
-		// addFertileTile(0, 3);
-		// addFertileTile(1, 3);
-		// addForestTile(2, 3);
-		// addSwampTile(3, 3);
-		return false;
+	/**
+	 * Fills the production area of the Board with the Greek Board configuration
+	 * of tiles.
+	 */
+	public void createGreekBoard() {
+		productionArea.add(new Tile(Constants.TYPE_DESERT, 0, 0));
+		productionArea.add(new Tile(Constants.TYPE_HILLS, 1, 0));
+		productionArea.add(new Tile(Constants.TYPE_HILLS, 2, 0));
+		productionArea.add(new Tile(Constants.TYPE_HILLS, 3, 0));
+		productionArea.add(new Tile(Constants.TYPE_HILLS, 0, 1));
+		productionArea.add(new Tile(Constants.TYPE_HILLS, 1, 1));
+		productionArea.add(new Tile(Constants.TYPE_HILLS, 2, 1));
+		productionArea.add(new Tile(Constants.TYPE_HILLS, 3, 1));
+		productionArea.add(new Tile(Constants.TYPE_HILLS, 0, 2));
+		productionArea.add(new Tile(Constants.TYPE_MOUNTAINS, 1, 2));
+		productionArea.add(new Tile(Constants.TYPE_FERTILE, 2, 2));
+		productionArea.add(new Tile(Constants.TYPE_FOREST, 3, 2));
+		productionArea.add(new Tile(Constants.TYPE_FERTILE, 0, 3));
+		productionArea.add(new Tile(Constants.TYPE_FERTILE, 1, 3));
+		productionArea.add(new Tile(Constants.TYPE_FOREST, 2, 3));
+		productionArea.add(new Tile(Constants.TYPE_SWAMP, 3, 3));
 	}
 
-	// private void addDesertTile(final int i, final int j) {
-	// // TODO: Change Type "Object" to Desert Tile type
-	// productionArea[i][j] = new Object();
-	// }
-	//
-	// private void addSwampTile(final int i, final int j) {
-	// // TODO: Change Type "Object" to Swamp Tile type
-	// productionArea[i][j] = new Object();
-	// }
-	//
-	// private void addHillsTile(final int i, final int j) {
-	// // TODO: Change Type "Object" to Hills Tile type
-	// productionArea[i][j] = new Object();
-	// }
-	//
-	// private void addFertileTile(final int i, final int j) {
-	// // TODO: Change Type "Object" to Fertile Tile type
-	// productionArea[i][j] = new Object();
-	// }
-	//
-	// private void addForestTile(final int i, final int j) {
-	// // TODO: Change Type "Object" to Forest Tile type
-	// productionArea[i][j] = new Object();
-	// }
-	//
-	// private void addMountainsTile(final int i, final int j) {
-	// // TODO: Change Type "Object" to Mountains Tile type
-	// productionArea[i][j] = new Object();
-	// }
-
+	/**
+	 * Class used to represent the tiles on the board. The board has two 4x4
+	 * tile areas, the city area (for BuildingTiles) and the production area
+	 * (for ResourceTiles).
+	 * 
+	 * @author grolfsen
+	 *
+	 */
 	class Tile {
 
 		int type = -1;
@@ -189,6 +167,15 @@ public class Board {
 		int y = -1;
 		boolean isFilled = false;
 
+		/**
+		 * 
+		 * @param type
+		 *            Tile type, defined in /utils/Constants.java
+		 * @param x
+		 *            [0-3] Horizontal position of the tile on a 4x4 area
+		 * @param y
+		 *            [0-3] Vertical position of the tile on a 4x4 area
+		 */
 		public Tile(final int type, final int x, final int y) {
 			this.type = type;
 			this.x = x;
