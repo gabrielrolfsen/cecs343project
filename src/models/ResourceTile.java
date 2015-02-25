@@ -11,28 +11,27 @@ public class ResourceTile {
 	private int resource;
 	private final Icon icon;
 
-	public ResourceTile(final int aTerrain, final int aResource,
+	public ResourceTile(final int type, final int resource,
 			final String iconPath) {
-		this.icon = new ImageIcon(iconPath);
+		this.icon = new ImageIcon(iconPath, String.valueOf(type) + "-"
+				+ String.valueOf(resource));
 
-		if (aTerrain < 0 && aTerrain > 5) // 6 terrain types
+		if (type < 0 || type > 5) // 6 terrain types
 		{
-			System.err.println(aTerrain
-					+ " is not a vaild code for terrain type.");
+			System.err.println(type + " is not a vaild code for terrain type.");
 		} else {
-			this.type = aTerrain;
+			this.type = type;
 		}
 
-		if (aResource < 0 && aResource > 7) {
+		if (resource < 0 || resource > 7) {
 
-			System.err.println(aResource
+			System.err.println(resource
 					+ " is not a valid code for resource type.");
 
 		} else {
-			this.resource = aResource;
+			this.resource = resource;
 		}
 
-		setIcon();
 	}
 
 	private void setIcon() {
@@ -57,11 +56,11 @@ public class ResourceTile {
 	}
 
 	public int getType() {
-		return type;
+		return this.type;
 	}
 
 	public int getResource() {
-		return resource;
+		return this.resource;
 	}
 
 }

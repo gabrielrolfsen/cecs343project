@@ -21,34 +21,37 @@ import javax.swing.JPanel;
  * @author grolfsen
  *
  */
-class ButtonDialog extends JDialog {
+public class ButtonDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	private final String selected = null;
+	private ResourceTile tileSelected = null;
+	private final int pickCounter = 0;
+	private final JFrame frame;
 	ArrayList<ResourceTile> tiles = new ArrayList<ResourceTile>();
+	final ActionListener confirmListener = new PickTileListener();
+	final ActionListener passTurnListener = new PassTurnListener();
 
-	public ButtonDialog(final JFrame frame, final String title,
-			final ArrayList<ResourceTile> tiles) {
-		super(frame, title, true);
+	public ButtonDialog(final JFrame frame, final ArrayList<ResourceTile> tiles) {
+		super(frame, "Pick a terrain", true);
+		this.frame = frame;
 		this.tiles = tiles;
-		int numRows = tiles.size() / 3;
-		if (tiles.size() % 3 != 0) {
-			numRows++;
-		}
-		final GridLayout layout = new GridLayout(numRows, 3);
+
+		// Creates a layout for 18 tiles
+		final GridLayout layout = new GridLayout(6, 3);
 		final JPanel panel = new JPanel(layout);
-		final ActionListener confirmListener = new ConfirmListener();
+
+		// Set-up a JButton listener
 		int i = 0;
 		for (i = 0; i < tiles.size(); i++) {
-			final JButton button = new JButton(Integer.toString(tiles.get(i)
-					.getType()), tiles.get(i).getIcon());
+			final JButton button = new JButton("", tiles.get(i).getIcon());
 			panel.add(button);
 			button.setActionCommand(Integer.toString(i));
 			button.addActionListener(confirmListener);
 		}
 
-		// TODO: Make the layout fit this last button
+		// TODO: Make the layout fit this last button.
 		final JButton passBtn = new JButton("Pass");
+		passBtn.addActionListener(passTurnListener);
 		panel.add(passBtn);
 
 		add(panel);
@@ -57,25 +60,33 @@ class ButtonDialog extends JDialog {
 
 	}
 
-	public void start() {
-
+	public ResourceTile getSelected() {
+		return this.tileSelected;
 	}
 
-	public String getSelected() {
-		return this.selected;
-	}
-
-	private class ConfirmListener implements ActionListener {
+	private class PickTileListener implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			final JButton button = (JButton) e.getSource();
-			tiles.remove(String.valueOf((button.getActionCommand())));
-			// TODO: Verify if the player can actually pick the Tile and throw
-			// the specific error.
-			// TODO: If the player can pick it, remove from the tiles Array.
+			// DEBUG
 			System.out.println("Button Clicked: " + e.getActionCommand());
 
-			// TODO: Do the Routine
+			// Add the tile to the return object
+			tileSelected = tiles.get(Integer.valueOf(e.getActionCommand()));
+
+			// Remove the button from the array.
+			tiles.remove(Integer.valueOf(e.getActionCommand()));
+
+			// TODO: Verify if the player can actually pick the Tile and throw
+			// the specific error.
+			dispose();
+		}
+	}
+
+	private class PassTurnListener implements ActionListener {
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			tileSelected = null;
+			dispose();
 		}
 	}
 
