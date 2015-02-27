@@ -29,8 +29,7 @@ public class Main extends JFrame {
 	int[] terrainCounter = new int[6];
 
 	public Board playerBoard;
-	public Board ai1Board;
-	public Board ai2Board;
+	Board[] aiPlayersBoards = new Board[2];
 
 	public Main() {
 
@@ -51,12 +50,15 @@ public class Main extends JFrame {
 		// TODO: Implement the code to get 18 random tiles from the bank and add
 		// to an ArrayList called randomTiles
 		int i = 0;
-		for (i = 0; i < 18; i++) {
+		for (i = 0; i < 17; i++) {
 			randomTiles.add(new ResourceTile(Constants.TYPE_DESERT,
 					Constants.ONE_GOLD,
 					"res/production_tiles/tile_desert_1_gold.png"));
 
 		}
+		randomTiles.add(new ResourceTile(Constants.TYPE_MOUNTAINS,
+				Constants.ONE_GOLD,
+				"res/production_tiles/tile_forest_1_gold.png"));
 
 		// Counts terrains on the random selection
 		for (final ResourceTile t : randomTiles) {
@@ -70,14 +72,12 @@ public class Main extends JFrame {
 
 		// 6 Rounds to pick the Terrains
 		for (i = 0; i < 3; i++) {
-			System.out.println("i: " + i);
 			userPick();
+			aiPick(0);
 			aiPick(1);
-			aiPick(2);
-			aiPick(2);
 			aiPick(1);
+			aiPick(0);
 			userPick();
-			System.out.println("i: " + i);
 		}
 
 		// TODO: Improve this dialog
@@ -86,33 +86,32 @@ public class Main extends JFrame {
 		System.exit(0);
 	}
 
-	// TODO: Make for AI1 and AI2
 	private void userPick() {
 		final int[] boardFreeTerrains = playerBoard.getFreeTerrainCounter();
 		boolean canPick = false;
 		int i = 0;
+		// Checks if there's still any available selection
 		for (i = 0; i < 6; i++) {
 			if (boardFreeTerrains[i] != 0 && terrainCounter[i] > 0) {
 				canPick = true;
 			}
 		}
+
 		if (canPick) {
 			final ButtonDialog bDialog = new ButtonDialog(this, randomTiles,
 					playerBoard.getFreeTerrainCounter());
-			// User picks
 			bDialog.setVisible(true);
-			// DEBUG
-			System.out.println("USER SELECTED TYPE: "
-					+ bDialog.getSelected().getType());
-			// Adds the Tile to the player's board and decrement tileCounter if
-			// he
-			// didn't skipped the
-			// selection
+
 			if (bDialog.getSelected() != null) {
-				// Update the list and counter
+				// Update tile counter
 				playerBoard.setFreeTerrainCounter(bDialog.getTerrainCounter());
+				// Update tile list
 				this.randomTiles = bDialog.getList();
-				playerBoard.addResourceTile(bDialog.getSelected());
+				// Add tile to player's board
+				final boolean s = playerBoard.addResourceTile(bDialog
+						.getSelected());
+				// DEBUG
+				System.out.println(s);
 				for (i = 0; i < 6; i++) {
 					if (bDialog.getSelected().getType() == i) {
 						playerBoard.decreaseFreeTerrainCounter(i);
@@ -126,41 +125,60 @@ public class Main extends JFrame {
 	}
 
 	private void aiPick(final int aiNum) {
-		final int pickedTileIndex = new Random().nextInt(randomTiles.size());
-		System.out.println("AI #" + aiNum + " has selected index: "
-				+ pickedTileIndex);
-		final ResourceTile selectedTile = randomTiles.get(pickedTileIndex);
-
-		// Add the Tile to AI's board
-		if (aiNum == 1) {
-			ai1Board.addResourceTile(selectedTile);
-		} else {
-			ai2Board.addResourceTile(selectedTile);
-		}
+		final int[] boardFreeTerrains = aiPlayersBoards[aiNum]
+				.getFreeTerrainCounter();
+		boolean canPick = false;
 		int i = 0;
-
 		for (i = 0; i < 6; i++) {
-			if (selectedTile.getType() == i) {
-				if (aiNum == 1) {
-					ai1Board.decreaseFreeTerrainCounter(i);
-				} else {
-					ai2Board.decreaseFreeTerrainCounter(i);
-				}
-				terrainCounter[i]--;
-				break;
+			if (boardFreeTerrains[i] != 0 && terrainCounter[i] > 0) {
+				canPick = true;
 			}
 		}
+		if (canPick) {
+			final Random r = new Random();
+			int pickedTileIndex = -1;
+			// TODO: change variable name (it's horrible)
+			boolean rightTile = false;
+			// Keeps picking tile until find one that fits in the board
+			while (!rightTile) {
+				pickedTileIndex = r.nextInt(randomTiles.size());
+				if (boardFreeTerrains[randomTiles.get(pickedTileIndex)
+						.getType()] != 0) {
+					rightTile = true;
+				}
+			}
+			// DEBUG
+			System.out.println("AI #" + aiNum + " has selected index: "
+					+ pickedTileIndex);
 
-		// Removes the tile picked from the Array
-		randomTiles.remove(pickedTileIndex);
+			final ResourceTile selectedTile = randomTiles.get(pickedTileIndex);
+
+			// Add the Tile to AI's board
+			final boolean s = aiPlayersBoards[aiNum]
+					.addResourceTile(selectedTile);
+			// DEBUG
+			System.out.println(s);
+
+			for (i = 0; i < 6; i++) {
+				if (selectedTile.getType() == i) {
+					aiPlayersBoards[aiNum].addResourceTile(selectedTile);
+					aiPlayersBoards[aiNum].decreaseFreeTerrainCounter(i);
+					terrainCounter[i]--;
+					break;
+				}
+			}
+
+			// Removes the tile picked from the Array
+			randomTiles.remove(pickedTileIndex);
+		}
 	}
 
 	private void initBoard(final int Type, final String Title) {
 		playerBoard = new Board(Type);
-		// If user = 2, ai2 = 1, if User = 1, ai2 = 0, user = 0, ai2 = 2
-		ai1Board = new Board(Type == 2 ? 1 : (Type == 1 ? 0 : 2));
-		// If user = 2, ai3 = 0, if User = 1, ai3 = 2, user = 0, ai3 = 1
-		ai2Board = new Board(Type == 2 ? 0 : (Type == 1 ? 2 : 1));
+
+		aiPlayersBoards[0] = new Board(Type == 2 ? 1 : (Type == 1 ? 0 : 2));
+		aiPlayersBoards[1] = new Board(Type == 2 ? 0 : (Type == 1 ? 2 : 1));
+
 		add(playerBoard);
 		pack();
 		setTitle(Title);

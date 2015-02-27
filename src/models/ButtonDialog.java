@@ -37,20 +37,23 @@ public class ButtonDialog extends JDialog {
 		this.freeTerrainCounter = terrainCounter;
 		int i = 0;
 
-		// Creates a layout for 18 tiles
+		// TODO: Get a better layout, fixed size
 		final GridLayout layout = new GridLayout(6, 3);
 		final JPanel panel = new JPanel(layout);
 
-		// Set-up a JButton listener
-
 		for (i = 0; i < tiles.size(); i++) {
 			final JButton button = new JButton("", tiles.get(i).getIcon());
+			// If the user cannot pick the tile, the button is disabled
+			if (freeTerrainCounter[tiles.get(i).getType()] == 0) {
+				button.setEnabled(false);
+			}
 			panel.add(button);
+			// Put the button index as Action Command
 			button.setActionCommand(Integer.toString(i));
+			// Set-up a JButton listener
 			button.addActionListener(confirmListener);
 		}
 
-		// TODO: Make the layout fit this last button.
 		final JButton passBtn = new JButton("Pass");
 		passBtn.addActionListener(passTurnListener);
 		panel.add(passBtn);
@@ -79,22 +82,15 @@ public class ButtonDialog extends JDialog {
 			tileSelected = tiles.get(Integer.valueOf(e.getActionCommand()));
 
 			// DEBUG
-			System.out.println("Button Clicked: " + e.getActionCommand());
-			System.out.println("Terrains left:"
-					+ freeTerrainCounter[tileSelected.getType()]);
+			System.out.println("USER has selected Index: "
+					+ e.getActionCommand());
 
-			// TODO: possible disable the button
-			if (freeTerrainCounter[tileSelected.getType()] == 0) {
-				// User cannot pick, because it doesn't fit. He has to pick
-				// another one
-			} else {
-				// Add the tile to the return object
+			// Remove the button from the array.
+			tiles.remove(Integer.parseInt((e.getActionCommand())));
 
-				// Remove the button from the array.
-				tiles.remove(Integer.valueOf(e.getActionCommand()));
+			setVisible(false);
+			dispose();
 
-				dispose();
-			}
 		}
 	}
 

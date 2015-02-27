@@ -72,7 +72,7 @@ public class Board extends JPanel {
 	 *         matching tile on the board or if all spaces are being used.
 	 */
 	public boolean addResourceTile(final ResourceTile tile) {
-		for (final Tile t : cityArea) {
+		for (final Tile t : productionArea) {
 			if (t.getType() == tile.getType() && !t.isFilled()) {
 				t.setFilled();
 				return true;
@@ -92,7 +92,7 @@ public class Board extends JPanel {
 	 */
 	public boolean addBuildingTile(final BuildingTile tile) {
 		if (this.buildingsCounter < 16) {
-			for (final Tile t : productionArea) {
+			for (final Tile t : cityArea) {
 				if (!t.isFilled()) {
 					t.setFilled();
 					this.buildingsCounter++;
