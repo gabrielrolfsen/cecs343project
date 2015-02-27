@@ -25,23 +25,24 @@ public class ButtonDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private ResourceTile tileSelected = null;
-	private final int pickCounter = 0;
-	private final JFrame frame;
+	private int[] freeTerrainCounter = new int[6];
 	ArrayList<ResourceTile> tiles = new ArrayList<ResourceTile>();
 	final ActionListener confirmListener = new PickTileListener();
 	final ActionListener passTurnListener = new PassTurnListener();
 
-	public ButtonDialog(final JFrame frame, final ArrayList<ResourceTile> tiles) {
+	public ButtonDialog(final JFrame frame,
+			final ArrayList<ResourceTile> tiles, final int[] terrainCounter) {
 		super(frame, "Pick a terrain", true);
-		this.frame = frame;
 		this.tiles = tiles;
+		this.freeTerrainCounter = terrainCounter;
+		int i = 0;
 
 		// Creates a layout for 18 tiles
 		final GridLayout layout = new GridLayout(6, 3);
 		final JPanel panel = new JPanel(layout);
 
 		// Set-up a JButton listener
-		int i = 0;
+
 		for (i = 0; i < tiles.size(); i++) {
 			final JButton button = new JButton("", tiles.get(i).getIcon());
 			panel.add(button);
@@ -64,21 +65,36 @@ public class ButtonDialog extends JDialog {
 		return this.tileSelected;
 	}
 
+	public ArrayList<ResourceTile> getList() {
+		return this.tiles;
+	}
+
+	public int[] getTerrainCounter() {
+		return this.freeTerrainCounter;
+	}
+
 	private class PickTileListener implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			// DEBUG
-			System.out.println("Button Clicked: " + e.getActionCommand());
-
-			// Add the tile to the return object
 			tileSelected = tiles.get(Integer.valueOf(e.getActionCommand()));
 
-			// Remove the button from the array.
-			tiles.remove(Integer.valueOf(e.getActionCommand()));
+			// DEBUG
+			System.out.println("Button Clicked: " + e.getActionCommand());
+			System.out.println("Terrains left:"
+					+ freeTerrainCounter[tileSelected.getType()]);
 
-			// TODO: Verify if the player can actually pick the Tile and throw
-			// the specific error.
-			dispose();
+			// TODO: possible disable the button
+			if (freeTerrainCounter[tileSelected.getType()] == 0) {
+				// User cannot pick, because it doesn't fit. He has to pick
+				// another one
+			} else {
+				// Add the tile to the return object
+
+				// Remove the button from the array.
+				tiles.remove(Integer.valueOf(e.getActionCommand()));
+
+				dispose();
+			}
 		}
 	}
 

@@ -23,9 +23,10 @@ import utils.Constants;
  */
 public class Board extends JPanel {
 
-	private final String owner = "N/A";
+	// TODO: Separate JPanel from model
 	private int type = -1;
 	private int buildingsCounter = 0;
+	int freeTerrainCounter[] = new int[6];
 
 	private Image BackgroundImage = null;
 	private ImageIcon icon = null;
@@ -124,6 +125,12 @@ public class Board extends JPanel {
 		productionArea.add(new Tile(Constants.TYPE_MOUNTAINS, 2, 3));
 		productionArea.add(new Tile(Constants.TYPE_MOUNTAINS, 3, 3));
 		icon = new ImageIcon("/res/board_norse.png");
+		freeTerrainCounter[Constants.TYPE_DESERT] = 1;
+		freeTerrainCounter[Constants.TYPE_FERTILE] = 4;
+		freeTerrainCounter[Constants.TYPE_FOREST] = 3;
+		freeTerrainCounter[Constants.TYPE_HILLS] = 3;
+		freeTerrainCounter[Constants.TYPE_MOUNTAINS] = 4;
+		freeTerrainCounter[Constants.TYPE_SWAMP] = 1;
 	}
 
 	/**
@@ -148,6 +155,12 @@ public class Board extends JPanel {
 		productionArea.add(new Tile(Constants.TYPE_SWAMP, 2, 3));
 		productionArea.add(new Tile(Constants.TYPE_SWAMP, 3, 3));
 		icon = new ImageIcon("res/board_egypt.png");
+		freeTerrainCounter[Constants.TYPE_DESERT] = 6;
+		freeTerrainCounter[Constants.TYPE_FERTILE] = 5;
+		freeTerrainCounter[Constants.TYPE_FOREST] = 1;
+		freeTerrainCounter[Constants.TYPE_HILLS] = 2;
+		freeTerrainCounter[Constants.TYPE_MOUNTAINS] = 0;
+		freeTerrainCounter[Constants.TYPE_SWAMP] = 2;
 	}
 
 	/**
@@ -172,6 +185,24 @@ public class Board extends JPanel {
 		productionArea.add(new Tile(Constants.TYPE_FOREST, 2, 3));
 		productionArea.add(new Tile(Constants.TYPE_SWAMP, 3, 3));
 		icon = new ImageIcon("res/board_greek.png");
+		freeTerrainCounter[Constants.TYPE_DESERT] = 1;
+		freeTerrainCounter[Constants.TYPE_FERTILE] = 3;
+		freeTerrainCounter[Constants.TYPE_FOREST] = 2;
+		freeTerrainCounter[Constants.TYPE_HILLS] = 8;
+		freeTerrainCounter[Constants.TYPE_MOUNTAINS] = 1;
+		freeTerrainCounter[Constants.TYPE_SWAMP] = 1;
+	}
+
+	public void decreaseFreeTerrainCounter(final int i) {
+		this.freeTerrainCounter[i]--;
+	}
+
+	public int[] getFreeTerrainCounter() {
+		return this.freeTerrainCounter;
+	}
+
+	public void setFreeTerrainCounter(final int[] counter) {
+		this.freeTerrainCounter = counter;
 	}
 
 	/**

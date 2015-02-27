@@ -26,60 +26,101 @@ import utils.Constants;
 public class Main extends JFrame {
 
 	ArrayList<ResourceTile> randomTiles = new ArrayList<ResourceTile>();
-	Board playerBoard;
-	Board ai1Board;
-	Board ai2Board;
+	int[] terrainCounter = new int[6];
+
+	public Board playerBoard;
+	public Board ai1Board;
+	public Board ai2Board;
 
 	public Main() {
 
 		final String input = JOptionPane
 				.showInputDialog("Please choose your board: Greek, Norse or Egyptian:");
 		if (input.equalsIgnoreCase("Greek")) {
-			init(Constants.TYPE_GREEK, "Greek Board");
+			initBoard(Constants.TYPE_GREEK, "Greek Board");
 		}
 
 		if (input.equalsIgnoreCase("Norse")) {
-			init(Constants.TYPE_NORSE, "Norse Board");
+			initBoard(Constants.TYPE_NORSE, "Norse Board");
 		}
 
 		if (input.equalsIgnoreCase("Egyptian")) {
-			init(Constants.TYPE_EGYPTIAN, "Egyptian Board");
+			initBoard(Constants.TYPE_EGYPTIAN, "Egyptian Board");
 		}
 
 		// TODO: Implement the code to get 18 random tiles from the bank and add
 		// to an ArrayList called randomTiles
 		int i = 0;
 		for (i = 0; i < 18; i++) {
-			randomTiles.add(new ResourceTile(Constants.TYPE_FOREST,
+			randomTiles.add(new ResourceTile(Constants.TYPE_DESERT,
 					Constants.ONE_GOLD,
 					"res/production_tiles/tile_desert_1_gold.png"));
 
 		}
-		// 6 Rounds to pick the Terrains
-		for (i = 0; i < 3; i++) {
-			userPick();
-			aiPick(1);
-			aiPick(2);
-			aiPick(2);
-			aiPick(1);
-			userPick();
+
+		// Counts terrains on the random selection
+		for (final ResourceTile t : randomTiles) {
+			for (i = 0; i < 6; i++) {
+				if (t.getType() == i) {
+					terrainCounter[i]++;
+					break;
+				}
+			}
 		}
 
+		// 6 Rounds to pick the Terrains
+		for (i = 0; i < 3; i++) {
+			System.out.println("i: " + i);
+			userPick();
+			aiPick(1);
+			aiPick(2);
+			aiPick(2);
+			aiPick(1);
+			userPick();
+			System.out.println("i: " + i);
+		}
+
+		// TODO: Improve this dialog
+		JOptionPane.showMessageDialog(this, "Game is ready to Play.",
+				"All Set!", JOptionPane.PLAIN_MESSAGE);
 		System.exit(0);
 	}
 
-	// TODO: If no remaining selection for the human player can be made, they
-	// must “pass” (not get a selection) on this and all subsequent rounds
+	// TODO: Make for AI1 and AI2
 	private void userPick() {
-		final ButtonDialog bDialog = new ButtonDialog(this, randomTiles);
-		// User picks
-		bDialog.setVisible(true);
-		// DEBUG
-		System.out.println("USER SELECTED TYPE: "
-				+ bDialog.getSelected().getType());
-		// Adds the Tile to the player's board if he didn't pass the selection
-		if (bDialog.getSelected() != null) {
-			playerBoard.addResourceTile(bDialog.getSelected());
+		final int[] boardFreeTerrains = playerBoard.getFreeTerrainCounter();
+		boolean canPick = false;
+		int i = 0;
+		for (i = 0; i < 6; i++) {
+			if (boardFreeTerrains[i] != 0 && terrainCounter[i] > 0) {
+				canPick = true;
+			}
+		}
+		if (canPick) {
+			final ButtonDialog bDialog = new ButtonDialog(this, randomTiles,
+					playerBoard.getFreeTerrainCounter());
+			// User picks
+			bDialog.setVisible(true);
+			// DEBUG
+			System.out.println("USER SELECTED TYPE: "
+					+ bDialog.getSelected().getType());
+			// Adds the Tile to the player's board and decrement tileCounter if
+			// he
+			// didn't skipped the
+			// selection
+			if (bDialog.getSelected() != null) {
+				// Update the list and counter
+				playerBoard.setFreeTerrainCounter(bDialog.getTerrainCounter());
+				this.randomTiles = bDialog.getList();
+				playerBoard.addResourceTile(bDialog.getSelected());
+				for (i = 0; i < 6; i++) {
+					if (bDialog.getSelected().getType() == i) {
+						playerBoard.decreaseFreeTerrainCounter(i);
+						terrainCounter[i]--;
+						break;
+					}
+				}
+			}
 		}
 
 	}
@@ -96,12 +137,25 @@ public class Main extends JFrame {
 		} else {
 			ai2Board.addResourceTile(selectedTile);
 		}
+		int i = 0;
+
+		for (i = 0; i < 6; i++) {
+			if (selectedTile.getType() == i) {
+				if (aiNum == 1) {
+					ai1Board.decreaseFreeTerrainCounter(i);
+				} else {
+					ai2Board.decreaseFreeTerrainCounter(i);
+				}
+				terrainCounter[i]--;
+				break;
+			}
+		}
 
 		// Removes the tile picked from the Array
 		randomTiles.remove(pickedTileIndex);
 	}
 
-	private void init(final int Type, final String Title) {
+	private void initBoard(final int Type, final String Title) {
 		playerBoard = new Board(Type);
 		// If user = 2, ai2 = 1, if User = 1, ai2 = 0, user = 0, ai2 = 2
 		ai1Board = new Board(Type == 2 ? 1 : (Type == 1 ? 0 : 2));
