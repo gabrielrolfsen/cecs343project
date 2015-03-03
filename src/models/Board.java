@@ -205,6 +205,23 @@ public class Board extends JPanel {
 		this.freeTerrainCounter = counter;
 	}
 
+	public String getTypeName() {
+		String typeName = "";
+		switch (this.type) {
+		case Constants.TYPE_EGYPTIAN:
+			typeName = "Egyptian";
+			break;
+		case Constants.TYPE_NORSE:
+			typeName = "Norse";
+			break;
+		case Constants.TYPE_GREEK:
+			typeName = "Greek";
+			break;
+		}
+		System.out.println(this.type);
+		return typeName;
+	}
+
 	/**
 	 * Class used to represent the tiles on the board. The board has two 4x4
 	 * tile areas, the city area (for BuildingTiles) and the production area

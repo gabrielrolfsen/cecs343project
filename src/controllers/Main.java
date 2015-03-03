@@ -34,8 +34,8 @@ public class Main extends JFrame implements ActionListener {
 	ArrayList<ResourceTile> randomTiles = new ArrayList<ResourceTile>();
 	int[] terrainCounter = new int[6];
 
-	public Board playerBoard;
-	Board[] aiPlayersBoards = new Board[2];
+	public Board playerBoard = null;
+	public Board[] aiPlayersBoards = new Board[2];
 
 	public Main() {
 
@@ -80,6 +80,7 @@ public class Main extends JFrame implements ActionListener {
 		}
 
 		// 6 Rounds to pick the Terrains
+		// TODO: Show the tiles on the boards.
 		for (i = 0; i < 3; i++) {
 			userPick();
 			aiPick(0);
@@ -190,14 +191,15 @@ public class Main extends JFrame implements ActionListener {
 		}
 	}
 
-	private void initBoard(final int Type, final String Title) {
-		playerBoard = new Board(Type);
+	private void initBoard(final int type, final String title) {
+		playerBoard = new Board(type);
+		System.out.println(playerBoard.getTypeName());
 
 		// If Player = Greek, Ai0 = Egyptian, Ai1 = Norse
 		// If Player = Egyptian, Ai0 = Norse, Ai1 = Greek
 		// If Player = Norse, Ai0 = Greek, Ai1 = Egyptian
-		aiPlayersBoards[0] = new Board(Type == 2 ? 1 : (Type == 1 ? 0 : 2));
-		aiPlayersBoards[1] = new Board(Type == 2 ? 0 : (Type == 1 ? 2 : 1));
+		aiPlayersBoards[0] = new Board(type == 2 ? 1 : (type == 1 ? 0 : 2));
+		aiPlayersBoards[1] = new Board(type == 2 ? 0 : (type == 1 ? 2 : 1));
 
 		final JButton switchBoard = new JButton("Switch Board");
 		switchBoard.addActionListener(this);
@@ -213,7 +215,7 @@ public class Main extends JFrame implements ActionListener {
 		c.gridy = 0;
 		setSize(800, 600);
 
-		setTitle("Age of Mythology");
+		setTitle(title);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		add(switchBoard, c);
@@ -241,7 +243,24 @@ public class Main extends JFrame implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		// TODO Auto-generated method stub
+		final String[] boardNames = new String[] { playerBoard.getTypeName(),
+				aiPlayersBoards[0].getTypeName(),
+				aiPlayersBoards[1].getTypeName() };
+		final JFrame frame = new JFrame("Board Selection");
+		final String input = (String) JOptionPane.showInputDialog(frame,
+				"Please choose a board:", "Board Selection",
+				JOptionPane.QUESTION_MESSAGE, null, boardNames, boardNames[0]);
+		if (input.equalsIgnoreCase(playerBoard.getTypeName())) {
+			// TODO: Show playerBoard
+		}
+
+		if (input.equalsIgnoreCase(aiPlayersBoards[0].getTypeName())) {
+			// TODO: Show aiPlayersBoards[0]
+		}
+
+		if (input.equalsIgnoreCase(aiPlayersBoards[1].getTypeName())) {
+			// TODO: Show aiPlayersBoards[1]
+		}
 
 	}
 
