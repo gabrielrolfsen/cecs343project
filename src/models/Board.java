@@ -75,6 +75,11 @@ public class Board extends JPanel {
 		for (final Tile t : productionArea) {
 			if (t.getType() == tile.getType() && !t.isFilled()) {
 				t.setFilled();
+				System.out.println("BEFORE "
+						+ freeTerrainCounter[tile.getType()]);
+				freeTerrainCounter[tile.getType()]--;
+				System.out.println("AFTER:"
+						+ freeTerrainCounter[tile.getType()]);
 				return true;
 			}
 		}
@@ -193,10 +198,6 @@ public class Board extends JPanel {
 		freeTerrainCounter[Constants.TYPE_SWAMP] = 1;
 	}
 
-	public void decreaseFreeTerrainCounter(final int i) {
-		this.freeTerrainCounter[i]--;
-	}
-
 	public int[] getFreeTerrainCounter() {
 		return this.freeTerrainCounter;
 	}
@@ -218,7 +219,6 @@ public class Board extends JPanel {
 			typeName = "Greek";
 			break;
 		}
-		System.out.println(this.type);
 		return typeName;
 	}
 

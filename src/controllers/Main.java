@@ -38,7 +38,7 @@ public class Main extends JFrame implements ActionListener {
 	public Board[] aiPlayersBoards = new Board[2];
 
 	public Main() {
-
+		// Creates a Dialog to user choose their culture
 		final String[] boardNames = new String[] { "Greek", "Norse", "Egyptian" };
 		final JFrame frame = new JFrame("Board Selection");
 		final String input = (String) JOptionPane.showInputDialog(frame,
@@ -60,16 +60,16 @@ public class Main extends JFrame implements ActionListener {
 		// to an ArrayList called randomTiles
 		int i = 0;
 		for (i = 0; i < 17; i++) {
-			randomTiles.add(new ResourceTile(Constants.TYPE_DESERT,
-					Constants.ONE_GOLD,
-					"res/production_tiles/tile_desert_1_gold.png"));
+			randomTiles.add(new ResourceTile(Constants.TYPE_MOUNTAINS,
+					Constants.ONE_FAVOR,
+					"res/production_tiles/tile_mountains_1_favor.png"));
 		}
 
 		randomTiles.add(new ResourceTile(Constants.TYPE_MOUNTAINS,
-				Constants.ONE_GOLD,
-				"res/production_tiles/tile_forest_1_gold.png"));
+				Constants.ONE_FAVOR,
+				"res/production_tiles/tile_forest_1_favor.png"));
 
-		// Counts terrains on the random selection
+		// Counts terrains type on the random selection
 		for (final ResourceTile t : randomTiles) {
 			for (i = 0; i < 6; i++) {
 				if (t.getType() == i) {
@@ -96,12 +96,15 @@ public class Main extends JFrame implements ActionListener {
 
 	}
 
+	/**
+	 * Method that handles the user picking a tile in the Terrain Tile selection
+	 */
 	private void userPick() {
 		final int[] boardFreeTerrains = playerBoard.getFreeTerrainCounter();
 		boolean canPick = false;
 		int i = 0;
-		// Checks if there's still any available selection
 
+		// Checks if there's still any available selection
 		for (i = 0; i < 6; i++) {
 			if (boardFreeTerrains[i] != 0 && terrainCounter[i] > 0) {
 				canPick = true;
@@ -109,11 +112,15 @@ public class Main extends JFrame implements ActionListener {
 			}
 		}
 
+		// If there's any available choice, a dialog will pop so the user can
+		// pick one Tile
 		if (canPick) {
+			// Pops the ButtonDialog for the Tile Selection
 			final ButtonDialog bDialog = new ButtonDialog(this, randomTiles,
 					playerBoard.getFreeTerrainCounter());
 			bDialog.setVisible(true);
 
+			// Checks if the user has passed his turn or picked a tile
 			if (bDialog.getSelected() != null) {
 				// Update tile counter
 				playerBoard.setFreeTerrainCounter(bDialog.getTerrainCounter());
@@ -122,18 +129,15 @@ public class Main extends JFrame implements ActionListener {
 				// Add tile to player's board
 				final boolean s = playerBoard.addResourceTile(bDialog
 						.getSelected());
+
 				// DEBUG
-				System.out.println(s);
-				for (i = 0; i < 6; i++) {
-					if (bDialog.getSelected().getType() == i) {
-						playerBoard.decreaseFreeTerrainCounter(i);
-						terrainCounter[i]--;
-						break;
-					}
-				}
+				System.out.println("Tile Successfuly added:" + s);
+
+				// Decrease the TerrainCounter (for RandomTiles array)
+				terrainCounter[bDialog.getSelected().getType()]--;
+
 			}
 		}
-
 	}
 
 	private void aiPick(final int aiNum) {
@@ -141,19 +145,32 @@ public class Main extends JFrame implements ActionListener {
 				.getFreeTerrainCounter();
 		boolean canPick = false;
 		int i = 0;
-		System.out.println("--AI Pick--");
+		Random r = new Random();
+
+		// DEBUG
+		System.out.println("--AI" + aiNum + " Pick--");
+		// while (canPick == false) {
+		// final int randomIndex = r.nextInt(6);
+		// System.out.println(randomIndex);
+		// System.out.println("!= " + boardFreeTerrains[randomIndex]);
+		// System.out.println("> " + terrainCounter[randomIndex]);
+		//
+		// if (boardFreeTerrains[randomIndex] != 0
+		// && terrainCounter[randomIndex] > 0) {
+		// canPick = true;
+		// }
+		// }
+
+		// TODO: Make it random instead of just going through the array
 		for (i = 0; i < 6; i++) {
 			if (boardFreeTerrains[i] != 0 && terrainCounter[i] > 0) {
-				System.out.println("freeTerrains i:" + i + " - "
-						+ boardFreeTerrains[i]);
-				System.out.println("terrainCounter i:" + i + " - "
-						+ terrainCounter[i]);
 				canPick = true;
 				break;
 			}
 		}
+		// If there's any available choice, the AI will try to pick one tile
 		if (canPick) {
-			final Random r = new Random();
+			r = new Random();
 			int pickedTileIndex = -1;
 			// TODO: change variable name (it's horrible)
 			boolean rightTile = false;
@@ -165,29 +182,22 @@ public class Main extends JFrame implements ActionListener {
 					rightTile = true;
 				}
 			}
-			// DEBUG
-			System.out.println("AI #" + aiNum + " has selected index: "
-					+ pickedTileIndex);
 
 			final ResourceTile selectedTile = randomTiles.get(pickedTileIndex);
 
 			// Add the Tile to AI's board
 			final boolean s = aiPlayersBoards[aiNum]
 					.addResourceTile(selectedTile);
-			// DEBUG
-			System.out.println(s);
+			terrainCounter[selectedTile.getType()]--;
 
-			for (i = 0; i < 6; i++) {
-				if (selectedTile.getType() == i) {
-					aiPlayersBoards[aiNum].addResourceTile(selectedTile);
-					aiPlayersBoards[aiNum].decreaseFreeTerrainCounter(i);
-					terrainCounter[i]--;
-					break;
-				}
-			}
+			// DEBUG
+			System.out.println("Tile Successfuly added:" + s);
 
 			// Removes the tile picked from the Array
 			randomTiles.remove(pickedTileIndex);
+		} else {
+			// DEBUG
+			System.out.println("Passed");
 		}
 	}
 
@@ -235,11 +245,8 @@ public class Main extends JFrame implements ActionListener {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	/**
+	 * Method used to Switch Boards Button
 	 */
 	@Override
 	public void actionPerformed(final ActionEvent e) {

@@ -7,7 +7,10 @@
  */
 package models;
 
-import java.awt.GridLayout;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -37,9 +40,9 @@ public class ButtonDialog extends JDialog {
 		this.freeTerrainCounter = terrainCounter;
 		int i = 0;
 
-		// TODO: Get a better layout, fixed size
-		final GridLayout layout = new GridLayout(6, 3);
-		final JPanel panel = new JPanel(layout);
+		final JPanel panel = new JPanel(new GridBagLayout());
+		panel.setPreferredSize(new Dimension(350, 700));
+		final GridBagConstraints c = new GridBagConstraints();
 
 		for (i = 0; i < tiles.size(); i++) {
 			final JButton button = new JButton("", tiles.get(i).getIcon());
@@ -47,16 +50,31 @@ public class ButtonDialog extends JDialog {
 			if (freeTerrainCounter[tiles.get(i).getType()] == 0) {
 				button.setEnabled(false);
 			}
-			panel.add(button);
 			// Put the button index as Action Command
 			button.setActionCommand(Integer.toString(i));
 			// Set-up a JButton listener
 			button.addActionListener(confirmListener);
+			// * Button Layout Constraints * //
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 0.5;
+			c.gridx = (i % 3);
+			c.gridy = (i / 3);
+			// Add it to the Panel
+			panel.add(button, c);
 		}
 
 		final JButton passBtn = new JButton("Pass");
 		passBtn.addActionListener(passTurnListener);
-		panel.add(passBtn);
+		// * Button Layout Constraints * //
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.ipady = 0; // reset to default
+		c.weighty = 1.0; // request any extra vertical space
+		c.anchor = GridBagConstraints.PAGE_END; // bottom of space
+		c.insets = new Insets(10, 0, 0, 0); // top padding
+		c.gridx = 0;
+		c.gridwidth = 3;
+		c.gridy = (tiles.size() / 3) + 1;
+		panel.add(passBtn, c);
 
 		add(panel);
 		pack();
