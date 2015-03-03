@@ -14,6 +14,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import javax.swing.JButton;
@@ -149,25 +150,24 @@ public class Main extends JFrame implements ActionListener {
 
 		// DEBUG
 		System.out.println("--AI" + aiNum + " Pick--");
-		// while (canPick == false) {
-		// final int randomIndex = r.nextInt(6);
-		// System.out.println(randomIndex);
-		// System.out.println("!= " + boardFreeTerrains[randomIndex]);
-		// System.out.println("> " + terrainCounter[randomIndex]);
-		//
-		// if (boardFreeTerrains[randomIndex] != 0
-		// && terrainCounter[randomIndex] > 0) {
-		// canPick = true;
-		// }
-		// }
 
-		// TODO: Make it random instead of just going through the array
+		// Create a list with numbers 0 to 5 (types of terrains)
+		final ArrayList<Integer> nums = new ArrayList<Integer>();
 		for (i = 0; i < 6; i++) {
-			if (boardFreeTerrains[i] != 0 && terrainCounter[i] > 0) {
+			nums.add(i);
+		}
+		// Shuffle it
+		Collections.shuffle(nums);
+
+		// Iterate through a random array of numbers from 0..5 and see if the AI
+		// can pick this type of Tile
+		for (final Integer n : nums) {
+			if (boardFreeTerrains[n] != 0 && terrainCounter[n] > 0) {
 				canPick = true;
 				break;
 			}
 		}
+
 		// If there's any available choice, the AI will try to pick one tile
 		if (canPick) {
 			r = new Random();
