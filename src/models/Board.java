@@ -124,7 +124,7 @@ public class Board extends JPanel {
 		productionArea.add(new Tile(Constants.TYPE_MOUNTAINS, 1, 3));
 		productionArea.add(new Tile(Constants.TYPE_MOUNTAINS, 2, 3));
 		productionArea.add(new Tile(Constants.TYPE_MOUNTAINS, 3, 3));
-		icon = new ImageIcon("/res/board_norse.png");
+		icon = new ImageIcon("res/board_norse.png");
 		freeTerrainCounter[Constants.TYPE_DESERT] = 1;
 		freeTerrainCounter[Constants.TYPE_FERTILE] = 4;
 		freeTerrainCounter[Constants.TYPE_FOREST] = 3;

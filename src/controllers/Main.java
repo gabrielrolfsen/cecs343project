@@ -7,10 +7,16 @@
  */
 package controllers;
 
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -23,7 +29,7 @@ import utils.Constants;
  * @author grolfsen
  *
  */
-public class Main extends JFrame {
+public class Main extends JFrame implements ActionListener {
 
 	ArrayList<ResourceTile> randomTiles = new ArrayList<ResourceTile>();
 	int[] terrainCounter = new int[6];
@@ -33,8 +39,11 @@ public class Main extends JFrame {
 
 	public Main() {
 
-		final String input = JOptionPane
-				.showInputDialog("Please choose your board: Greek, Norse or Egyptian:");
+		final String[] boardNames = new String[] { "Greek", "Norse", "Egyptian" };
+		final JFrame frame = new JFrame("Board Selection");
+		final String input = (String) JOptionPane.showInputDialog(frame,
+				"Please choose a board:", "Board Selection",
+				JOptionPane.QUESTION_MESSAGE, null, boardNames, boardNames[0]);
 		if (input.equalsIgnoreCase("Greek")) {
 			initBoard(Constants.TYPE_GREEK, "Greek Board");
 		}
@@ -54,8 +63,8 @@ public class Main extends JFrame {
 			randomTiles.add(new ResourceTile(Constants.TYPE_DESERT,
 					Constants.ONE_GOLD,
 					"res/production_tiles/tile_desert_1_gold.png"));
-
 		}
+
 		randomTiles.add(new ResourceTile(Constants.TYPE_MOUNTAINS,
 				Constants.ONE_GOLD,
 				"res/production_tiles/tile_forest_1_gold.png"));
@@ -83,7 +92,7 @@ public class Main extends JFrame {
 		// TODO: Improve this dialog
 		JOptionPane.showMessageDialog(this, "Game is ready to Play.",
 				"All Set!", JOptionPane.PLAIN_MESSAGE);
-		System.exit(0);
+
 	}
 
 	private void userPick() {
@@ -91,9 +100,11 @@ public class Main extends JFrame {
 		boolean canPick = false;
 		int i = 0;
 		// Checks if there's still any available selection
+
 		for (i = 0; i < 6; i++) {
 			if (boardFreeTerrains[i] != 0 && terrainCounter[i] > 0) {
 				canPick = true;
+				break;
 			}
 		}
 
@@ -129,9 +140,15 @@ public class Main extends JFrame {
 				.getFreeTerrainCounter();
 		boolean canPick = false;
 		int i = 0;
+		System.out.println("--AI Pick--");
 		for (i = 0; i < 6; i++) {
 			if (boardFreeTerrains[i] != 0 && terrainCounter[i] > 0) {
+				System.out.println("freeTerrains i:" + i + " - "
+						+ boardFreeTerrains[i]);
+				System.out.println("terrainCounter i:" + i + " - "
+						+ terrainCounter[i]);
 				canPick = true;
+				break;
 			}
 		}
 		if (canPick) {
@@ -176,14 +193,32 @@ public class Main extends JFrame {
 	private void initBoard(final int Type, final String Title) {
 		playerBoard = new Board(Type);
 
+		// If Player = Greek, Ai0 = Egyptian, Ai1 = Norse
+		// If Player = Egyptian, Ai0 = Norse, Ai1 = Greek
+		// If Player = Norse, Ai0 = Greek, Ai1 = Egyptian
 		aiPlayersBoards[0] = new Board(Type == 2 ? 1 : (Type == 1 ? 0 : 2));
 		aiPlayersBoards[1] = new Board(Type == 2 ? 0 : (Type == 1 ? 2 : 1));
 
-		add(playerBoard);
-		pack();
-		setTitle(Title);
+		final JButton switchBoard = new JButton("Switch Board");
+		switchBoard.addActionListener(this);
+		switchBoard.setPreferredSize(new Dimension(100, 50));
+
+		setContentPane(playerBoard);
+		setLayout(new GridBagLayout());
+		final GridBagConstraints c = new GridBagConstraints();
+		c.weightx = 0.5;
+		c.weighty = 0.5;
+		c.anchor = GridBagConstraints.FIRST_LINE_START;
+		c.gridx = 0;
+		c.gridy = 0;
+		setSize(800, 600);
+
+		setTitle("Age of Mythology");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(this);
+		setLocationRelativeTo(null);
+		add(switchBoard, c);
+
+		pack();
 	}
 
 	public static void main(final String[] args) {
@@ -195,6 +230,18 @@ public class Main extends JFrame {
 				main.setVisible(true);
 			}
 		});
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	@Override
+	public void actionPerformed(final ActionEvent e) {
+		// TODO Auto-generated method stub
 
 	}
 
