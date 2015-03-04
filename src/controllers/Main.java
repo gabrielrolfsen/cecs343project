@@ -26,6 +26,7 @@ import models.ButtonDialog;
 import models.ResourceTile;
 import models.ResourceTilePool;
 import utils.Constants;
+import utils.Types.BoardType;
 
 /**
  * @author grolfsen
@@ -45,18 +46,19 @@ public class Main extends JFrame implements ActionListener {
 
 	public Main() {
 		// Creates a Dialog to user choose their culture
-		final String[] boardNames = new String[] { "Greek", "Norse", "Egyptian" };
+		final String[] boardNames = new String[] { BoardType.GREEK.toString(),
+				BoardType.NORSE.toString(), BoardType.EGYPTIAN.toString() };
 		final JFrame frame = new JFrame("Board Selection");
 		final String input = (String) JOptionPane.showInputDialog(frame,
 				"Please choose a board:", "Board Selection",
 				JOptionPane.QUESTION_MESSAGE, null, boardNames, boardNames[0]);
 		// Gets input and initialize the specific board for user + ai's
 		if (input.equalsIgnoreCase("Greek")) {
-			initBoard(Constants.TYPE_GREEK, "Greek Board");
+			initBoard(BoardType.GREEK, "Greek Board");
 		} else if (input.equalsIgnoreCase("Norse")) {
-			initBoard(Constants.TYPE_NORSE, "Norse Board");
+			initBoard(BoardType.NORSE, "Norse Board");
 		} else if (input.equalsIgnoreCase("Egyptian")) {
-			initBoard(Constants.TYPE_EGYPTIAN, "Egyptian Board");
+			initBoard(BoardType.EGYPTIAN, "Egyptian Board");
 		}
 
 		// Creates the ResourceTile Pool
@@ -71,7 +73,7 @@ public class Main extends JFrame implements ActionListener {
 		// Counts terrains type on the random selection
 		for (final ResourceTile t : randomTiles) {
 			for (i = 0; i < 6; i++) {
-				if (t.getType() == i) {
+				if (t.getType().getValue() == i) {
 					terrainCounter[i]++;
 					break;
 				}
@@ -133,7 +135,7 @@ public class Main extends JFrame implements ActionListener {
 				System.out.println("Tile Successfuly added:" + s);
 
 				// Decrease the TerrainCounter (for RandomTiles array)
-				terrainCounter[bDialog.getSelected().getType()]--;
+				terrainCounter[bDialog.getSelected().getType().getValue()]--;
 
 			}
 		}
@@ -176,7 +178,7 @@ public class Main extends JFrame implements ActionListener {
 			while (!rightTile) {
 				pickedTileIndex = r.nextInt(randomTiles.size());
 				if (boardFreeTerrains[randomTiles.get(pickedTileIndex)
-				                      .getType()] != 0) {
+				                      .getType().getValue()] != 0) {
 					rightTile = true;
 				}
 			}
@@ -186,7 +188,7 @@ public class Main extends JFrame implements ActionListener {
 			// Add the Tile to AI's board
 			final boolean s = aiPlayersBoards[aiNum]
 					.addResourceTile(selectedTile);
-			terrainCounter[selectedTile.getType()]--;
+			terrainCounter[selectedTile.getType().getValue()]--;
 
 			// DEBUG
 			System.out.println("Tile Successfuly added:" + s);
@@ -199,15 +201,21 @@ public class Main extends JFrame implements ActionListener {
 		}
 	}
 
-	private void initBoard(final int type, final String title) {
+	private void initBoard(final BoardType type, final String title) {
 		playerBoard = new Board(type);
-		System.out.println(playerBoard.getTypeName());
+		System.out.println(playerBoard.getType());
 
 		// If Player = Greek, Ai0 = Egyptian, Ai1 = Norse
 		// If Player = Egyptian, Ai0 = Norse, Ai1 = Greek
 		// If Player = Norse, Ai0 = Greek, Ai1 = Egyptian
-		aiPlayersBoards[0] = new Board(type == 2 ? 1 : (type == 1 ? 0 : 2));
-		aiPlayersBoards[1] = new Board(type == 2 ? 0 : (type == 1 ? 2 : 1));
+		aiPlayersBoards[0] = new Board(
+				type == BoardType.GREEK ? BoardType.EGYPTIAN
+						: (type == BoardType.EGYPTIAN ? BoardType.NORSE
+								: BoardType.GREEK));
+		aiPlayersBoards[1] = new Board(
+				type == BoardType.GREEK ? BoardType.NORSE
+						: (type == BoardType.EGYPTIAN ? BoardType.GREEK
+								: BoardType.EGYPTIAN));
 
 		showBoard(playerBoard, title);
 	}
@@ -254,30 +262,32 @@ public class Main extends JFrame implements ActionListener {
 	public void actionPerformed(final ActionEvent e) {
 		Board board = null;
 		String title = "";
-		final String[] boardNames = new String[] { playerBoard.getTypeName(),
-				aiPlayersBoards[0].getTypeName(),
-				aiPlayersBoards[1].getTypeName() };
+		final String[] boardNames = new String[] {
+				playerBoard.getType().toString(),
+				aiPlayersBoards[0].getType().toString(),
+				aiPlayersBoards[1].getType().toString() };
 		final JFrame frame = new JFrame("Board Selection");
 		final String input = (String) JOptionPane.showInputDialog(frame,
 				"Please choose a board:", "Board Selection",
 				JOptionPane.QUESTION_MESSAGE, null, boardNames, boardNames[0]);
 
-		if (input.equalsIgnoreCase(playerBoard.getTypeName())) {
+		if (input.equalsIgnoreCase(playerBoard.getType().toString())) {
 			if (getContentPane() != playerBoard) {
 				board = playerBoard;
-				title = playerBoard.getTypeName();
+				title = playerBoard.getType().toString();
 			}
-		} else if (input.equalsIgnoreCase(aiPlayersBoards[0].getTypeName())) {
+		} else if (input.equalsIgnoreCase(aiPlayersBoards[0].getType()
+				.toString())) {
 			if (getContentPane() != aiPlayersBoards[0]) {
 				board = aiPlayersBoards[0];
-				title = aiPlayersBoards[0].getTypeName();
+				title = aiPlayersBoards[0].getType().toString();
 			}
 		}
 
-		if (input.equalsIgnoreCase(aiPlayersBoards[1].getTypeName())) {
+		if (input.equalsIgnoreCase(aiPlayersBoards[1].getType().toString())) {
 			if (getContentPane() != aiPlayersBoards[1]) {
 				board = aiPlayersBoards[1];
-				title = aiPlayersBoards[1].getTypeName();
+				title = aiPlayersBoards[1].getType().toString();
 			}
 		}
 		if (board != null) {

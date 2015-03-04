@@ -3,32 +3,19 @@ package models;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import utils.Constants;
+import utils.Types.ResourceTileType;
+import utils.Types.ResourceType;
 
 public class ResourceTile {
 
 	private boolean isSelected;
-	private int type;
-	private int resource;
+	private final ResourceTileType type;
+	private final ResourceType resource;
 	private Icon icon;
 
-	public ResourceTile(final int type, final int resource) {
-
-		if (type < 0 || type > 5) // 6 terrain types
-		{
-			System.err.println(type + " is not a vaild code for terrain type.");
-		} else {
-			this.type = type;
-		}
-
-		if (resource < 0 || resource > 7) {
-
-			System.err.println(resource
-					+ " is not a valid code for resource type.");
-
-		} else {
-			this.resource = resource;
-		}
+	public ResourceTile(final ResourceTileType type, final ResourceType resource) {
+		this.type = type;
+		this.resource = resource;
 		setIcon();
 
 	}
@@ -39,49 +26,49 @@ public class ResourceTile {
 		String iconPath = "";
 
 		switch (this.type) {
-		case Constants.TYPE_DESERT:
+		case DESERT:
 			typeName = "desert";
 			break;
-		case Constants.TYPE_FOREST:
+		case FOREST:
 			typeName = "forest";
 			break;
-		case Constants.TYPE_FERTILE:
+		case FERTILE:
 			typeName = "fertile";
 			break;
-		case Constants.TYPE_HILLS:
+		case HILLS:
 			typeName = "hills";
 			break;
-		case Constants.TYPE_MOUNTAINS:
+		case MOUNTAINS:
 			typeName = "mountains";
 			break;
-		case Constants.TYPE_SWAMP:
+		case SWAMP:
 			typeName = "swamp";
 			break;
 		}
 
 		switch (this.resource) {
-		case Constants.ONE_GOLD:
+		case ONE_GOLD:
 			resourceName = "1_gold";
 			break;
-		case Constants.ONE_FAVOR:
+		case ONE_FAVOR:
 			resourceName = "1_favor";
 			break;
-		case Constants.ONE_FOOD:
+		case ONE_FOOD:
 			resourceName = "1_food";
 			break;
-		case Constants.ONE_WOOD:
+		case ONE_WOOD:
 			resourceName = "1_wood";
 			break;
-		case Constants.TWO_GOLDS:
+		case TWO_GOLDS:
 			resourceName = "2_golds";
 			break;
-		case Constants.TWO_FAVORS:
+		case TWO_FAVORS:
 			resourceName = "2_favors";
 			break;
-		case Constants.TWO_FOODS:
+		case TWO_FOODS:
 			resourceName = "2_foods";
 			break;
-		case Constants.TWO_WOODS:
+		case TWO_WOODS:
 			resourceName = "2_woods";
 			break;
 		}
@@ -103,11 +90,11 @@ public class ResourceTile {
 		return this.icon;
 	}
 
-	public int getType() {
+	public ResourceTileType getType() {
 		return this.type;
 	}
 
-	public int getResource() {
+	public ResourceType getResource() {
 		return this.resource;
 	}
 

@@ -47,7 +47,7 @@ public class ButtonDialog extends JDialog {
 		for (i = 0; i < tiles.size(); i++) {
 			final JButton button = new JButton("", tiles.get(i).getIcon());
 			// If the user cannot pick the tile, the button is disabled
-			if (freeTerrainCounter[tiles.get(i).getType()] == 0) {
+			if (freeTerrainCounter[tiles.get(i).getType().getValue()] == 0) {
 				button.setEnabled(false);
 			}
 			// Put the button index as Action Command

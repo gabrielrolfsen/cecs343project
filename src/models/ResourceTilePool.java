@@ -3,6 +3,8 @@ package models;
 import java.util.Random;
 
 import utils.Constants;
+import utils.Types.ResourceTileType;
+import utils.Types.ResourceType;
 
 public class ResourceTilePool {
 	private final ResourceTile[] tilePool;
@@ -36,120 +38,120 @@ public class ResourceTilePool {
 		int curTile = 0;
 
 		for (i = 0; i < 12; i++) {
-			tilePool[curTile] = new ResourceTile(Constants.TYPE_FERTILE,
-					Constants.TWO_FOODS);
+			tilePool[curTile] = new ResourceTile(ResourceTileType.FERTILE,
+					ResourceType.TWO_FOODS);
 			curTile++;
 		}
 
 		for (i = 0; i < 3; i++) {
-			tilePool[curTile] = new ResourceTile(Constants.TYPE_FERTILE,
-					Constants.ONE_WOOD);
+			tilePool[curTile] = new ResourceTile(ResourceTileType.FERTILE,
+					ResourceType.ONE_WOOD);
 			curTile++;
 		}
 
 		for (i = 0; i < 3; i++) {
-			tilePool[curTile] = new ResourceTile(Constants.TYPE_FERTILE,
-					Constants.ONE_FAVOR);
+			tilePool[curTile] = new ResourceTile(ResourceTileType.FERTILE,
+					ResourceType.ONE_FAVOR);
 			curTile++;
 		}
 
 		for (i = 0; i < 3; i++) {
-			tilePool[curTile] = new ResourceTile(Constants.TYPE_FERTILE,
-					Constants.ONE_GOLD);
+			tilePool[curTile] = new ResourceTile(ResourceTileType.FERTILE,
+					ResourceType.ONE_GOLD);
 			curTile++;
 		}
 
 		for (i = 0; i < 9; i++) {
-			tilePool[curTile] = new ResourceTile(Constants.TYPE_FOREST,
-					Constants.TWO_WOODS);
+			tilePool[curTile] = new ResourceTile(ResourceTileType.FOREST,
+					ResourceType.TWO_WOODS);
 			curTile++;
 		}
 
 		for (i = 0; i < 2; i++) {
-			tilePool[curTile] = new ResourceTile(Constants.TYPE_FOREST,
-					Constants.ONE_FOOD);
+			tilePool[curTile] = new ResourceTile(ResourceTileType.FOREST,
+					ResourceType.ONE_FOOD);
 			curTile++;
 		}
 
 		for (i = 0; i < 2; i++) {
-			tilePool[curTile] = new ResourceTile(Constants.TYPE_FOREST,
-					Constants.ONE_GOLD);
+			tilePool[curTile] = new ResourceTile(ResourceTileType.FOREST,
+					ResourceType.ONE_GOLD);
 			curTile++;
 		}
 
 		for (i = 0; i < 2; i++) {
-			tilePool[curTile] = new ResourceTile(Constants.TYPE_FOREST,
-					Constants.ONE_FAVOR);
+			tilePool[curTile] = new ResourceTile(ResourceTileType.FOREST,
+					ResourceType.ONE_FAVOR);
 			curTile++;
 		}
 
 		for (i = 0; i < 4; i++) {
-			tilePool[curTile] = new ResourceTile(Constants.TYPE_HILLS,
-					Constants.TWO_GOLDS);
+			tilePool[curTile] = new ResourceTile(ResourceTileType.HILLS,
+					ResourceType.TWO_GOLDS);
 			curTile++;
 		}
 
 		for (i = 0; i < 4; i++) {
-			tilePool[curTile] = new ResourceTile(Constants.TYPE_HILLS,
-					Constants.ONE_WOOD);
+			tilePool[curTile] = new ResourceTile(ResourceTileType.HILLS,
+					ResourceType.ONE_WOOD);
 			curTile++;
 		}
 		for (i = 0; i < 4; i++) {
-			tilePool[curTile] = new ResourceTile(Constants.TYPE_HILLS,
-					Constants.ONE_FOOD);
+			tilePool[curTile] = new ResourceTile(ResourceTileType.HILLS,
+					ResourceType.ONE_FOOD);
 			curTile++;
 		}
 		for (i = 0; i < 4; i++) {
-			tilePool[curTile] = new ResourceTile(Constants.TYPE_HILLS,
-					Constants.ONE_FAVOR);
+			tilePool[curTile] = new ResourceTile(ResourceTileType.HILLS,
+					ResourceType.ONE_FAVOR);
 			curTile++;
 		}
 
 		for (i = 0; i < 6; i++) {
-			tilePool[curTile] = new ResourceTile(Constants.TYPE_MOUNTAINS,
-					Constants.TWO_GOLDS);
+			tilePool[curTile] = new ResourceTile(ResourceTileType.MOUNTAINS,
+					ResourceType.TWO_GOLDS);
 			curTile++;
 		}
 
 		for (i = 0; i < 3; i++) {
-			tilePool[curTile] = new ResourceTile(Constants.TYPE_MOUNTAINS,
-					Constants.ONE_WOOD);
+			tilePool[curTile] = new ResourceTile(ResourceTileType.MOUNTAINS,
+					ResourceType.ONE_WOOD);
 			curTile++;
 		}
 
 		for (i = 0; i < 3; i++) {
-			tilePool[curTile] = new ResourceTile(Constants.TYPE_MOUNTAINS,
-					Constants.ONE_FAVOR);
+			tilePool[curTile] = new ResourceTile(ResourceTileType.MOUNTAINS,
+					ResourceType.ONE_FAVOR);
 			curTile++;
 		}
 
 		for (i = 0; i < 7; i++) {
-			tilePool[curTile] = new ResourceTile(Constants.TYPE_DESERT,
-					Constants.TWO_FAVORS);
+			tilePool[curTile] = new ResourceTile(ResourceTileType.DESERT,
+					ResourceType.TWO_FAVORS);
 			curTile++;
 		}
 
 		for (i = 0; i < 7; i++) {
-			tilePool[curTile] = new ResourceTile(Constants.TYPE_DESERT,
-					Constants.ONE_GOLD);
+			tilePool[curTile] = new ResourceTile(ResourceTileType.DESERT,
+					ResourceType.ONE_GOLD);
 			curTile++;
 		}
 
 		for (i = 0; i < 4; i++) {
-			tilePool[curTile] = new ResourceTile(Constants.TYPE_SWAMP,
-					Constants.ONE_FAVOR);
+			tilePool[curTile] = new ResourceTile(ResourceTileType.SWAMP,
+					ResourceType.ONE_FAVOR);
 			curTile++;
 		}
 
 		for (i = 0; i < 4; i++) {
-			tilePool[curTile] = new ResourceTile(Constants.TYPE_SWAMP,
-					Constants.ONE_FOOD);
+			tilePool[curTile] = new ResourceTile(ResourceTileType.SWAMP,
+					ResourceType.ONE_FOOD);
 			curTile++;
 		}
 
 		for (i = 0; i < 4; i++) {
-			tilePool[curTile] = new ResourceTile(Constants.TYPE_SWAMP,
-					Constants.ONE_WOOD);
+			tilePool[curTile] = new ResourceTile(ResourceTileType.SWAMP,
+					ResourceType.ONE_WOOD);
 			curTile++;
 		}
 

@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import utils.Constants;
+import utils.Types.BoardType;
+import utils.Types.ResourceTileType;
 
 /**
  * @author grolfsen
@@ -24,7 +25,7 @@ import utils.Constants;
 public class Board extends JPanel {
 
 	// TODO: Separate JPanel from model
-	private int type = -1;
+	private final BoardType type;
 	private int buildingsCounter = 0;
 	int freeTerrainCounter[] = new int[6];
 
@@ -34,16 +35,17 @@ public class Board extends JPanel {
 	private final ArrayList<Tile> productionArea = new ArrayList<Tile>();
 	private final ArrayList<Tile> cityArea = new ArrayList<Tile>();
 
-	public Board(final int type) {
+	public Board(final BoardType type) {
 		this.type = type;
+		final int n = BoardType.NORSE.getValue();
 		switch (type) {
-		case Constants.TYPE_NORSE:
+		case NORSE:
 			createNorseBoard();
 			break;
-		case Constants.TYPE_EGYPTIAN:
+		case EGYPTIAN:
 			createEgyptBoard();
 			break;
-		case Constants.TYPE_GREEK:
+		case GREEK:
 			createGreekBoard();
 			break;
 		default:
@@ -76,10 +78,10 @@ public class Board extends JPanel {
 			if (t.getType() == tile.getType() && !t.isFilled()) {
 				t.setFilled();
 				System.out.println("BEFORE "
-						+ freeTerrainCounter[tile.getType()]);
-				freeTerrainCounter[tile.getType()]--;
+						+ freeTerrainCounter[tile.getType().getValue()]);
+				freeTerrainCounter[tile.getType().getValue()]--;
 				System.out.println("AFTER:"
-						+ freeTerrainCounter[tile.getType()]);
+						+ freeTerrainCounter[tile.getType().getValue()]);
 				return true;
 			}
 		}
@@ -113,29 +115,29 @@ public class Board extends JPanel {
 	 * of tiles.
 	 */
 	public void createNorseBoard() {
-		productionArea.add(new Tile(Constants.TYPE_DESERT, 0, 0));
-		productionArea.add(new Tile(Constants.TYPE_FERTILE, 1, 0));
-		productionArea.add(new Tile(Constants.TYPE_FOREST, 2, 0));
-		productionArea.add(new Tile(Constants.TYPE_FERTILE, 3, 0));
-		productionArea.add(new Tile(Constants.TYPE_HILLS, 0, 1));
-		productionArea.add(new Tile(Constants.TYPE_SWAMP, 1, 1));
-		productionArea.add(new Tile(Constants.TYPE_FOREST, 2, 1));
-		productionArea.add(new Tile(Constants.TYPE_HILLS, 3, 1));
-		productionArea.add(new Tile(Constants.TYPE_FERTILE, 0, 2));
-		productionArea.add(new Tile(Constants.TYPE_FOREST, 1, 2));
-		productionArea.add(new Tile(Constants.TYPE_HILLS, 2, 2));
-		productionArea.add(new Tile(Constants.TYPE_MOUNTAINS, 3, 2));
-		productionArea.add(new Tile(Constants.TYPE_FERTILE, 0, 3));
-		productionArea.add(new Tile(Constants.TYPE_MOUNTAINS, 1, 3));
-		productionArea.add(new Tile(Constants.TYPE_MOUNTAINS, 2, 3));
-		productionArea.add(new Tile(Constants.TYPE_MOUNTAINS, 3, 3));
+		productionArea.add(new Tile(ResourceTileType.DESERT, 0, 0));
+		productionArea.add(new Tile(ResourceTileType.FERTILE, 1, 0));
+		productionArea.add(new Tile(ResourceTileType.FOREST, 2, 0));
+		productionArea.add(new Tile(ResourceTileType.FERTILE, 3, 0));
+		productionArea.add(new Tile(ResourceTileType.HILLS, 0, 1));
+		productionArea.add(new Tile(ResourceTileType.SWAMP, 1, 1));
+		productionArea.add(new Tile(ResourceTileType.FOREST, 2, 1));
+		productionArea.add(new Tile(ResourceTileType.HILLS, 3, 1));
+		productionArea.add(new Tile(ResourceTileType.FERTILE, 0, 2));
+		productionArea.add(new Tile(ResourceTileType.FOREST, 1, 2));
+		productionArea.add(new Tile(ResourceTileType.HILLS, 2, 2));
+		productionArea.add(new Tile(ResourceTileType.MOUNTAINS, 3, 2));
+		productionArea.add(new Tile(ResourceTileType.FERTILE, 0, 3));
+		productionArea.add(new Tile(ResourceTileType.MOUNTAINS, 1, 3));
+		productionArea.add(new Tile(ResourceTileType.MOUNTAINS, 2, 3));
+		productionArea.add(new Tile(ResourceTileType.MOUNTAINS, 3, 3));
 		icon = new ImageIcon("res/board_norse.png");
-		freeTerrainCounter[Constants.TYPE_DESERT] = 1;
-		freeTerrainCounter[Constants.TYPE_FERTILE] = 4;
-		freeTerrainCounter[Constants.TYPE_FOREST] = 3;
-		freeTerrainCounter[Constants.TYPE_HILLS] = 3;
-		freeTerrainCounter[Constants.TYPE_MOUNTAINS] = 4;
-		freeTerrainCounter[Constants.TYPE_SWAMP] = 1;
+		freeTerrainCounter[ResourceTileType.DESERT.getValue()] = 1;
+		freeTerrainCounter[ResourceTileType.FERTILE.getValue()] = 4;
+		freeTerrainCounter[ResourceTileType.FOREST.getValue()] = 3;
+		freeTerrainCounter[ResourceTileType.HILLS.getValue()] = 3;
+		freeTerrainCounter[ResourceTileType.MOUNTAINS.getValue()] = 4;
+		freeTerrainCounter[ResourceTileType.SWAMP.getValue()] = 1;
 	}
 
 	/**
@@ -143,29 +145,29 @@ public class Board extends JPanel {
 	 * of tiles.
 	 */
 	public void createEgyptBoard() {
-		productionArea.add(new Tile(Constants.TYPE_DESERT, 0, 0));
-		productionArea.add(new Tile(Constants.TYPE_HILLS, 1, 0));
-		productionArea.add(new Tile(Constants.TYPE_FERTILE, 2, 0));
-		productionArea.add(new Tile(Constants.TYPE_HILLS, 3, 0));
-		productionArea.add(new Tile(Constants.TYPE_DESERT, 0, 1));
-		productionArea.add(new Tile(Constants.TYPE_DESERT, 1, 1));
-		productionArea.add(new Tile(Constants.TYPE_FERTILE, 2, 1));
-		productionArea.add(new Tile(Constants.TYPE_FERTILE, 3, 1));
-		productionArea.add(new Tile(Constants.TYPE_FOREST, 0, 2));
-		productionArea.add(new Tile(Constants.TYPE_DESERT, 1, 2));
-		productionArea.add(new Tile(Constants.TYPE_FERTILE, 2, 2));
-		productionArea.add(new Tile(Constants.TYPE_FERTILE, 3, 2));
-		productionArea.add(new Tile(Constants.TYPE_DESERT, 0, 3));
-		productionArea.add(new Tile(Constants.TYPE_DESERT, 1, 3));
-		productionArea.add(new Tile(Constants.TYPE_SWAMP, 2, 3));
-		productionArea.add(new Tile(Constants.TYPE_SWAMP, 3, 3));
+		productionArea.add(new Tile(ResourceTileType.DESERT, 0, 0));
+		productionArea.add(new Tile(ResourceTileType.HILLS, 1, 0));
+		productionArea.add(new Tile(ResourceTileType.FERTILE, 2, 0));
+		productionArea.add(new Tile(ResourceTileType.HILLS, 3, 0));
+		productionArea.add(new Tile(ResourceTileType.DESERT, 0, 1));
+		productionArea.add(new Tile(ResourceTileType.DESERT, 1, 1));
+		productionArea.add(new Tile(ResourceTileType.FERTILE, 2, 1));
+		productionArea.add(new Tile(ResourceTileType.FERTILE, 3, 1));
+		productionArea.add(new Tile(ResourceTileType.FOREST, 0, 2));
+		productionArea.add(new Tile(ResourceTileType.DESERT, 1, 2));
+		productionArea.add(new Tile(ResourceTileType.FERTILE, 2, 2));
+		productionArea.add(new Tile(ResourceTileType.FERTILE, 3, 2));
+		productionArea.add(new Tile(ResourceTileType.DESERT, 0, 3));
+		productionArea.add(new Tile(ResourceTileType.DESERT, 1, 3));
+		productionArea.add(new Tile(ResourceTileType.SWAMP, 2, 3));
+		productionArea.add(new Tile(ResourceTileType.SWAMP, 3, 3));
 		icon = new ImageIcon("res/board_egypt.png");
-		freeTerrainCounter[Constants.TYPE_DESERT] = 6;
-		freeTerrainCounter[Constants.TYPE_FERTILE] = 5;
-		freeTerrainCounter[Constants.TYPE_FOREST] = 1;
-		freeTerrainCounter[Constants.TYPE_HILLS] = 2;
-		freeTerrainCounter[Constants.TYPE_MOUNTAINS] = 0;
-		freeTerrainCounter[Constants.TYPE_SWAMP] = 2;
+		freeTerrainCounter[ResourceTileType.DESERT.getValue()] = 6;
+		freeTerrainCounter[ResourceTileType.FERTILE.getValue()] = 5;
+		freeTerrainCounter[ResourceTileType.FOREST.getValue()] = 1;
+		freeTerrainCounter[ResourceTileType.HILLS.getValue()] = 2;
+		freeTerrainCounter[ResourceTileType.MOUNTAINS.getValue()] = 0;
+		freeTerrainCounter[ResourceTileType.SWAMP.getValue()] = 2;
 	}
 
 	/**
@@ -173,29 +175,29 @@ public class Board extends JPanel {
 	 * of tiles.
 	 */
 	public void createGreekBoard() {
-		productionArea.add(new Tile(Constants.TYPE_DESERT, 0, 0));
-		productionArea.add(new Tile(Constants.TYPE_HILLS, 1, 0));
-		productionArea.add(new Tile(Constants.TYPE_HILLS, 2, 0));
-		productionArea.add(new Tile(Constants.TYPE_HILLS, 3, 0));
-		productionArea.add(new Tile(Constants.TYPE_HILLS, 0, 1));
-		productionArea.add(new Tile(Constants.TYPE_HILLS, 1, 1));
-		productionArea.add(new Tile(Constants.TYPE_HILLS, 2, 1));
-		productionArea.add(new Tile(Constants.TYPE_HILLS, 3, 1));
-		productionArea.add(new Tile(Constants.TYPE_HILLS, 0, 2));
-		productionArea.add(new Tile(Constants.TYPE_MOUNTAINS, 1, 2));
-		productionArea.add(new Tile(Constants.TYPE_FERTILE, 2, 2));
-		productionArea.add(new Tile(Constants.TYPE_FOREST, 3, 2));
-		productionArea.add(new Tile(Constants.TYPE_FERTILE, 0, 3));
-		productionArea.add(new Tile(Constants.TYPE_FERTILE, 1, 3));
-		productionArea.add(new Tile(Constants.TYPE_FOREST, 2, 3));
-		productionArea.add(new Tile(Constants.TYPE_SWAMP, 3, 3));
+		productionArea.add(new Tile(ResourceTileType.DESERT, 0, 0));
+		productionArea.add(new Tile(ResourceTileType.HILLS, 1, 0));
+		productionArea.add(new Tile(ResourceTileType.HILLS, 2, 0));
+		productionArea.add(new Tile(ResourceTileType.HILLS, 3, 0));
+		productionArea.add(new Tile(ResourceTileType.HILLS, 0, 1));
+		productionArea.add(new Tile(ResourceTileType.HILLS, 1, 1));
+		productionArea.add(new Tile(ResourceTileType.HILLS, 2, 1));
+		productionArea.add(new Tile(ResourceTileType.HILLS, 3, 1));
+		productionArea.add(new Tile(ResourceTileType.HILLS, 0, 2));
+		productionArea.add(new Tile(ResourceTileType.MOUNTAINS, 1, 2));
+		productionArea.add(new Tile(ResourceTileType.FERTILE, 2, 2));
+		productionArea.add(new Tile(ResourceTileType.FOREST, 3, 2));
+		productionArea.add(new Tile(ResourceTileType.FERTILE, 0, 3));
+		productionArea.add(new Tile(ResourceTileType.FERTILE, 1, 3));
+		productionArea.add(new Tile(ResourceTileType.FOREST, 2, 3));
+		productionArea.add(new Tile(ResourceTileType.SWAMP, 3, 3));
 		icon = new ImageIcon("res/board_greek.png");
-		freeTerrainCounter[Constants.TYPE_DESERT] = 1;
-		freeTerrainCounter[Constants.TYPE_FERTILE] = 3;
-		freeTerrainCounter[Constants.TYPE_FOREST] = 2;
-		freeTerrainCounter[Constants.TYPE_HILLS] = 8;
-		freeTerrainCounter[Constants.TYPE_MOUNTAINS] = 1;
-		freeTerrainCounter[Constants.TYPE_SWAMP] = 1;
+		freeTerrainCounter[ResourceTileType.DESERT.getValue()] = 1;
+		freeTerrainCounter[ResourceTileType.FERTILE.getValue()] = 3;
+		freeTerrainCounter[ResourceTileType.FOREST.getValue()] = 2;
+		freeTerrainCounter[ResourceTileType.HILLS.getValue()] = 8;
+		freeTerrainCounter[ResourceTileType.MOUNTAINS.getValue()] = 1;
+		freeTerrainCounter[ResourceTileType.SWAMP.getValue()] = 1;
 	}
 
 	public int[] getFreeTerrainCounter() {
@@ -206,16 +208,21 @@ public class Board extends JPanel {
 		this.freeTerrainCounter = counter;
 	}
 
+	public BoardType getType() {
+		return this.type;
+	}
+
+	// TODO: implement a camelCase Method
 	public String getTypeName() {
 		String typeName = "";
 		switch (this.type) {
-		case Constants.TYPE_EGYPTIAN:
+		case EGYPTIAN:
 			typeName = "Egyptian";
 			break;
-		case Constants.TYPE_NORSE:
+		case NORSE:
 			typeName = "Norse";
 			break;
-		case Constants.TYPE_GREEK:
+		case GREEK:
 			typeName = "Greek";
 			break;
 		}
@@ -232,7 +239,7 @@ public class Board extends JPanel {
 	 */
 	class Tile {
 
-		int type = -1;
+		ResourceTileType type;
 		int x = -1;
 		int y = -1;
 		boolean isFilled = false;
@@ -240,13 +247,13 @@ public class Board extends JPanel {
 		/**
 		 * 
 		 * @param type
-		 *            Tile type, defined in /utils/Constants.java
+		 *            Tile type, defined in /utils/Types.java
 		 * @param x
 		 *            [0-3] Horizontal position of the tile on a 4x4 area
 		 * @param y
 		 *            [0-3] Vertical position of the tile on a 4x4 area
 		 */
-		public Tile(final int type, final int x, final int y) {
+		public Tile(final ResourceTileType type, final int x, final int y) {
 			this.type = type;
 			this.x = x;
 			this.y = y;
@@ -264,7 +271,7 @@ public class Board extends JPanel {
 			return this.isFilled;
 		}
 
-		public int getType() {
+		public ResourceTileType getType() {
 			return this.type;
 		}
 
