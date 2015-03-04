@@ -13,6 +13,11 @@ package utils;
  */
 public final class Constants {
 
+	public static final int NUM_AI_PLAYERS = 2;
+
+	public static final int MAX_TILES = 90;
+	public static final int MAX_TILES_SELECTED = 18;
+
 	/* Tile Types */
 	public static final int TYPE_DESERT = 0;
 	public static final int TYPE_FERTILE = 1;
