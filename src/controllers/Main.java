@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 import models.Board;
 import models.ButtonDialog;
 import models.ResourceTile;
+import models.ResourceTilePool;
 import utils.Constants;
 
 /**
@@ -57,18 +58,13 @@ public class Main extends JFrame implements ActionListener {
 			initBoard(Constants.TYPE_EGYPTIAN, "Egyptian Board");
 		}
 
-		// TODO: Implement the code to get 18 random tiles from the bank and add
-		// to an ArrayList called randomTiles
-		int i = 0;
-		for (i = 0; i < 17; i++) {
-			randomTiles.add(new ResourceTile(Constants.TYPE_MOUNTAINS,
-					Constants.ONE_FAVOR,
-					"res/production_tiles/tile_mountains_1_favor.png"));
-		}
+		final ResourceTilePool resPool = new ResourceTilePool();
 
-		randomTiles.add(new ResourceTile(Constants.TYPE_MOUNTAINS,
-				Constants.ONE_FAVOR,
-				"res/production_tiles/tile_forest_1_favor.png"));
+		int i = 0;
+		// Picks 18 random Tiles from the Resource Tile Pool
+		for (i = 0; i < 18; i++) {
+			randomTiles.add(resPool.SelectedTiles[i]);
+		}
 
 		// Counts terrains type on the random selection
 		for (final ResourceTile t : randomTiles) {
@@ -178,7 +174,7 @@ public class Main extends JFrame implements ActionListener {
 			while (!rightTile) {
 				pickedTileIndex = r.nextInt(randomTiles.size());
 				if (boardFreeTerrains[randomTiles.get(pickedTileIndex)
-						.getType()] != 0) {
+				                      .getType()] != 0) {
 					rightTile = true;
 				}
 			}
