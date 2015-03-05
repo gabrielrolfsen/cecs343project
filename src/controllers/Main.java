@@ -25,7 +25,10 @@ import models.Board;
 import models.ButtonDialog;
 import models.ResourceTile;
 import models.ResourceTilePool;
+import models.TileRes;
 import utils.Constants;
+import utils.ResEnum;
+import utils.TileEnum;
 import utils.Types.BoardType;
 
 /**
@@ -116,6 +119,7 @@ public class Main extends JFrame implements ActionListener {
 		// If there's any available choice, a dialog will pop so the user can
 		// pick one Tile
 		if (canPick) {
+			
 			// Pops the ButtonDialog for the Tile Selection
 			final ButtonDialog bDialog = new ButtonDialog(this, randomTiles,
 					playerBoard.getFreeTerrainCounter());
@@ -131,6 +135,19 @@ public class Main extends JFrame implements ActionListener {
 				final boolean s = playerBoard.addResourceTile(bDialog
 						.getSelected());
 
+				
+				TileRes curTileRes = (TileRes) playerBoard.boardResGrid.TileArray[i];
+				ResourceTile curResourceTile = bDialog.getSelected();
+				for (i = 0; i < 16; i++) {
+					if ((curTileRes.getType() == curResourceTile.myType) &&
+						!curTileRes.isVisible()) {
+						curTileRes.setType(curResourceTile.myType);
+						curTileRes.setRes(curResourceTile.myRes,
+										  curResourceTile.myTwoRes);
+						curTileRes.setVisible(true);
+					}
+				}
+				
 				// DEBUG
 				System.out.println("Tile Successfuly added:" + s);
 
@@ -190,6 +207,22 @@ public class Main extends JFrame implements ActionListener {
 					.addResourceTile(selectedTile);
 			terrainCounter[selectedTile.getType().getValue()]--;
 
+			
+			
+			TileRes curTileRes = (TileRes) aiPlayersBoards[aiNum].boardResGrid.TileArray[i];
+			ResourceTile curResourceTile = selectedTile;
+			for (i = 0; i < 16; i++) {
+				if ((curTileRes.getType() == curResourceTile.myType) &&
+					!curTileRes.isVisible()) {
+					curTileRes.setType(curResourceTile.myType);
+					curTileRes.setRes(curResourceTile.myRes,
+									  curResourceTile.myTwoRes);
+					curTileRes.setVisible(true);
+				}
+			}
+			
+			
+			
 			// DEBUG
 			System.out.println("Tile Successfuly added:" + s);
 
@@ -225,6 +258,16 @@ public class Main extends JFrame implements ActionListener {
 		switchBoard.addActionListener(this);
 		switchBoard.setPreferredSize(new Dimension(100, 50));
 
+		final JButton showAll = new JButton("Show All Tiles");
+		showAll.addActionListener(this);
+		showAll.setPreferredSize(new Dimension(150, 50));
+		showAll.setLocation(20, 20);
+		showAll.setActionCommand("Show All Tiles");
+		showAll.setVisible(true);
+		
+		
+
+		
 		setContentPane(board);
 		setLayout(new GridBagLayout());
 		final GridBagConstraints c = new GridBagConstraints();
@@ -240,6 +283,8 @@ public class Main extends JFrame implements ActionListener {
 		setLocationRelativeTo(null);
 		add(switchBoard, c);
 
+		add(showAll);
+		
 		pack();
 	}
 
@@ -292,6 +337,37 @@ public class Main extends JFrame implements ActionListener {
 		}
 		if (board != null) {
 			showBoard(board, title);
+		}
+		
+		if (e.getActionCommand() == "Show All Tiles") {
+			playerBoard.boardBuildGrid.TileArray[0].setType(TileEnum.WALL);
+			playerBoard.boardBuildGrid.TileArray[1].setType(TileEnum.TOWER);
+			playerBoard.boardBuildGrid.TileArray[2].setType(TileEnum.STOREHOUSE);
+			playerBoard.boardBuildGrid.TileArray[3].setType(TileEnum.MARKET);
+			playerBoard.boardBuildGrid.TileArray[4].setType(TileEnum.ARMORY);
+			playerBoard.boardBuildGrid.TileArray[5].setType(TileEnum.QUARRY);
+			playerBoard.boardBuildGrid.TileArray[6].setType(TileEnum.MONUMENT);
+			playerBoard.boardBuildGrid.TileArray[7].setType(TileEnum.GRANARY);
+			playerBoard.boardBuildGrid.TileArray[8].setType(TileEnum.MINT);
+			playerBoard.boardBuildGrid.TileArray[9].setType(TileEnum.WORKSHOP_WOOD);
+			playerBoard.boardBuildGrid.TileArray[10].setType(TileEnum.TEMPLE);
+			playerBoard.boardBuildGrid.TileArray[11].setType(TileEnum.WONDER);
+			playerBoard.boardBuildGrid.TileArray[12].setType(TileEnum.HOUSE);
+			playerBoard.boardBuildGrid.TileArray[13].setType(TileEnum.HOUSE);
+			playerBoard.boardBuildGrid.TileArray[14].setType(TileEnum.HOUSE);
+			playerBoard.boardBuildGrid.TileArray[15].setType(TileEnum.WORKSHOP_SIEGE);
+			
+			int i;
+			for(i = 0; i < 16; i++) {
+				playerBoard.boardBuildGrid.TileArray[i].setVisible(true);
+			}
+			
+			
+			for (i = 0; i < 16; i++) {
+				playerBoard.boardResGrid.TileArray[i].setVisible(true);
+				((TileRes) playerBoard.boardResGrid.TileArray[i]).setRes(ResEnum.FOOD, true);
+			}
+
 		}
 
 	}

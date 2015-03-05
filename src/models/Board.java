@@ -10,11 +10,15 @@ package models;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import utils.CulEnum;
+import utils.ResEnum;
+import utils.TileGridEnum;
 import utils.Types.BoardType;
 import utils.Types.ResourceTileType;
 
@@ -35,18 +39,29 @@ public class Board extends JPanel {
 	private final ArrayList<Tile> productionArea = new ArrayList<Tile>();
 	private final ArrayList<Tile> cityArea = new ArrayList<Tile>();
 
+	public ResStats boardResStats;
+	public TileGrid boardBuildGrid;
+	public ResGrid boardResGrid;
+	
+	
 	public Board(final BoardType type) {
+		boardBuildGrid = new TileGrid(this, TileGridEnum.BUILDING);
+		boardResGrid = new ResGrid(this, TileGridEnum.RESOURCE);
+		
 		this.type = type;
 		final int n = BoardType.NORSE.getValue();
 		switch (type) {
 		case NORSE:
 			createNorseBoard();
+			boardResGrid.setCulture(CulEnum.NORSE);
 			break;
 		case EGYPTIAN:
 			createEgyptBoard();
+			boardResGrid.setCulture(CulEnum.EGYPTIAN);
 			break;
 		case GREEK:
 			createGreekBoard();
+			boardResGrid.setCulture(CulEnum.GREEK);
 			break;
 		default:
 			System.err.println("ERROR: " + type
@@ -54,15 +69,41 @@ public class Board extends JPanel {
 			System.exit(1);
 		}
 		BackgroundImage = icon.getImage();
-		final int w = BackgroundImage.getWidth(this);
-		final int h = BackgroundImage.getHeight(this);
+		//final int w = BackgroundImage.getWidth(this);
+		//final int h = BackgroundImage.getHeight(this);
 
-		setPreferredSize(new Dimension(w, h));
+		//setPreferredSize(new Dimension(w, h));
+		setPreferredSize(new Dimension(800, 600));
+		//setSize(800, 600);
+		setLayout(null);
+		setVisible(true);
+
+		boardResStats = new ResStats(this);
+		boardResStats.setValue(ResEnum.FOOD, 5);
+		boardResStats.setValue(ResEnum.FAVOR, 5);
+		boardResStats.setValue(ResEnum.GOLD, 5);
+		boardResStats.setValue(ResEnum.WOOD, 5);
+		boardResStats.setValue(ResEnum.VICTORY, 0);
+		
+		
+//		int i;
+//		for (i = 0; i < 16; i++) {
+//			boardResGrid.TileArray[i].setVisible(true);
+//			((TileRes) boardResGrid.TileArray[i]).setRes(ResEnum.FOOD, true);
+//		}
+
 	}
 
 	@Override
-	public void paintComponent(final Graphics g) {
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		g.drawImage(BackgroundImage, 0, 0, null);
+		
+		boardResStats.setTop(10);
+		boardResStats.setLeft(700);
+
+		boardResGrid.Refresh();
+		boardBuildGrid.Refresh();
 	}
 
 	/**
