@@ -22,14 +22,11 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import models.Board;
-import models.ButtonDialog;
 import models.ResourceTile;
 import models.ResourceTilePool;
-import models.TileRes;
 import utils.Constants;
-import utils.ResEnum;
-import utils.TileEnum;
 import utils.Types.BoardType;
+import views.ButtonDialog;
 
 /**
  * @author grolfsen
@@ -67,15 +64,14 @@ public class Main extends JFrame implements ActionListener {
 		// Creates the ResourceTile Pool
 		final ResourceTilePool resPool = new ResourceTilePool();
 
-		int i = 0;
 		// Picks 18 random Tiles from the Resource Tile Pool
-		for (i = 0; i < 18; i++) {
+		for (int i = 0; i < 18; i++) {
 			randomTiles.add(resPool.getSelectedTile(i));
 		}
 
 		// Counts terrains type on the random selection
 		for (final ResourceTile t : randomTiles) {
-			for (i = 0; i < 6; i++) {
+			for (int i = 0; i < 6; i++) {
 				if (t.getType().getValue() == i) {
 					terrainCounter[i]++;
 					break;
@@ -84,8 +80,7 @@ public class Main extends JFrame implements ActionListener {
 		}
 
 		// 6 Rounds to pick the Terrains
-		// TODO: Show the tiles on the boards.
-		for (i = 0; i < 3; i++) {
+		for (int i = 0; i < 3; i++) {
 			userPick();
 			aiPick(0);
 			aiPick(1);
@@ -119,7 +114,7 @@ public class Main extends JFrame implements ActionListener {
 		// If there's any available choice, a dialog will pop so the user can
 		// pick one Tile
 		if (canPick) {
-			
+
 			// Pops the ButtonDialog for the Tile Selection
 			final ButtonDialog bDialog = new ButtonDialog(this, randomTiles,
 					playerBoard.getFreeTerrainCounter());
@@ -127,27 +122,27 @@ public class Main extends JFrame implements ActionListener {
 
 			// Checks if the user has passed his turn or picked a tile
 			if (bDialog.getSelected() != null) {
-				// Update tile counter
+				// Update free board tiles counter
 				playerBoard.setFreeTerrainCounter(bDialog.getTerrainCounter());
-				// Update tile list
+				// Update random tiles list
 				this.randomTiles = bDialog.getList();
 				// Add tile to player's board
 				final boolean s = playerBoard.addResourceTile(bDialog
 						.getSelected());
 
-				
-				TileRes curTileRes = (TileRes) playerBoard.boardResGrid.TileArray[i];
-				ResourceTile curResourceTile = bDialog.getSelected();
-				for (i = 0; i < 16; i++) {
-					if ((curTileRes.getType() == curResourceTile.myType) &&
-						!curTileRes.isVisible()) {
-						curTileRes.setType(curResourceTile.myType);
-						curTileRes.setRes(curResourceTile.myRes,
-										  curResourceTile.myTwoRes);
-						curTileRes.setVisible(true);
-					}
-				}
-				
+				// final TileRes curTileRes = (TileRes)
+				// playerBoard.boardResGrid.TileArray[i];
+				// final ResourceTile curResourceTile = bDialog.getSelected();
+				// for (i = 0; i < 16; i++) {
+				// if ((curTileRes.getType() == curResourceTile.myType)
+				// && !curTileRes.isVisible()) {
+				// curTileRes.setType(curResourceTile.myType);
+				// curTileRes.setRes(curResourceTile.myRes,
+				// curResourceTile.myTwoRes);
+				// curTileRes.setVisible(true);
+				// }
+				// }
+
 				// DEBUG
 				System.out.println("Tile Successfuly added:" + s);
 
@@ -166,6 +161,7 @@ public class Main extends JFrame implements ActionListener {
 		Random r = new Random();
 
 		// DEBUG
+		System.out.println();
 		System.out.println("--AI" + aiNum + " Pick--");
 
 		// Create a list with numbers 0 to 5 (types of terrains)
@@ -207,24 +203,21 @@ public class Main extends JFrame implements ActionListener {
 					.addResourceTile(selectedTile);
 			terrainCounter[selectedTile.getType().getValue()]--;
 
-			
-			
-			TileRes curTileRes = (TileRes) aiPlayersBoards[aiNum].boardResGrid.TileArray[i];
-			ResourceTile curResourceTile = selectedTile;
-			for (i = 0; i < 16; i++) {
-				if ((curTileRes.getType() == curResourceTile.myType) &&
-					!curTileRes.isVisible()) {
-					curTileRes.setType(curResourceTile.myType);
-					curTileRes.setRes(curResourceTile.myRes,
-									  curResourceTile.myTwoRes);
-					curTileRes.setVisible(true);
-				}
-			}
-			
-			
-			
+			// final TileRes curTileRes = (TileRes)
+			// aiPlayersBoards[aiNum].boardResGrid.TileArray[i];
+			// final ResourceTile curResourceTile = selectedTile;
+			// for (i = 0; i < 16; i++) {
+			// if ((curTileRes.getType() == curResourceTile.myType)
+			// && !curTileRes.isVisible()) {
+			// curTileRes.setType(curResourceTile.myType);
+			// curTileRes.setRes(curResourceTile.myRes,
+			// curResourceTile.myTwoRes);
+			// curTileRes.setVisible(true);
+			// }
+			// }
+
 			// DEBUG
-			System.out.println("Tile Successfuly added:" + s);
+			System.out.println("Tile Successfuly added: " + s);
 
 			// Removes the tile picked from the Array
 			randomTiles.remove(pickedTileIndex);
@@ -253,21 +246,12 @@ public class Main extends JFrame implements ActionListener {
 		showBoard(playerBoard, title);
 	}
 
+	// TODO: Button being replicated.
 	private void showBoard(final Board board, final String title) {
 		final JButton switchBoard = new JButton("Switch Board");
 		switchBoard.addActionListener(this);
 		switchBoard.setPreferredSize(new Dimension(100, 50));
 
-		final JButton showAll = new JButton("Show All Tiles");
-		showAll.addActionListener(this);
-		showAll.setPreferredSize(new Dimension(150, 50));
-		showAll.setLocation(20, 20);
-		showAll.setActionCommand("Show All Tiles");
-		showAll.setVisible(true);
-		
-		
-
-		
 		setContentPane(board);
 		setLayout(new GridBagLayout());
 		final GridBagConstraints c = new GridBagConstraints();
@@ -276,15 +260,15 @@ public class Main extends JFrame implements ActionListener {
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
 		c.gridx = 0;
 		c.gridy = 0;
-		setSize(800, 600);
+		setPreferredSize(new Dimension(Constants.BOARD_WIDTH,
+				Constants.BOARD_HEIGHT));
+		setResizable(false);
 
 		setTitle(title);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		add(switchBoard, c);
 
-		add(showAll);
-		
 		pack();
 	}
 
@@ -301,7 +285,7 @@ public class Main extends JFrame implements ActionListener {
 	}
 
 	/**
-	 * Method used to Switch Boards Button
+	 * Method used to Switch Boards Button. Still not working fine.
 	 */
 	@Override
 	public void actionPerformed(final ActionEvent e) {
@@ -335,39 +319,10 @@ public class Main extends JFrame implements ActionListener {
 				title = aiPlayersBoards[1].getType().toString();
 			}
 		}
+		// Show the board if the user selected a different one
 		if (board != null) {
 			showBoard(board, title);
-		}
-		
-		if (e.getActionCommand() == "Show All Tiles") {
-			playerBoard.boardBuildGrid.TileArray[0].setType(TileEnum.WALL);
-			playerBoard.boardBuildGrid.TileArray[1].setType(TileEnum.TOWER);
-			playerBoard.boardBuildGrid.TileArray[2].setType(TileEnum.STOREHOUSE);
-			playerBoard.boardBuildGrid.TileArray[3].setType(TileEnum.MARKET);
-			playerBoard.boardBuildGrid.TileArray[4].setType(TileEnum.ARMORY);
-			playerBoard.boardBuildGrid.TileArray[5].setType(TileEnum.QUARRY);
-			playerBoard.boardBuildGrid.TileArray[6].setType(TileEnum.MONUMENT);
-			playerBoard.boardBuildGrid.TileArray[7].setType(TileEnum.GRANARY);
-			playerBoard.boardBuildGrid.TileArray[8].setType(TileEnum.MINT);
-			playerBoard.boardBuildGrid.TileArray[9].setType(TileEnum.WORKSHOP_WOOD);
-			playerBoard.boardBuildGrid.TileArray[10].setType(TileEnum.TEMPLE);
-			playerBoard.boardBuildGrid.TileArray[11].setType(TileEnum.WONDER);
-			playerBoard.boardBuildGrid.TileArray[12].setType(TileEnum.HOUSE);
-			playerBoard.boardBuildGrid.TileArray[13].setType(TileEnum.HOUSE);
-			playerBoard.boardBuildGrid.TileArray[14].setType(TileEnum.HOUSE);
-			playerBoard.boardBuildGrid.TileArray[15].setType(TileEnum.WORKSHOP_SIEGE);
-			
-			int i;
-			for(i = 0; i < 16; i++) {
-				playerBoard.boardBuildGrid.TileArray[i].setVisible(true);
-			}
-			
-			
-			for (i = 0; i < 16; i++) {
-				playerBoard.boardResGrid.TileArray[i].setVisible(true);
-				((TileRes) playerBoard.boardResGrid.TileArray[i]).setRes(ResEnum.FOOD, true);
-			}
-
+			board.refresh();
 		}
 
 	}

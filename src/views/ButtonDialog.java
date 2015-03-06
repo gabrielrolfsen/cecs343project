@@ -5,7 +5,7 @@
  * @version %I%, %G%
  * @since Feb 23, 2015
  */
-package models;
+package views;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -19,6 +19,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import models.ResourceTile;
 
 /**
  * @author grolfsen
@@ -40,7 +42,9 @@ public class ButtonDialog extends JDialog {
 		this.freeTerrainCounter = terrainCounter;
 		int i = 0;
 
+		// Creates the layout for the Dialog
 		final JPanel panel = new JPanel(new GridBagLayout());
+		// TODO: Use constraints on dimensions
 		panel.setPreferredSize(new Dimension(350, 700));
 		final GridBagConstraints c = new GridBagConstraints();
 
@@ -82,10 +86,20 @@ public class ButtonDialog extends JDialog {
 
 	}
 
+	/**
+	 * Return the selected Resource Tile.
+	 * 
+	 * @return the selected Resource Tile or null if the user passed the round.
+	 */
 	public ResourceTile getSelected() {
 		return this.tileSelected;
 	}
 
+	/**
+	 * Return the updated Resource Tile list.
+	 * 
+	 * @return the updated Resource Tile list.
+	 */
 	public ArrayList<ResourceTile> getList() {
 		return this.tiles;
 	}
@@ -94,9 +108,18 @@ public class ButtonDialog extends JDialog {
 		return this.freeTerrainCounter;
 	}
 
+	/**
+	 * Listener to JButtons. When the user clicks one of the Buttons with a
+	 * ResourceTile on it, it will trigger this listener
+	 * 
+	 * @author grolfsen
+	 *
+	 */
 	private class PickTileListener implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
+			// Get the tileSelected by using the array index number on the
+			// button
 			tileSelected = tiles.get(Integer.valueOf(e.getActionCommand()));
 
 			// DEBUG
@@ -106,15 +129,25 @@ public class ButtonDialog extends JDialog {
 			// Remove the button from the array.
 			tiles.remove(Integer.parseInt((e.getActionCommand())));
 
+			// Dispose the JDialog
 			setVisible(false);
 			dispose();
 
 		}
 	}
 
+	/**
+	 * Listener to " pass"JButton. When the user clicks the button it will
+	 * trigger this listener, that just make the tileSelected null and dispose
+	 * the JDialog
+	 * 
+	 * @author grolfsen
+	 *
+	 */
 	private class PassTurnListener implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
+			// Set the return object as null and dispose the JDialog
 			tileSelected = null;
 			dispose();
 		}

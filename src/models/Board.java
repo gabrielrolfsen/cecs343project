@@ -7,20 +7,19 @@
  */
 package models;
 
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Point;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import utils.CulEnum;
+import utils.Constants;
 import utils.ResEnum;
-import utils.TileGridEnum;
 import utils.Types.BoardType;
+import utils.Types.GridType;
 import utils.Types.ResourceTileType;
+import views.TileGridView;
 
 /**
  * @author grolfsen
@@ -36,74 +35,63 @@ public class Board extends JPanel {
 	private Image BackgroundImage = null;
 	private ImageIcon icon = null;
 
-	private final ArrayList<Tile> productionArea = new ArrayList<Tile>();
-	private final ArrayList<Tile> cityArea = new ArrayList<Tile>();
+	private final ArrayList<TilePlaceHolder> productionArea = new ArrayList<TilePlaceHolder>();
+	private final ArrayList<TilePlaceHolder> cityArea = new ArrayList<TilePlaceHolder>();
 
-	public ResStats boardResStats;
-	public TileGrid boardBuildGrid;
-	public ResGrid boardResGrid;
-	
-	
+	private final ResStats boardResStats;
+
+	private final TileGridView productionAreaGrid;
+
 	public Board(final BoardType type) {
-		boardBuildGrid = new TileGrid(this, TileGridEnum.BUILDING);
-		boardResGrid = new ResGrid(this, TileGridEnum.RESOURCE);
-		
 		this.type = type;
-		final int n = BoardType.NORSE.getValue();
+
 		switch (type) {
 		case NORSE:
 			createNorseBoard();
-			boardResGrid.setCulture(CulEnum.NORSE);
 			break;
 		case EGYPTIAN:
 			createEgyptBoard();
-			boardResGrid.setCulture(CulEnum.EGYPTIAN);
 			break;
 		case GREEK:
 			createGreekBoard();
-			boardResGrid.setCulture(CulEnum.GREEK);
 			break;
-		default:
-			System.err.println("ERROR: " + type
-					+ " is not a valid code for board type.");
-			System.exit(1);
 		}
+
+		// Creates a Graphical Grid to place tiles on it
+		productionAreaGrid = new TileGridView(this, GridType.RESOURCE,
+				productionArea);
+
+		// Set the BoardImage as background image
 		BackgroundImage = icon.getImage();
-		//final int w = BackgroundImage.getWidth(this);
-		//final int h = BackgroundImage.getHeight(this);
 
-		//setPreferredSize(new Dimension(w, h));
-		setPreferredSize(new Dimension(800, 600));
-		//setSize(800, 600);
-		setLayout(null);
-		setVisible(true);
-
+		// Creates a Panel final to show the final resource status of
+		// the player
+		// TODO: Probably update this class, so its constructor do the setValue
+		// lines?
 		boardResStats = new ResStats(this);
 		boardResStats.setValue(ResEnum.FOOD, 5);
 		boardResStats.setValue(ResEnum.FAVOR, 5);
 		boardResStats.setValue(ResEnum.GOLD, 5);
 		boardResStats.setValue(ResEnum.WOOD, 5);
 		boardResStats.setValue(ResEnum.VICTORY, 0);
-		
-		
-//		int i;
-//		for (i = 0; i < 16; i++) {
-//			boardResGrid.TileArray[i].setVisible(true);
-//			((TileRes) boardResGrid.TileArray[i]).setRes(ResEnum.FOOD, true);
-//		}
 
 	}
 
+	public void refresh() {
+		productionAreaGrid.refresh();
+	}
+
 	@Override
-	public void paintComponent(Graphics g) {
+	public void paintComponent(final Graphics g) {
 		super.paintComponent(g);
 		g.drawImage(BackgroundImage, 0, 0, null);
-		
-		boardResStats.setTop(10);
-		boardResStats.setLeft(700);
 
-		boardResGrid.Refresh();
-		boardBuildGrid.Refresh();
+		// Set Resource Bar location
+		boardResStats.setTop(Constants.CUBES_BAR_Y_LOCATION);
+		boardResStats.setLeft(Constants.CUBES_BAR_X_LOCATION);
+
+		// TODO: Why is it necessary?
+		this.refresh();
 	}
 
 	/**
@@ -115,14 +103,13 @@ public class Board extends JPanel {
 	 *         matching tile on the board or if all spaces are being used.
 	 */
 	public boolean addResourceTile(final ResourceTile tile) {
-		for (final Tile t : productionArea) {
+		for (final TilePlaceHolder t : productionArea) {
 			if (t.getType() == tile.getType() && !t.isFilled()) {
 				t.setFilled();
-				System.out.println("BEFORE "
-						+ freeTerrainCounter[tile.getType().getValue()]);
+				// Add the tile to the graphical grid
+				productionAreaGrid.addTile(tile, t.getX(), t.getY());
+				// Decrease the Specific Free Terrain Counter
 				freeTerrainCounter[tile.getType().getValue()]--;
-				System.out.println("AFTER:"
-						+ freeTerrainCounter[tile.getType().getValue()]);
 				return true;
 			}
 		}
@@ -140,7 +127,7 @@ public class Board extends JPanel {
 	 */
 	public boolean addBuildingTile(final BuildingTile tile) {
 		if (this.buildingsCounter < 16) {
-			for (final Tile t : cityArea) {
+			for (final TilePlaceHolder t : cityArea) {
 				if (!t.isFilled()) {
 					t.setFilled();
 					this.buildingsCounter++;
@@ -156,22 +143,26 @@ public class Board extends JPanel {
 	 * of tiles.
 	 */
 	public void createNorseBoard() {
-		productionArea.add(new Tile(ResourceTileType.DESERT, 0, 0));
-		productionArea.add(new Tile(ResourceTileType.FERTILE, 1, 0));
-		productionArea.add(new Tile(ResourceTileType.FOREST, 2, 0));
-		productionArea.add(new Tile(ResourceTileType.FERTILE, 3, 0));
-		productionArea.add(new Tile(ResourceTileType.HILLS, 0, 1));
-		productionArea.add(new Tile(ResourceTileType.SWAMP, 1, 1));
-		productionArea.add(new Tile(ResourceTileType.FOREST, 2, 1));
-		productionArea.add(new Tile(ResourceTileType.HILLS, 3, 1));
-		productionArea.add(new Tile(ResourceTileType.FERTILE, 0, 2));
-		productionArea.add(new Tile(ResourceTileType.FOREST, 1, 2));
-		productionArea.add(new Tile(ResourceTileType.HILLS, 2, 2));
-		productionArea.add(new Tile(ResourceTileType.MOUNTAINS, 3, 2));
-		productionArea.add(new Tile(ResourceTileType.FERTILE, 0, 3));
-		productionArea.add(new Tile(ResourceTileType.MOUNTAINS, 1, 3));
-		productionArea.add(new Tile(ResourceTileType.MOUNTAINS, 2, 3));
-		productionArea.add(new Tile(ResourceTileType.MOUNTAINS, 3, 3));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.DESERT, 0, 0));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 1, 0));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.FOREST, 2, 0));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 3, 0));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 0, 1));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.SWAMP, 1, 1));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.FOREST, 2, 1));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 3, 1));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 0, 2));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.FOREST, 1, 2));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 2, 2));
+		productionArea
+				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 2));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 0, 3));
+		productionArea
+				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 3));
+		productionArea
+				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 2, 3));
+		productionArea
+				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 3));
 		icon = new ImageIcon("res/board_norse.png");
 		freeTerrainCounter[ResourceTileType.DESERT.getValue()] = 1;
 		freeTerrainCounter[ResourceTileType.FERTILE.getValue()] = 4;
@@ -186,22 +177,22 @@ public class Board extends JPanel {
 	 * of tiles.
 	 */
 	public void createEgyptBoard() {
-		productionArea.add(new Tile(ResourceTileType.DESERT, 0, 0));
-		productionArea.add(new Tile(ResourceTileType.HILLS, 1, 0));
-		productionArea.add(new Tile(ResourceTileType.FERTILE, 2, 0));
-		productionArea.add(new Tile(ResourceTileType.HILLS, 3, 0));
-		productionArea.add(new Tile(ResourceTileType.DESERT, 0, 1));
-		productionArea.add(new Tile(ResourceTileType.DESERT, 1, 1));
-		productionArea.add(new Tile(ResourceTileType.FERTILE, 2, 1));
-		productionArea.add(new Tile(ResourceTileType.FERTILE, 3, 1));
-		productionArea.add(new Tile(ResourceTileType.FOREST, 0, 2));
-		productionArea.add(new Tile(ResourceTileType.DESERT, 1, 2));
-		productionArea.add(new Tile(ResourceTileType.FERTILE, 2, 2));
-		productionArea.add(new Tile(ResourceTileType.FERTILE, 3, 2));
-		productionArea.add(new Tile(ResourceTileType.DESERT, 0, 3));
-		productionArea.add(new Tile(ResourceTileType.DESERT, 1, 3));
-		productionArea.add(new Tile(ResourceTileType.SWAMP, 2, 3));
-		productionArea.add(new Tile(ResourceTileType.SWAMP, 3, 3));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.DESERT, 0, 0));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 1, 0));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 2, 0));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 3, 0));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.DESERT, 0, 1));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.DESERT, 1, 1));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 2, 1));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 3, 1));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.FOREST, 0, 2));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.DESERT, 1, 2));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 2, 2));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 3, 2));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.DESERT, 0, 3));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.DESERT, 1, 3));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.SWAMP, 2, 3));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.SWAMP, 3, 3));
 		icon = new ImageIcon("res/board_egypt.png");
 		freeTerrainCounter[ResourceTileType.DESERT.getValue()] = 6;
 		freeTerrainCounter[ResourceTileType.FERTILE.getValue()] = 5;
@@ -216,22 +207,23 @@ public class Board extends JPanel {
 	 * of tiles.
 	 */
 	public void createGreekBoard() {
-		productionArea.add(new Tile(ResourceTileType.DESERT, 0, 0));
-		productionArea.add(new Tile(ResourceTileType.HILLS, 1, 0));
-		productionArea.add(new Tile(ResourceTileType.HILLS, 2, 0));
-		productionArea.add(new Tile(ResourceTileType.HILLS, 3, 0));
-		productionArea.add(new Tile(ResourceTileType.HILLS, 0, 1));
-		productionArea.add(new Tile(ResourceTileType.HILLS, 1, 1));
-		productionArea.add(new Tile(ResourceTileType.HILLS, 2, 1));
-		productionArea.add(new Tile(ResourceTileType.HILLS, 3, 1));
-		productionArea.add(new Tile(ResourceTileType.HILLS, 0, 2));
-		productionArea.add(new Tile(ResourceTileType.MOUNTAINS, 1, 2));
-		productionArea.add(new Tile(ResourceTileType.FERTILE, 2, 2));
-		productionArea.add(new Tile(ResourceTileType.FOREST, 3, 2));
-		productionArea.add(new Tile(ResourceTileType.FERTILE, 0, 3));
-		productionArea.add(new Tile(ResourceTileType.FERTILE, 1, 3));
-		productionArea.add(new Tile(ResourceTileType.FOREST, 2, 3));
-		productionArea.add(new Tile(ResourceTileType.SWAMP, 3, 3));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.DESERT, 0, 0));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 1, 0));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 2, 0));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 3, 0));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 0, 1));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 1, 1));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 2, 1));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 3, 1));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 0, 2));
+		productionArea
+				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 2));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 2, 2));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.FOREST, 3, 2));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 0, 3));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 1, 3));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.FOREST, 2, 3));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.SWAMP, 3, 3));
 		icon = new ImageIcon("res/board_greek.png");
 		freeTerrainCounter[ResourceTileType.DESERT.getValue()] = 1;
 		freeTerrainCounter[ResourceTileType.FERTILE.getValue()] = 3;
@@ -253,7 +245,7 @@ public class Board extends JPanel {
 		return this.type;
 	}
 
-	// TODO: implement a camelCase Method
+	// TODO: implement a camelCase Method (this method is not used yet)
 	public String getTypeName() {
 		String typeName = "";
 		switch (this.type) {
@@ -268,54 +260,11 @@ public class Board extends JPanel {
 			break;
 		}
 		return typeName;
+
 	}
 
-	/**
-	 * Class used to represent the tiles on the board. The board has two 4x4
-	 * tile areas, the city area (for BuildingTiles) and the production area
-	 * (for ResourceTiles).
-	 * 
-	 * @author grolfsen
-	 *
-	 */
-	class Tile {
-
-		ResourceTileType type;
-		int x = -1;
-		int y = -1;
-		boolean isFilled = false;
-
-		/**
-		 * 
-		 * @param type
-		 *            Tile type, defined in /utils/Types.java
-		 * @param x
-		 *            [0-3] Horizontal position of the tile on a 4x4 area
-		 * @param y
-		 *            [0-3] Vertical position of the tile on a 4x4 area
-		 */
-		public Tile(final ResourceTileType type, final int x, final int y) {
-			this.type = type;
-			this.x = x;
-			this.y = y;
-		}
-
-		public void setTile() {
-			this.isFilled = true;
-		}
-
-		public void setFilled() {
-			this.isFilled = true;
-		}
-
-		public boolean isFilled() {
-			return this.isFilled;
-		}
-
-		public ResourceTileType getType() {
-			return this.type;
-		}
-
+	public ArrayList<TilePlaceHolder> getProductionArea() {
+		return this.productionArea;
 	}
 
 }

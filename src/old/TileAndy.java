@@ -1,4 +1,4 @@
-package models;
+package old;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -15,7 +15,7 @@ import javax.swing.SwingConstants;
 import utils.*;
 
 
-public class Tile extends JPanel{
+public class TileAndy extends JPanel{
 
 	private static final int BOARD_HEIGHT = 600;
 	private static final int BOARD_WIDTH = 800;
@@ -25,7 +25,7 @@ public class Tile extends JPanel{
 	private Dimension myDimension;
 	private Point myPoint;
 	
-	public Tile() {
+	public TileAndy() {
 		super();
 
 		int intHeight = BOARD_HEIGHT / 2 / 4;

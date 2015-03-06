@@ -1,12 +1,14 @@
-package models;
+package old;
 
 import java.awt.Dimension;
 import java.awt.Color;
+
 import javax.swing.JLabel;
 
 import utils.*;
+import views.ResourceCube;
 
-public class TileRes extends Tile{
+public class TileRes extends TileAndy{
 	private JLabel lblRes1, lblRes2;
 	
 	public TileRes() {
@@ -60,10 +62,10 @@ public class TileRes extends Tile{
 	}
 	
 	public void setRes(ResEnum resType, boolean blnTwoRes) {
-		lblRes1.setIcon(new Res(resType));
+		lblRes1.setIcon(new ResourceCube(resType));
 		lblRes1.setVisible(true);
 		
-		lblRes2.setIcon(new Res(resType));
+		lblRes2.setIcon(new ResourceCube(resType));
 		if (blnTwoRes) {
 			lblRes2.setVisible(true);
 		} else {

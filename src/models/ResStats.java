@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import utils.*;
+import views.ResourceCube;
 
 public class ResStats {
 	private JLabel[] lblGraphic;
@@ -23,11 +24,11 @@ public class ResStats {
 		myLeft = 0;
 		myTop = 0;
 		
-		lblGraphic[ResEnum.FOOD.getValue()] = new JLabel(new Res(ResEnum.FOOD));
-		lblGraphic[ResEnum.FAVOR.getValue()] = new JLabel(new Res(ResEnum.FAVOR));
-		lblGraphic[ResEnum.WOOD.getValue()] = new JLabel(new Res(ResEnum.WOOD));
-		lblGraphic[ResEnum.GOLD.getValue()] = new JLabel(new Res(ResEnum.GOLD));	
-		lblGraphic[ResEnum.VICTORY.getValue()] = new JLabel(new Res(ResEnum.VICTORY));
+		lblGraphic[ResEnum.FOOD.getValue()] = new JLabel(new ResourceCube(ResEnum.FOOD));
+		lblGraphic[ResEnum.FAVOR.getValue()] = new JLabel(new ResourceCube(ResEnum.FAVOR));
+		lblGraphic[ResEnum.WOOD.getValue()] = new JLabel(new ResourceCube(ResEnum.WOOD));
+		lblGraphic[ResEnum.GOLD.getValue()] = new JLabel(new ResourceCube(ResEnum.GOLD));	
+		lblGraphic[ResEnum.VICTORY.getValue()] = new JLabel(new ResourceCube(ResEnum.VICTORY));
 				
 		for(n = 0; n < 5; n++) {
 			jfrm.add(lblGraphic[n]);

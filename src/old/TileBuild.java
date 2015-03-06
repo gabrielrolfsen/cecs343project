@@ -1,4 +1,4 @@
-package models;
+package old;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,7 +10,7 @@ import javax.swing.SwingConstants;
 import utils.*;
 
 
-public class TileBuild extends Tile {
+public class TileBuild extends TileAndy {
 
 	private JLabel lblDesc;
 	

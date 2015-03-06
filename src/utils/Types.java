@@ -50,4 +50,13 @@ public class Types {
 		}
 	}
 
+	public enum GridType {
+		RESOURCE(0), BUILDING(1);
+		private final int n;
+
+		GridType(final int n) {
+			this.n = n;
+		}
+	}
+
 }

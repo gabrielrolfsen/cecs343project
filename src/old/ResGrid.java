@@ -1,18 +1,19 @@
-package models;
+package old;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import utils.*;
+import utils.TileEnum;
+import utils.TileGridEnum;
+import utils.Types.BoardType;
 
 public class ResGrid extends TileGrid {
 
-	public ResGrid(JPanel jfrm, TileGridEnum newType) {
+	public ResGrid(final JPanel jfrm, final TileGridEnum newType) {
 		super(jfrm, newType);
 	}
-	
-	public void setCulture(CulEnum newCul) {
-		switch(newCul) {
+
+	public void setCulture(final BoardType newCul) {
+		switch (newCul) {
 		case GREEK:
 			initGreek();
 			break;
@@ -23,7 +24,7 @@ public class ResGrid extends TileGrid {
 			initNorse();
 		}
 	}
-	
+
 	private void initGreek() {
 		TileArray[0].setType(TileEnum.FERTILE);
 		TileArray[1].setType(TileEnum.FERTILE);
@@ -42,7 +43,7 @@ public class ResGrid extends TileGrid {
 		TileArray[14].setType(TileEnum.HILL);
 		TileArray[15].setType(TileEnum.HILL);
 	}
-	
+
 	private void initEgyptian() {
 		TileArray[0].setType(TileEnum.DESERT);
 		TileArray[1].setType(TileEnum.DESERT);
@@ -61,7 +62,7 @@ public class ResGrid extends TileGrid {
 		TileArray[14].setType(TileEnum.FERTILE);
 		TileArray[15].setType(TileEnum.HILL);
 	}
-	
+
 	private void initNorse() {
 		TileArray[0].setType(TileEnum.FERTILE);
 		TileArray[1].setType(TileEnum.MOUNTAIN);

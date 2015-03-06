@@ -2,28 +2,18 @@ package models;
 
 public class BuildingTile {
 
-	private int type;
+	private final int type;
 
 	public BuildingTile(final int aType) {
+		this.type = aType;
+	}
 
-		if (aType > 0 && aType < 15) // 14 types of building tiles
-		{
-			this.type = aType;
-		} else {
-			System.err.println(aType + " is not a valid building tile");
-			System.exit(1);
-		}
-
-	}// end Building_tile
-
-	public int getType() // returns type of building tile
-	{
+	public int getType() {
 		return type;
 	}
 
 	@Override
-	public String toString() // returns the string name of building tile
-	{
+	public String toString() {
 		String buildingName = "Error";
 
 		switch (this.type) {
@@ -85,6 +75,6 @@ public class BuildingTile {
 		}
 
 		return buildingName;
-	} // end toString
+	}
 
-} // end class Building_tile
+}

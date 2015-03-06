@@ -1,12 +1,12 @@
-package models;
+package views;
 
 import javax.swing.ImageIcon;
 import utils.*;
 
 
-public class Res extends ImageIcon{
+public class ResourceCube extends ImageIcon{
 
-	public Res(ResEnum newType) {
+	public ResourceCube(ResEnum newType) {
 		super();
 		
 		ImageIcon tmpImageIcon;
