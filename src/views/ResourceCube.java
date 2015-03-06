@@ -1,17 +1,17 @@
 package views;
 
 import javax.swing.ImageIcon;
-import utils.*;
 
+import utils.Types.ResourceCubeType;
 
-public class ResourceCube extends ImageIcon{
+public class ResourceCube extends ImageIcon {
 
-	public ResourceCube(ResEnum newType) {
+	public ResourceCube(final ResourceCubeType newType) {
 		super();
-		
+
 		ImageIcon tmpImageIcon;
-		
-		switch(newType) {
+
+		switch (newType) {
 		case FOOD:
 			tmpImageIcon = new ImageIcon("res/ResourceFood.jpg");
 			break;
@@ -27,8 +27,8 @@ public class ResourceCube extends ImageIcon{
 		default:
 			tmpImageIcon = new ImageIcon("res/ResourceVictory.jpg");
 		}
-		
+
 		setImage(tmpImageIcon.getImage());
-		
+
 	}
 }

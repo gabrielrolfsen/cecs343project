@@ -15,9 +15,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import utils.Constants;
-import utils.ResEnum;
 import utils.Types.BoardType;
 import utils.Types.GridType;
+import utils.Types.ResourceCubeType;
 import utils.Types.ResourceTileType;
 import views.TileGridView;
 
@@ -69,11 +69,11 @@ public class Board extends JPanel {
 		// TODO: Probably update this class, so its constructor do the setValue
 		// lines?
 		boardResStats = new ResStats(this);
-		boardResStats.setValue(ResEnum.FOOD, 5);
-		boardResStats.setValue(ResEnum.FAVOR, 5);
-		boardResStats.setValue(ResEnum.GOLD, 5);
-		boardResStats.setValue(ResEnum.WOOD, 5);
-		boardResStats.setValue(ResEnum.VICTORY, 0);
+		boardResStats.setValue(ResourceCubeType.FOOD, 5);
+		boardResStats.setValue(ResourceCubeType.FAVOR, 5);
+		boardResStats.setValue(ResourceCubeType.GOLD, 5);
+		boardResStats.setValue(ResourceCubeType.WOOD, 5);
+		boardResStats.setValue(ResourceCubeType.VICTORY, 0);
 
 	}
 
@@ -155,14 +155,14 @@ public class Board extends JPanel {
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FOREST, 1, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 2, 2));
 		productionArea
-				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 2));
+		.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 0, 3));
 		productionArea
-				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 3));
+		.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 3));
 		productionArea
-				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 2, 3));
+		.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 2, 3));
 		productionArea
-				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 3));
+		.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 3));
 		icon = new ImageIcon("res/board_norse.png");
 		freeTerrainCounter[ResourceTileType.DESERT.getValue()] = 1;
 		freeTerrainCounter[ResourceTileType.FERTILE.getValue()] = 4;
@@ -217,7 +217,7 @@ public class Board extends JPanel {
 		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 3, 1));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 0, 2));
 		productionArea
-				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 2));
+		.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 2, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FOREST, 3, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 0, 3));

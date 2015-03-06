@@ -2,8 +2,6 @@ package old;
 
 import javax.swing.JPanel;
 
-import utils.TileEnum;
-import utils.TileGridEnum;
 import utils.Types.BoardType;
 
 public class ResGrid extends TileGrid {

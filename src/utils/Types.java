@@ -50,6 +50,20 @@ public class Types {
 		}
 	}
 
+	public enum ResourceCubeType {
+		FOOD(0), FAVOR(1), WOOD(2), GOLD(3), VICTORY(4);
+
+		private final int myValue;
+
+		ResourceCubeType(final int v) {
+			myValue = v;
+		}
+
+		public int getValue() {
+			return myValue;
+		}
+	}
+
 	public enum GridType {
 		RESOURCE(0), BUILDING(1);
 		private final int n;

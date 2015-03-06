@@ -5,7 +5,6 @@ import java.awt.Insets;
 import javax.swing.JPanel;
 
 import utils.Constants;
-import utils.TileGridEnum;
 
 public class TileGrid {
 
