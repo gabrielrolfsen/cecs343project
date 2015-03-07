@@ -26,8 +26,9 @@ public class TileGridView {
 
 		// TODO: create Constants and use it ?
 		// Calculates the top of the grid based on constant (window's size)
-		int posYTile = Constants.GRID_TOP - insFrame.top;
-		final int tileHeight = (Constants.BOARD_HEIGHT - insFrame.top) / 8 + 2;
+		int posYTile = Constants.GRID_TOP - insFrame.top - 15;
+		// TODO: Change to constants?
+		final int tileHeight = (Constants.BOARD_HEIGHT - insFrame.top) / 8 - 2;
 		final int tileWidth = (Constants.BOARD_WIDTH - insFrame.left * 2) / 8;
 
 		// X position for the grid and X position for each tile
@@ -44,9 +45,13 @@ public class TileGridView {
 		// First position starts at the right-most and top most position grid
 		// location
 		posXTile = posXGrid;
-		System.out.println(posXGrid);
 
 		// Iterator to add each tile on the grid in the right location
+		// In the matrix is this one:
+		// 12 13 14 15
+		// 8 9 10 11
+		// 4 5 6 7
+		// 0 1 2 3
 		for (int k = 15; k >= 0; k--) {
 			// Set size and location based on the position
 			tileArray[k].setSize(tileWidth, tileHeight);
@@ -77,7 +82,6 @@ public class TileGridView {
 	public void addTile(final ResourceTile t, final int posX, final int posY) {
 		final int pos = posX + posY * 4;
 		this.tileArray[pos].setType(t.getType(), t.getResource());
-		this.tileArray[pos].setVisible(true);
 	}
 
 	/**

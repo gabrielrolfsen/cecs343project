@@ -75,12 +75,6 @@ public class ResourceTile {
 				+ ".png";
 		this.icon = new ImageIcon(iconPath, String.valueOf(type) + "-"
 				+ String.valueOf(resource));
-
-		// Andy implementation
-		// final TileRes tempResTile = new TileRes();
-		// tempResTile.setType(myType);
-		// tempResTile.setRes(myRes, myTwoRes);
-		// this.icon = tempResTile.getIcon();
 	}
 
 	public void setSelected(final boolean state) {

@@ -245,7 +245,11 @@ public class Board extends JPanel {
 		return this.type;
 	}
 
-	// TODO: implement a camelCase Method (this method is not used yet)
+	/**
+	 * Returns the type on a string
+	 * 
+	 * @return
+	 */
 	public String getTypeName() {
 		String typeName = "";
 		switch (this.type) {

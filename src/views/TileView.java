@@ -27,6 +27,7 @@ public class TileView extends JPanel {
 	public TileView() {
 		setSize(Constants.TILE_WIDTH, Constants.TILE_HEIGHT);
 		setLocation(0, 0);
+		// TODO: Why?!
 		setVisible(false);
 		setLayout(null);
 
@@ -85,8 +86,9 @@ public class TileView extends JPanel {
 		myPoint = super.getLocation();
 	}
 
+	// TODO: Why is it needed??
 	/**
-	 * Make the tile visible and set right Location
+	 * Make the tile visible and set right Location.
 	 */
 	public void refresh() {
 		this.setVisible(true);

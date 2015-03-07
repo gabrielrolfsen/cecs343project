@@ -1,19 +1,23 @@
 package views;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
 
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 
 import utils.Types.ResourceTileType;
 import utils.Types.ResourceType;
 
 public class ResourceTileView extends TileView {
-	private final JLabel lblRes1;
+	// private final JLabel lblRes1;
+	private Image BackgroundImage = null;
+	private ImageIcon icon = null;
 
 	public ResourceTileView(final ResourceTileType tileType) {
 		super();
 
+		// TODO: find a way to not use public/protected variables?
 		lblTitle.setForeground(Color.BLACK);
 		switch (tileType) {
 		case FERTILE:
@@ -34,12 +38,6 @@ public class ResourceTileView extends TileView {
 		case SWAMP:
 			lblTitle.setText("Swamp");
 		}
-		// TODO: Make a way to show the icon as full background image
-		lblRes1 = new JLabel();
-		add(lblRes1);
-		// IF this is the best way, remove hardcoding
-		lblRes1.setSize(140, 140);
-		lblRes1.setLocation(0, 0);
 	}
 
 	@Override
@@ -104,9 +102,19 @@ public class ResourceTileView extends TileView {
 		}
 		iconPath = "res/production_tiles/tile_" + typeName + "_" + resourceName
 				+ ".png";
+		this.icon = new ImageIcon(iconPath, String.valueOf(tileType) + "-"
+				+ String.valueOf(resource));
 
-		lblRes1.setIcon(new ImageIcon(iconPath, String.valueOf(tileType) + "-"
-				+ String.valueOf(resource)));
+		BackgroundImage = icon.getImage();
+
+		// lblRes1.setIcon(new ImageIcon(iconPath, String.valueOf(tileType) +
+		// "-"
+		// + String.valueOf(resource)));
 	}
 
+	@Override
+	public void paintComponent(final Graphics g) {
+		super.paintComponent(g);
+		g.drawImage(BackgroundImage, 0, 0, null);
+	}
 }

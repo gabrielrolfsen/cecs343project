@@ -35,9 +35,11 @@ public class ButtonDialog extends JDialog {
 	final ActionListener confirmListener = new PickTileListener();
 	final ActionListener passTurnListener = new PassTurnListener();
 
-	public ButtonDialog(final JFrame frame,
+	public ButtonDialog(final JFrame parentFrame,
 			final ArrayList<ResourceTile> tiles, final int[] terrainCounter) {
-		super(frame, "Pick a terrain", true);
+		// TODO: Try to implement a way it doesn't block the main Frame (modal:
+		// false)
+		super(parentFrame, "Pick a terrain", true);
 		this.tiles = tiles;
 		this.freeTerrainCounter = terrainCounter;
 		int i = 0;
@@ -82,7 +84,7 @@ public class ButtonDialog extends JDialog {
 
 		add(panel);
 		pack();
-		setLocationRelativeTo(frame);
+		setLocationRelativeTo(parentFrame);
 
 	}
 
@@ -123,8 +125,7 @@ public class ButtonDialog extends JDialog {
 			tileSelected = tiles.get(Integer.valueOf(e.getActionCommand()));
 
 			// DEBUG
-			System.out.println("USER has selected Index: "
-					+ e.getActionCommand());
+			System.out.println("--USER Pick--");
 
 			// Remove the button from the array.
 			tiles.remove(Integer.parseInt((e.getActionCommand())));
