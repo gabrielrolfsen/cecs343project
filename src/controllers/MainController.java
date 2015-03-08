@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import models.Board;
 import models.ResourceTile;
 import models.ResourceTilePool;
+import models.TilePlaceHolder.Coordinates;
 import utils.Constants;
 import utils.Types.BoardType;
 import views.ButtonDialog;
@@ -39,9 +40,11 @@ public class MainController {
 	// Array to place 18 random tiles picked from the tile pool
 	ArrayList<ResourceTile> randomTiles = new ArrayList<ResourceTile>();
 
-	// Counter for each type of terrain inside the randomTiles array, each index
-	// represent a terrainType and contains the number of tiles of this type in
-	// the random array
+	/*
+	 * Counter for each type of terrain inside the randomTiles array, each index
+	 * represent a terrainType and contains the number of tiles of this type in
+	 * the random array
+	 */
 	int[] terrainTypeCounter = new int[6];
 
 	// Player Board
@@ -54,6 +57,9 @@ public class MainController {
 
 		// Pops a Dialog so user can pick a culture
 		userCulturePick();
+
+		// Show the player board in the main frame
+		mainFrame.setDisplayedBoard(playerBoard);
 
 		// Creates the ResourceTile Pool
 		final ResourceTilePool resPool = new ResourceTilePool();
@@ -79,7 +85,7 @@ public class MainController {
 		mainFrame.showGameReadyDialog();
 
 		// Add Switch Button functionality
-		mainFrame.addButtonActionListener(new ActionListener() {
+		mainFrame.addSwitchBoardsButtonActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				Board boardToDisplay = null;
@@ -107,10 +113,9 @@ public class MainController {
 				}
 
 				// If the option was one different from the already
-				// displayed, chagne it
+				// displayed, change it
 				if (boardToDisplay != mainFrame.getDisplayedBoard()) {
 					mainFrame.setDisplayedBoard(boardToDisplay);
-					boardToDisplay.refresh();
 				}
 			}
 		});
@@ -158,8 +163,10 @@ public class MainController {
 			}
 		}
 
-		// If there's any available choice, a dialog will pop so the user can
-		// pick one Tile
+		/*
+		 * If there's any available choice, a dialog will pop so the user can
+		 * pick one Tile
+		 */
 		if (canPick) {
 
 			// Pops the ButtonDialog for the Tile Selection
@@ -172,12 +179,24 @@ public class MainController {
 				// Update free board tiles counter
 				playerBoard.setFreeTerrainCounter(bDialog.getTerrainCounter());
 
-				// Add tile to player's board
-				final boolean s = playerBoard.addResourceTile(bDialog
+				/*
+				 * Add tile to player's board and get the coordinates where it
+				 * was added
+				 */
+				final Coordinates c = playerBoard.addResourceTile(bDialog
 						.getSelected());
 
-				// DEBUG
-				System.out.println("Tile Successfuly added:" + s);
+				/*
+				 * If the tile was successfully added to the board, show it on
+				 * the BoardView
+				 */
+				if (c != null) {
+					mainFrame.addResourceTileToBoard(bDialog.getSelected(),
+							c.getX(), c.getY());
+				} else {
+					System.err
+							.println("There was a problem adding the tile to the board.");
+				}
 
 				// Update RandomTiles Array
 				this.randomTiles = bDialog.getList();
@@ -208,10 +227,6 @@ public class MainController {
 		int i = 0;
 		Random r = new Random();
 
-		// DEBUG
-		System.out.println();
-		System.out.println("--AI" + aiNum + " Pick--");
-
 		// Create a list with numbers 0 to 5 (types of terrains)
 		final ArrayList<Integer> nums = new ArrayList<Integer>();
 		for (i = 0; i < 6; i++) {
@@ -239,7 +254,7 @@ public class MainController {
 			while (!rightTile) {
 				pickedTileIndex = r.nextInt(randomTiles.size());
 				if (boardFreeTerrains[randomTiles.get(pickedTileIndex)
-				                      .getType().getValue()] != 0) {
+						.getType().getValue()] != 0) {
 					rightTile = true;
 				}
 			}
@@ -248,19 +263,13 @@ public class MainController {
 			final ResourceTile selectedTile = randomTiles.get(pickedTileIndex);
 
 			// Add the Tile to AI's board
-			final boolean s = aiPlayersBoards[aiNum]
+			final Coordinates c = aiPlayersBoards[aiNum]
 					.addResourceTile(selectedTile);
-
-			// DEBUG
-			System.out.println("Tile Successfuly added: " + s);
 
 			// Removes the tile picked from the RandomTiles Array
 			randomTiles.remove(pickedTileIndex);
 			// Decrease the TerrainCounter for RandomTiles Array
 			terrainTypeCounter[selectedTile.getType().getValue()]--;
-		} else {
-			// DEBUG
-			System.out.println("Passed");
 		}
 	}
 
@@ -287,13 +296,19 @@ public class MainController {
 				type == BoardType.GREEK ? BoardType.NORSE
 						: (type == BoardType.EGYPTIAN ? BoardType.GREEK
 								: BoardType.EGYPTIAN));
+
 		// Set the Boards on the main JFrame
-		mainFrame.setDisplayedBoard(playerBoard);
 	}
 
+	/**
+	 * Main class, runs the game.
+	 * 
+	 * @param args
+	 */
 	public static void main(final String[] args) {
 
 		MainController game;
+		// Start the game
 		try {
 			game = new MainController();
 			game.mainFrame.setVisible(true);

@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import models.Board;
+import models.Tile;
 import utils.Constants;
 import utils.Types.BoardType;
 
@@ -26,9 +27,14 @@ import utils.Types.BoardType;
  */
 public class MainFrameView extends JFrame {
 
-	private Board currentBoard = null;
-	private final BoardView displayedBoard = null;
+	// BoardView where the boad is shown
+	private final BoardView currentBoard = new BoardView();
+
+	// Button to switch between boards
 	final JButton btnSwitchBoard = new JButton("Switch Board");
+	final GridBagConstraints switchBtnConstants = new GridBagConstraints(0, 0,
+			0, 0, 0.5, 0.5, GridBagConstraints.FIRST_LINE_START, 0,
+			this.getInsets(), 0, 0);
 
 	public MainFrameView() {
 
@@ -38,7 +44,7 @@ public class MainFrameView extends JFrame {
 	}
 
 	/**
-	 * Opens a Dialog to user pick among the three cultures available.
+	 * Opens a Dialog to user pick one of the three cultures available.
 	 * 
 	 * @return the selected culture, all uppercase.
 	 */
@@ -57,40 +63,64 @@ public class MainFrameView extends JFrame {
 				"All Set!", JOptionPane.PLAIN_MESSAGE);
 	}
 
+	/**
+	 * Sets the board to be displayed on the BoardView JPanel
+	 * 
+	 * @param board
+	 *            Board type, the board to be displayed.
+	 */
+	public void setDisplayedBoard(final Board board) {
+		currentBoard.setBoard(board);
+		showBoard(currentBoard, board.getTypeName());
+	}
+
 	public Board getDisplayedBoard() {
-		return this.currentBoard;
+		return this.currentBoard.getBoard();
 	}
 
 	// Show the desired board on the JFrame
-	private void showBoard(final Board board, final String title) {
-
+	private void showBoard(final BoardView board, final String title) {
+		// Places the BoardView on the JFrame
 		setContentPane(board);
+		// Sets the correspondent layout and configurations
 		setLayout(new GridBagLayout());
-		final GridBagConstraints c = new GridBagConstraints();
-		c.weightx = 0.5;
-		c.weighty = 0.5;
-		c.anchor = GridBagConstraints.FIRST_LINE_START;
-		c.gridx = 0;
-		c.gridy = 0;
 		setPreferredSize(new Dimension(Constants.BOARD_WIDTH,
 				Constants.BOARD_HEIGHT));
 		setResizable(false);
-
 		setTitle(title);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-		add(btnSwitchBoard, c);
+		// TODO: don't know why but was changing the window's position
+		// setLocationRelativeTo(null);
 
+		// Adds the switch board button
+		add(btnSwitchBoard, switchBtnConstants);
 		pack();
-		currentBoard.refresh();
+		// Makes this JFrame visible
+		this.setVisible(true);
 	}
 
-	public void setDisplayedBoard(final Board displayedBoard) {
-		this.currentBoard = displayedBoard;
-		showBoard(displayedBoard, displayedBoard.getTypeName());
+	/**
+	 * Add a ResourceTile to the gridView of the BoardView.
+	 * 
+	 * @param tile
+	 *            Tile, Tile to be added.
+	 * @param x
+	 *            int, X position.
+	 * @param y
+	 *            int, Y position.
+	 */
+	public void addResourceTileToBoard(final Tile tile, final int x, final int y) {
+		currentBoard.addResourceTile(tile, x, y);
 	}
 
-	public void addButtonActionListener(final ActionListener listener) {
+	/**
+	 * Adds a listener to the switch board button listener.
+	 * 
+	 * @param listener
+	 *            ActionListener, listener to be added.
+	 */
+	public void addSwitchBoardsButtonActionListener(
+			final ActionListener listener) {
 		btnSwitchBoard.addActionListener(listener);
 	}
 

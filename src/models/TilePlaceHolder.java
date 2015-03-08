@@ -12,10 +12,10 @@ import utils.Types.ResourceTileType;
  */
 public class TilePlaceHolder {
 
+	Tile tile;
 	ResourceTileType type;
 	int x = -1;
 	int y = -1;
-	boolean isFilled = false;
 
 	/**
 	 * 
@@ -30,6 +30,7 @@ public class TilePlaceHolder {
 		this.type = type;
 		this.x = x;
 		this.y = y;
+		this.tile = null;
 	}
 
 	public int getX() {
@@ -40,20 +41,44 @@ public class TilePlaceHolder {
 		return this.y;
 	}
 
-	public void setTile() {
-		this.isFilled = true;
+	public void setTile(final Tile tile) {
+		this.tile = tile;
 	}
 
-	public void setFilled() {
-		this.isFilled = true;
+	public Tile getTile() {
+		return this.tile;
 	}
 
+	// Returns true if there's a Tile assigned to the placeholder
 	public boolean isFilled() {
-		return this.isFilled;
+		return tile != null ? true : false;
 	}
 
 	public ResourceTileType getType() {
 		return this.type;
+	}
+
+	public Coordinates getCoordinates() {
+		return new Coordinates(this.x, this.y);
+	}
+
+	public class Coordinates {
+		public final int x;
+		public final int y;
+
+		public Coordinates(final int x, final int y) {
+			this.x = x;
+			this.y = y;
+		}
+
+		public int getX() {
+			return this.x;
+		}
+
+		public int getY() {
+			return this.y;
+		}
+
 	}
 
 }

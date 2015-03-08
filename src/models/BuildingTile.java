@@ -1,6 +1,6 @@
 package models;
 
-public class BuildingTile {
+public class BuildingTile extends Tile {
 
 	private final int type;
 

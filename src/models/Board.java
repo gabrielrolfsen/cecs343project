@@ -7,40 +7,31 @@
  */
 package models;
 
-import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
 
-import utils.Constants;
+import models.TilePlaceHolder.Coordinates;
 import utils.Types.BoardType;
-import utils.Types.GridType;
-import utils.Types.ResourceCubeType;
 import utils.Types.ResourceTileType;
-import views.TileGridView;
 
 /**
  * @author grolfsen
  *
  */
-public class Board extends JPanel {
+public class Board {
 
 	// TODO: Separate JPanel from model
 	private final BoardType type;
 	private int buildingsCounter = 0;
 	int freeTerrainCounter[] = new int[6];
 
-	private Image BackgroundImage = null;
+	private final Image BackgroundImage = null;
 	private ImageIcon icon = null;
 
 	private final ArrayList<TilePlaceHolder> productionArea = new ArrayList<TilePlaceHolder>();
 	private final ArrayList<TilePlaceHolder> cityArea = new ArrayList<TilePlaceHolder>();
-
-	private final ResStats boardResStats;
-
-	private final TileGridView productionAreaGrid;
 
 	public Board(final BoardType type) {
 		this.type = type;
@@ -58,40 +49,23 @@ public class Board extends JPanel {
 		}
 
 		// Creates a Graphical Grid to place tiles on it
-		productionAreaGrid = new TileGridView(this, GridType.RESOURCE,
-				productionArea);
-
-		// Set the BoardImage as background image
-		BackgroundImage = icon.getImage();
+		// productionAreaGrid = new TileGridView(this, GridType.RESOURCE,
+		// productionArea);
+		//
+		// // Set the BoardImage as background image
+		// BackgroundImage = icon.getImage();
 
 		// Creates a Panel final to show the final resource status of
 		// the player
 		// TODO: Probably update this class, so its constructor do the setValue
 		// lines?
-		boardResStats = new ResStats(this);
-		boardResStats.setValue(ResourceCubeType.FOOD, 5);
-		boardResStats.setValue(ResourceCubeType.FAVOR, 5);
-		boardResStats.setValue(ResourceCubeType.GOLD, 5);
-		boardResStats.setValue(ResourceCubeType.WOOD, 5);
-		boardResStats.setValue(ResourceCubeType.VICTORY, 0);
+		// boardResStats = new ResStats(this);
+		// boardResStats.setValue(ResourceCubeType.FOOD, 5);
+		// boardResStats.setValue(ResourceCubeType.FAVOR, 5);
+		// boardResStats.setValue(ResourceCubeType.GOLD, 5);
+		// boardResStats.setValue(ResourceCubeType.WOOD, 5);
+		// boardResStats.setValue(ResourceCubeType.VICTORY, 0);
 
-	}
-
-	public void refresh() {
-		productionAreaGrid.refresh();
-	}
-
-	@Override
-	public void paintComponent(final Graphics g) {
-		super.paintComponent(g);
-		g.drawImage(BackgroundImage, 0, 0, null);
-
-		// Set Resource Bar location
-		boardResStats.setTop(Constants.CUBES_BAR_Y_LOCATION);
-		boardResStats.setLeft(Constants.CUBES_BAR_X_LOCATION);
-
-		// TODO: Why is it necessary?
-		this.refresh();
 	}
 
 	/**
@@ -102,18 +76,16 @@ public class Board extends JPanel {
 	 * @return true if the tile was successful added, false if there's no
 	 *         matching tile on the board or if all spaces are being used.
 	 */
-	public boolean addResourceTile(final ResourceTile tile) {
+	public Coordinates addResourceTile(final ResourceTile tile) {
 		for (final TilePlaceHolder t : productionArea) {
 			if (t.getType() == tile.getType() && !t.isFilled()) {
-				t.setFilled();
-				// Add the tile to the graphical grid
-				productionAreaGrid.addTile(tile, t.getX(), t.getY());
+				t.setTile(tile);
 				// Decrease the Specific Free Terrain Counter
 				freeTerrainCounter[tile.getType().getValue()]--;
-				return true;
+				return t.getCoordinates();
 			}
 		}
-		return false;
+		return null;
 	}
 
 	/**
@@ -129,7 +101,7 @@ public class Board extends JPanel {
 		if (this.buildingsCounter < 16) {
 			for (final TilePlaceHolder t : cityArea) {
 				if (!t.isFilled()) {
-					t.setFilled();
+					t.setTile(tile);
 					this.buildingsCounter++;
 					return true;
 				}
@@ -155,14 +127,14 @@ public class Board extends JPanel {
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FOREST, 1, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 2, 2));
 		productionArea
-		.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 2));
+				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 0, 3));
 		productionArea
-		.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 3));
+				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 3));
 		productionArea
-		.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 2, 3));
+				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 2, 3));
 		productionArea
-		.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 3));
+				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 3));
 		icon = new ImageIcon("res/board_norse.png");
 		freeTerrainCounter[ResourceTileType.DESERT.getValue()] = 1;
 		freeTerrainCounter[ResourceTileType.FERTILE.getValue()] = 4;
@@ -217,7 +189,7 @@ public class Board extends JPanel {
 		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 3, 1));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 0, 2));
 		productionArea
-		.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 2));
+				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 2, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FOREST, 3, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 0, 3));
@@ -269,6 +241,10 @@ public class Board extends JPanel {
 
 	public ArrayList<TilePlaceHolder> getProductionArea() {
 		return this.productionArea;
+	}
+
+	public ImageIcon getIcon() {
+		return this.icon;
 	}
 
 }

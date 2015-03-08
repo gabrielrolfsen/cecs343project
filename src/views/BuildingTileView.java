@@ -25,7 +25,6 @@ public class BuildingTileView extends TileView {
 		lblDesc.setFont(new Font("Serif", Font.PLAIN, 9));
 		lblDesc.setVisible(true);
 
-		// setType(TileEnum.NONE);
 	}
 
 	// @Override

@@ -11,14 +11,15 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import models.Board;
 import models.ResStats;
+import models.Tile;
 import models.TilePlaceHolder;
 import utils.Constants;
 import utils.Types.GridType;
-import utils.Types.ResourceCubeType;
 
 /**
  * @author grolfsen
@@ -26,27 +27,47 @@ import utils.Types.ResourceCubeType;
  */
 public class BoardView extends JPanel {
 
+	// Current board held in the view
+	private Board board;
+
 	private final ResStats boardResStats;
 	private TileGridView productionAreaGrid;
-	private final Image BackgroundImage = null;
-	JFrame parent = null;
+	private TileGridView cityAreaGrid;
+	private Image BackgroundImage = null;
+	private final ImageIcon icon = null;
 
-	public BoardView(final JFrame parent) {
+	public BoardView() {
 		super();
-		this.parent = parent;
 
 		boardResStats = new ResStats(this);
-		boardResStats.setValue(ResourceCubeType.FOOD, 5);
-		boardResStats.setValue(ResourceCubeType.FAVOR, 5);
-		boardResStats.setValue(ResourceCubeType.GOLD, 5);
-		boardResStats.setValue(ResourceCubeType.WOOD, 5);
-		boardResStats.setValue(ResourceCubeType.VICTORY, 0);
 	}
 
-	public void setProductionAreaGrid(
+	private void setCityAreaGrid(final ArrayList<TilePlaceHolder> cityArea) {
+		cityAreaGrid = new TileGridView(this, GridType.BUILDING, cityArea);
+	}
+
+	private void setProductionAreaGrid(
 			final ArrayList<TilePlaceHolder> productionArea) {
 		productionAreaGrid = new TileGridView(this, GridType.RESOURCE,
 				productionArea);
+	}
+
+	public void addResourceTile(final Tile t, final int posX, final int posY) {
+		productionAreaGrid.addTile(t, posX, posY);
+	}
+
+	public Board getBoard() {
+		return this.board;
+	}
+
+	public void setBoard(final Board board) {
+		setProductionAreaGrid(board.getProductionArea());
+		BackgroundImage = board.getIcon().getImage();
+		this.board = board;
+	}
+
+	public void refresh() {
+		productionAreaGrid.refresh();
 	}
 
 	@Override
@@ -60,9 +81,5 @@ public class BoardView extends JPanel {
 
 		// TODO: Why is it necessary?
 		this.refresh();
-	}
-
-	private void refresh() {
-		productionAreaGrid.refresh();
 	}
 }

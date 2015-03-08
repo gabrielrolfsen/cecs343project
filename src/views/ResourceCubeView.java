@@ -4,9 +4,9 @@ import javax.swing.ImageIcon;
 
 import utils.Types.ResourceCubeType;
 
-public class ResourceCube extends ImageIcon {
+public class ResourceCubeView extends ImageIcon {
 
-	public ResourceCube(final ResourceCubeType newType) {
+	public ResourceCubeView(final ResourceCubeType newType) {
 		super();
 
 		ImageIcon tmpImageIcon;

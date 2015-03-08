@@ -79,7 +79,7 @@ public class ButtonDialog extends JDialog {
 		c.insets = new Insets(10, 0, 0, 0); // top padding
 		c.gridx = 0;
 		c.gridwidth = 3;
-		c.gridy = (tiles.size() / 3) + 1;
+		c.gridy = (tiles.size() / 3) + 1; // set y based on array size
 		panel.add(passBtn, c);
 
 		add(panel);
@@ -120,12 +120,11 @@ public class ButtonDialog extends JDialog {
 	private class PickTileListener implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			// Get the tileSelected by using the array index number on the
-			// button
+			/*
+			 * Get the tileSelected by using the array index number on the
+			 * button
+			 */
 			tileSelected = tiles.get(Integer.valueOf(e.getActionCommand()));
-
-			// DEBUG
-			System.out.println("--USER Pick--");
 
 			// Remove the button from the array.
 			tiles.remove(Integer.parseInt((e.getActionCommand())));

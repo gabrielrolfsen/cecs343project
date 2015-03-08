@@ -2,24 +2,17 @@ package views;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.image.BufferedImage;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import utils.Constants;
-import utils.Types.ResourceTileType;
-import utils.Types.ResourceType;
 
 public class TileView extends JPanel {
 
 	protected JLabel lblTitle;
-	private ResourceTileType myType;
 
 	private Dimension myDimension;
 	private Point myPoint;
@@ -27,25 +20,16 @@ public class TileView extends JPanel {
 	public TileView() {
 		setSize(Constants.TILE_WIDTH, Constants.TILE_HEIGHT);
 		setLocation(0, 0);
-		// TODO: Why?!
-		setVisible(false);
+
 		setLayout(null);
 
+		// Adds a JLabel which contains the tile's name
 		lblTitle = new JLabel();
 		add(lblTitle);
 		lblTitle.setLocation(0, 0);
 		lblTitle.setSize(Constants.TILE_WIDTH, Constants.TILE_HEIGHT / 2);
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitle.setVisible(true);
-	}
-
-	public void setType(final ResourceTileType newType,
-			final ResourceType resource) {
-		this.myType = newType;
-	}
-
-	public ResourceTileType getType() {
-		return this.myType;
 	}
 
 	@Override
@@ -61,17 +45,6 @@ public class TileView extends JPanel {
 
 		setSize(d);
 		setLocation(p);
-	}
-
-	public Icon getIcon() {
-		final Dimension d = getSize();
-
-		final BufferedImage bi = new BufferedImage(d.width, d.height,
-				BufferedImage.TYPE_INT_RGB);
-		final Graphics2D g = bi.createGraphics();
-		print(g);
-		final ImageIcon ii = new ImageIcon(bi);
-		return ii;
 	}
 
 	@Override

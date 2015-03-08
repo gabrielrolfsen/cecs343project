@@ -6,8 +6,9 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
+import models.ResourceTile;
+import models.Tile;
 import utils.Types.ResourceTileType;
-import utils.Types.ResourceType;
 
 public class ResourceTileView extends TileView {
 	// private final JLabel lblRes1;
@@ -40,12 +41,10 @@ public class ResourceTileView extends TileView {
 		}
 	}
 
-	@Override
-	public void setType(final ResourceTileType tileType,
-			final ResourceType resource) {
+	public void setTile(final Tile t) {
+		final ResourceTile tile = (ResourceTile) t;
 		// Remove the title from the tile placeholder
 		lblTitle.setText("");
-		super.setType(tileType, resource);
 
 		// Both switches will make the correct words and then they will be
 		// Concatenated to create the correct icon path
@@ -53,7 +52,7 @@ public class ResourceTileView extends TileView {
 		String resourceName = "";
 		String iconPath = "";
 
-		switch (tileType) {
+		switch (tile.getType()) {
 		case DESERT:
 			typeName = "desert";
 			break;
@@ -74,7 +73,7 @@ public class ResourceTileView extends TileView {
 			break;
 		}
 
-		switch (resource) {
+		switch (tile.getResource()) {
 		case ONE_GOLD:
 			resourceName = "1_gold";
 			break;
@@ -100,16 +99,14 @@ public class ResourceTileView extends TileView {
 			resourceName = "2_woods";
 			break;
 		}
+		// Build the iconPath
 		iconPath = "res/production_tiles/tile_" + typeName + "_" + resourceName
 				+ ".png";
-		this.icon = new ImageIcon(iconPath, String.valueOf(tileType) + "-"
-				+ String.valueOf(resource));
+		this.icon = new ImageIcon(iconPath, String.valueOf(tile.getType())
+				+ "-" + String.valueOf(tile.getResource()));
 
+		// Assign the background iamge the proper background
 		BackgroundImage = icon.getImage();
-
-		// lblRes1.setIcon(new ImageIcon(iconPath, String.valueOf(tileType) +
-		// "-"
-		// + String.valueOf(resource)));
 	}
 
 	@Override

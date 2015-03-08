@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import utils.Types.ResourceCubeType;
-import views.ResourceCube;
+import views.ResourceCubeView;
 
 public class ResStats {
 	private final JLabel[] lblGraphic;
@@ -24,15 +24,15 @@ public class ResStats {
 		myTop = 0;
 
 		lblGraphic[ResourceCubeType.FOOD.getValue()] = new JLabel(
-				new ResourceCube(ResourceCubeType.FOOD));
+				new ResourceCubeView(ResourceCubeType.FOOD));
 		lblGraphic[ResourceCubeType.FAVOR.getValue()] = new JLabel(
-				new ResourceCube(ResourceCubeType.FAVOR));
+				new ResourceCubeView(ResourceCubeType.FAVOR));
 		lblGraphic[ResourceCubeType.WOOD.getValue()] = new JLabel(
-				new ResourceCube(ResourceCubeType.WOOD));
+				new ResourceCubeView(ResourceCubeType.WOOD));
 		lblGraphic[ResourceCubeType.GOLD.getValue()] = new JLabel(
-				new ResourceCube(ResourceCubeType.GOLD));
+				new ResourceCubeView(ResourceCubeType.GOLD));
 		lblGraphic[ResourceCubeType.VICTORY.getValue()] = new JLabel(
-				new ResourceCube(ResourceCubeType.VICTORY));
+				new ResourceCubeView(ResourceCubeType.VICTORY));
 
 		for (n = 0; n < 5; n++) {
 			jfrm.add(lblGraphic[n]);
@@ -51,6 +51,11 @@ public class ResStats {
 
 		updateValues();
 		moveObjects();
+		setValue(ResourceCubeType.FOOD, 5);
+		setValue(ResourceCubeType.FAVOR, 5);
+		setValue(ResourceCubeType.GOLD, 5);
+		setValue(ResourceCubeType.WOOD, 5);
+		setValue(ResourceCubeType.VICTORY, 0);
 	}
 
 	private void updateValues() {

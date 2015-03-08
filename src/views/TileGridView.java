@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-import models.ResourceTile;
+import models.Tile;
 import models.TilePlaceHolder;
 import utils.Constants;
 import utils.Types.GridType;
@@ -20,6 +20,9 @@ public class TileGridView {
 		// TODO: Just work for RESOURCE TILES UNTIL NOW!!
 		for (int i = 0; i < 16; i++) {
 			tileArray[i] = new ResourceTileView(tileList.get(i).getType());
+			if (tileList.get(i).isFilled()) {
+				this.tileArray[i].setTile(tileList.get(i).getTile());
+			}
 		}
 
 		final Insets insFrame = jfrm.getInsets();
@@ -79,9 +82,9 @@ public class TileGridView {
 	 * @param t
 	 *            Tile to be added to the Grid
 	 */
-	public void addTile(final ResourceTile t, final int posX, final int posY) {
+	public void addTile(final Tile t, final int posX, final int posY) {
 		final int pos = posX + posY * 4;
-		this.tileArray[pos].setType(t.getType(), t.getResource());
+		this.tileArray[pos].setTile(t);
 	}
 
 	/**

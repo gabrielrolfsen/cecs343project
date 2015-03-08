@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 import utils.Types.ResourceTileType;
 import utils.Types.ResourceType;
 
-public class ResourceTile {
+public class ResourceTile extends Tile {
 
 	private boolean isSelected;
 	private final ResourceTileType type;
