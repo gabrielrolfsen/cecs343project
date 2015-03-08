@@ -40,6 +40,11 @@ public class Types {
 		}
 	}
 
+	public enum BuildingTileType {
+		HOUSE, WALL, TOWER, STOREHOUSE, MARKET, ARMORY, QUARRY, MONUMENT, GRANARY, MINT, WORKSHOP_WOOD, WORKSHOP_SIEGE, TEMPLE, WONDER;
+
+	}
+
 	public enum ResourceType {
 		ONE_FOOD(0), ONE_FAVOR(1), ONE_GOLD(2), ONE_WOOD(3), TWO_FOODS(4), TWO_FAVORS(
 				5), TWO_GOLDS(6), TWO_WOODS(7);

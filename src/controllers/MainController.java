@@ -19,8 +19,8 @@ import javax.swing.JOptionPane;
 import models.Board;
 import models.ResourceTile;
 import models.ResourceTilePool;
-import models.TilePlaceHolder.Coordinates;
 import utils.Constants;
+import utils.Coordinates;
 import utils.Types.BoardType;
 import views.ButtonDialog;
 import views.MainFrameView;
@@ -47,6 +47,9 @@ public class MainController {
 	 */
 	int[] terrainTypeCounter = new int[6];
 
+	// Creates the ResourceTile Pool
+	final ResourceTilePool resPool = new ResourceTilePool();
+
 	// Player Board
 	public Board playerBoard = null;
 
@@ -60,9 +63,6 @@ public class MainController {
 
 		// Show the player board in the main frame
 		mainFrame.setDisplayedBoard(playerBoard);
-
-		// Creates the ResourceTile Pool
-		final ResourceTilePool resPool = new ResourceTilePool();
 
 		// Picks 18 random Tiles from the Resource Tile Pool
 		for (int i = 0; i < 18; i++) {
@@ -119,11 +119,10 @@ public class MainController {
 				}
 			}
 		});
-
 	}
 
 	/**
-	 * Class that calls the mainFrame to pops the Dialog for culture pick, then
+	 * Method that calls the mainFrame to pops the Dialog for culture pick, then
 	 * initialize the boards.
 	 */
 	private void userCulturePick() {
@@ -195,7 +194,7 @@ public class MainController {
 							c.getX(), c.getY());
 				} else {
 					System.err
-							.println("There was a problem adding the tile to the board.");
+					.println("There was a problem adding the tile to the board.");
 				}
 
 				// Update RandomTiles Array
@@ -254,7 +253,7 @@ public class MainController {
 			while (!rightTile) {
 				pickedTileIndex = r.nextInt(randomTiles.size());
 				if (boardFreeTerrains[randomTiles.get(pickedTileIndex)
-						.getType().getValue()] != 0) {
+				                      .getType().getValue()] != 0) {
 					rightTile = true;
 				}
 			}

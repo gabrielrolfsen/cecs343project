@@ -30,6 +30,7 @@ public class TileView extends JPanel {
 		lblTitle.setSize(Constants.TILE_WIDTH, Constants.TILE_HEIGHT / 2);
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitle.setVisible(true);
+		this.setVisible(true);
 	}
 
 	@Override
@@ -59,12 +60,10 @@ public class TileView extends JPanel {
 		myPoint = super.getLocation();
 	}
 
-	// TODO: Why is it needed??
 	/**
 	 * Make the tile visible and set right Location.
 	 */
 	public void refresh() {
-		this.setVisible(true);
 		setLocation(myPoint);
 		setSize(myDimension);
 	}

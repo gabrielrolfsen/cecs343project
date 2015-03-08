@@ -1,5 +1,6 @@
 package models;
 
+import utils.Coordinates;
 import utils.Types.ResourceTileType;
 
 /**
@@ -19,6 +20,8 @@ public class TilePlaceHolder {
 
 	/**
 	 * 
+	 * Constructor for ResourceTiles
+	 * 
 	 * @param type
 	 *            Tile type, defined in /utils/Types.java
 	 * @param x
@@ -28,6 +31,21 @@ public class TilePlaceHolder {
 	 */
 	public TilePlaceHolder(final ResourceTileType type, final int x, final int y) {
 		this.type = type;
+		this.x = x;
+		this.y = y;
+		this.tile = null;
+	}
+
+	/**
+	 * 
+	 * Constructor for BuildingTiles
+	 * 
+	 * @param x
+	 *            [0-3] Horizontal position of the tile on a 4x4 area
+	 * @param y
+	 *            [0-3] Vertical position of the tile on a 4x4 area
+	 */
+	public TilePlaceHolder(final int x, final int y) {
 		this.x = x;
 		this.y = y;
 		this.tile = null;
@@ -60,25 +78,6 @@ public class TilePlaceHolder {
 
 	public Coordinates getCoordinates() {
 		return new Coordinates(this.x, this.y);
-	}
-
-	public class Coordinates {
-		public final int x;
-		public final int y;
-
-		public Coordinates(final int x, final int y) {
-			this.x = x;
-			this.y = y;
-		}
-
-		public int getX() {
-			return this.x;
-		}
-
-		public int getY() {
-			return this.y;
-		}
-
 	}
 
 }

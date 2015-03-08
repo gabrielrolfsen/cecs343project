@@ -114,6 +114,20 @@ public class MainFrameView extends JFrame {
 	}
 
 	/**
+	 * Add a BuildingTile to the gridView of the BoardView.
+	 * 
+	 * @param tile
+	 *            Tile, Tile to be added.
+	 * @param x
+	 *            int, X position.
+	 * @param y
+	 *            int, Y position.
+	 */
+	public void addBuildingTileToBoard(final Tile tile, final int x, final int y) {
+		currentBoard.addBuildingTile(tile, x, y);
+	}
+
+	/**
 	 * Adds a listener to the switch board button listener.
 	 * 
 	 * @param listener

@@ -12,42 +12,47 @@ import utils.Types.GridType;
 
 public class TileGridView {
 
-	private final ResourceTileView[] tileArray = new ResourceTileView[16];
+	private final TileView[] tileArray = new TileView[16];
 
-	public TileGridView(final JPanel jfrm, final GridType newType,
+	public TileGridView(final JPanel jfrm, final GridType type,
 			final ArrayList<TilePlaceHolder> tileList) {
-
-		// TODO: Just work for RESOURCE TILES UNTIL NOW!!
-		for (int i = 0; i < 16; i++) {
-			tileArray[i] = new ResourceTileView(tileList.get(i).getType());
-			if (tileList.get(i).isFilled()) {
-				this.tileArray[i].setTile(tileList.get(i).getTile());
-			}
-		}
-
+		int posXGrid = -1;
 		final Insets insFrame = jfrm.getInsets();
 
-		// TODO: create Constants and use it ?
+		// TODO: Change to constants?
 		// Calculates the top of the grid based on constant (window's size)
 		int posYTile = Constants.GRID_TOP - insFrame.top - 15;
-		// TODO: Change to constants?
 		final int tileHeight = (Constants.BOARD_HEIGHT - insFrame.top) / 8 - 2;
 		final int tileWidth = (Constants.BOARD_WIDTH - insFrame.left * 2) / 8;
 
-		// X position for the grid and X position for each tile
-		int posXGrid, posXTile;
-
-		// Determines position of the grid based on the type
-		if (newType == GridType.BUILDING) {
-			// TODO: this part is not being used right now
-			posXGrid = Constants.GRID_LEFT - insFrame.left;
-		} else {
+		switch (type) {
+		case BUILDING:
+			posXGrid = (7 * tileWidth);
+			for (int i = 0; i < 16; i++) {
+				tileArray[i] = new BuildingTileView();
+				if (tileList.get(i).isFilled()) {
+					((BuildingTileView) this.tileArray[i]).setTile(tileList
+							.get(i).getTile());
+				}
+			}
+			break;
+		case RESOURCE:
 			posXGrid = (3 * tileWidth);
+			for (int i = 0; i < 16; i++) {
+				tileArray[i] = new ResourceTileView(tileList.get(i).getType());
+				if (tileList.get(i).isFilled()) {
+					((ResourceTileView) this.tileArray[i]).setTile(tileList
+							.get(i).getTile());
+				}
+			}
+			break;
 		}
 
-		// First position starts at the right-most and top most position grid
-		// location
-		posXTile = posXGrid;
+		/*
+		 * First position starts at the right-most and top most position grid
+		 * location
+		 */
+		int posXTile = posXGrid;
 
 		// Iterator to add each tile on the grid in the right location
 		// In the matrix is this one:
@@ -60,10 +65,14 @@ public class TileGridView {
 			tileArray[k].setSize(tileWidth, tileHeight);
 			tileArray[k].setLocation(posXTile, posYTile);
 			jfrm.add(tileArray[k]);
-			// Decrements tile's X position based on tile Width, jumps to the
-			// next column on the left
+
+			/*
+			 * Decrements tile's X position based on tile Width, jumps to the
+			 * next column on the left
+			 */
 			posXTile -= tileWidth;
 
+			// If the row ended
 			if (k % 4 == 0) {
 				// Increments tile's Y position based on tile Height, jumps to
 				// next row
@@ -82,9 +91,18 @@ public class TileGridView {
 	 * @param t
 	 *            Tile to be added to the Grid
 	 */
-	public void addTile(final Tile t, final int posX, final int posY) {
+	public void addTile(final GridType type, final Tile t, final int posX,
+			final int posY) {
 		final int pos = posX + posY * 4;
-		this.tileArray[pos].setTile(t);
+		switch (type) {
+		case BUILDING:
+			((BuildingTileView) this.tileArray[pos]).setTile(t);
+			break;
+		case RESOURCE:
+			((ResourceTileView) this.tileArray[pos]).setTile(t);
+			break;
+		}
+
 	}
 
 	/**

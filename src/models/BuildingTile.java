@@ -1,80 +1,71 @@
 package models;
 
+import javax.swing.Icon;
+
+import utils.Types.BuildingTileType;
+
 public class BuildingTile extends Tile {
 
-	private final int type;
+	private final BuildingTileType type;
+	private Icon icon;
 
-	public BuildingTile(final int aType) {
-		this.type = aType;
+	public BuildingTile(final BuildingTileType type) {
+		this.type = type;
 	}
 
-	public int getType() {
-		return type;
-	}
-
-	@Override
-	public String toString() {
-		String buildingName = "Error";
-
+	private void setIcon() {
 		switch (this.type) {
-		case 1:
-			buildingName = "House";
-			break;
+		case HOUSE:
 
-		case 2:
-			buildingName = "Wall";
 			break;
+		case WALL:
 
-		case 3:
-			buildingName = "Tower";
 			break;
+		case TOWER:
 
-		case 4:
-			buildingName = "Storehouse";
 			break;
+		case STOREHOUSE:
 
-		case 5:
-			buildingName = "Market";
 			break;
+		case MARKET:
 
-		case 6:
-			buildingName = "Armory";
 			break;
+		case ARMORY:
 
-		case 7:
-			buildingName = "Quarry";
 			break;
+		case QUARRY:
 
-		case 8:
-			buildingName = "Monument";
 			break;
+		case MONUMENT:
 
-		case 9:
-			buildingName = "Granary";
 			break;
+		case GRANARY:
 
-		case 10:
-			buildingName = "Gold Mint";
 			break;
+		case MINT:
 
-		case 11:
-			buildingName = "Wood Workshop";
 			break;
+		case WORKSHOP_WOOD:
 
-		case 12:
-			buildingName = "Siege Engine Workshop";
 			break;
+		case WORKSHOP_SIEGE:
 
-		case 13:
-			buildingName = "Great Temple";
 			break;
+		case TEMPLE:
 
-		case 14:
-			buildingName = "The Wonder";
+			break;
+		case WONDER:
+
 			break;
 		}
+	}
 
-		return buildingName;
+	public BuildingTileType getType() {
+		return this.type;
+	}
+
+	public Icon getIcon() {
+		return this.icon;
 	}
 
 }

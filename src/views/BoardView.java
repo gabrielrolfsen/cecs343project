@@ -53,7 +53,11 @@ public class BoardView extends JPanel {
 	}
 
 	public void addResourceTile(final Tile t, final int posX, final int posY) {
-		productionAreaGrid.addTile(t, posX, posY);
+		productionAreaGrid.addTile(GridType.RESOURCE, t, posX, posY);
+	}
+
+	public void addBuildingTile(final Tile t, final int posX, final int posY) {
+		productionAreaGrid.addTile(GridType.BUILDING, t, posX, posY);
 	}
 
 	public Board getBoard() {
@@ -62,12 +66,14 @@ public class BoardView extends JPanel {
 
 	public void setBoard(final Board board) {
 		setProductionAreaGrid(board.getProductionArea());
+		setCityAreaGrid(board.getCityArea());
 		BackgroundImage = board.getIcon().getImage();
 		this.board = board;
 	}
 
-	public void refresh() {
+	public void refreshBoard() {
 		productionAreaGrid.refresh();
+		cityAreaGrid.refresh();
 	}
 
 	@Override
@@ -80,6 +86,6 @@ public class BoardView extends JPanel {
 		boardResStats.setLeft(Constants.CUBES_BAR_X_LOCATION);
 
 		// TODO: Why is it necessary?
-		this.refresh();
+		this.refreshBoard();
 	}
 }

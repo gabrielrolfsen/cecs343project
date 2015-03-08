@@ -7,12 +7,11 @@
  */
 package models;
 
-import java.awt.Image;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
-import models.TilePlaceHolder.Coordinates;
+import utils.Coordinates;
 import utils.Types.BoardType;
 import utils.Types.ResourceTileType;
 
@@ -22,12 +21,15 @@ import utils.Types.ResourceTileType;
  */
 public class Board {
 
+	public ArrayList<TilePlaceHolder> getCityArea() {
+		return this.cityArea;
+	}
+
 	// TODO: Separate JPanel from model
 	private final BoardType type;
 	private int buildingsCounter = 0;
 	int freeTerrainCounter[] = new int[6];
 
-	private final Image BackgroundImage = null;
 	private ImageIcon icon = null;
 
 	private final ArrayList<TilePlaceHolder> productionArea = new ArrayList<TilePlaceHolder>();
@@ -48,23 +50,16 @@ public class Board {
 			break;
 		}
 
-		// Creates a Graphical Grid to place tiles on it
-		// productionAreaGrid = new TileGridView(this, GridType.RESOURCE,
-		// productionArea);
-		//
-		// // Set the BoardImage as background image
-		// BackgroundImage = icon.getImage();
+		initCityArea();
 
-		// Creates a Panel final to show the final resource status of
-		// the player
-		// TODO: Probably update this class, so its constructor do the setValue
-		// lines?
-		// boardResStats = new ResStats(this);
-		// boardResStats.setValue(ResourceCubeType.FOOD, 5);
-		// boardResStats.setValue(ResourceCubeType.FAVOR, 5);
-		// boardResStats.setValue(ResourceCubeType.GOLD, 5);
-		// boardResStats.setValue(ResourceCubeType.WOOD, 5);
-		// boardResStats.setValue(ResourceCubeType.VICTORY, 0);
+	}
+
+	private void initCityArea() {
+		for (int x = 0; x < 4; x++) {
+			for (int y = 0; y < 4; y++) {
+				cityArea.add(new TilePlaceHolder(x, y));
+			}
+		}
 
 	}
 
