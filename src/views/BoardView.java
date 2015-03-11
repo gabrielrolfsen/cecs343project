@@ -15,10 +15,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import models.Board;
-import models.ResStats;
 import models.Tile;
 import models.TilePlaceHolder;
 import utils.Constants;
+import utils.Types.BoardType;
 import utils.Types.GridType;
 
 /**
@@ -27,10 +27,8 @@ import utils.Types.GridType;
  */
 public class BoardView extends JPanel {
 
-	// Current board held in the view
-	private Board board;
-
-	private final ResStats boardResStats;
+	private BoardType boardType;
+	private final ResourceStatusView boardResStats;
 	private TileGridView productionAreaGrid;
 	private TileGridView cityAreaGrid;
 	private Image BackgroundImage = null;
@@ -39,7 +37,7 @@ public class BoardView extends JPanel {
 	public BoardView() {
 		super();
 
-		boardResStats = new ResStats(this);
+		boardResStats = new ResourceStatusView(this);
 	}
 
 	private void setCityAreaGrid(final ArrayList<TilePlaceHolder> cityArea) {
@@ -60,15 +58,14 @@ public class BoardView extends JPanel {
 		productionAreaGrid.addTile(GridType.BUILDING, t, posX, posY);
 	}
 
-	public Board getBoard() {
-		return this.board;
-	}
-
 	public void setBoard(final Board board) {
 		setProductionAreaGrid(board.getProductionArea());
 		setCityAreaGrid(board.getCityArea());
 		BackgroundImage = board.getIcon().getImage();
-		this.board = board;
+	}
+
+	public BoardType getBoardType() {
+		return this.boardType;
 	}
 
 	public void refreshBoard() {

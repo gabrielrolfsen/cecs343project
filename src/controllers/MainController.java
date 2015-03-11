@@ -35,7 +35,6 @@ public class MainController {
 	private static final long serialVersionUID = 1L;
 
 	private final MainFrameView mainFrame = new MainFrameView();
-	ButtonDialog tilePickerDialog;
 
 	// Array to place 18 random tiles picked from the tile pool
 	ArrayList<ResourceTile> randomTiles = new ArrayList<ResourceTile>();
@@ -110,11 +109,14 @@ public class MainController {
 				} else if (boardType.equalsIgnoreCase(aiPlayersBoards[1]
 						.getType().toString())) {
 					boardToDisplay = aiPlayersBoards[1];
+				} else {
+					// User canceled.
 				}
 
 				// If the option was one different from the already
 				// displayed, change it
-				if (boardToDisplay != mainFrame.getDisplayedBoard()) {
+				if (boardToDisplay.getType() != mainFrame
+						.getDisplayedBoardType()) {
 					mainFrame.setDisplayedBoard(boardToDisplay);
 				}
 			}
@@ -128,7 +130,7 @@ public class MainController {
 	private void userCulturePick() {
 		// Pops the DialogView on the mainFrame so user can pick a culture
 		final String input = mainFrame.culturePickDialog();
-
+		System.out.println(input);
 		// Gets the input and initialize the specific board for user + AI's
 		if (input.equalsIgnoreCase("Greek")) {
 			initBoard(BoardType.GREEK);
@@ -174,34 +176,34 @@ public class MainController {
 			bDialog.setVisible(true);
 
 			// Checks if the user has passed his turn or picked a tile
-			if (bDialog.getSelected() != null) {
-				// Update free board tiles counter
-				playerBoard.setFreeTerrainCounter(bDialog.getTerrainCounter());
+			if (bDialog.getIndexSelected() != -1) {
+				// Get the ResourceTile selected
+				final ResourceTile selectedTile = randomTiles.get(bDialog
+						.getIndexSelected());
 
 				/*
 				 * Add tile to player's board and get the coordinates where it
 				 * was added
 				 */
-				final Coordinates c = playerBoard.addResourceTile(bDialog
-						.getSelected());
+				final Coordinates c = playerBoard.addResourceTile(selectedTile);
+
+				// Removes the tile picked from the RandomTiles Array
+				randomTiles.remove(selectedTile);
 
 				/*
 				 * If the tile was successfully added to the board, show it on
 				 * the BoardView
 				 */
 				if (c != null) {
-					mainFrame.addResourceTileToBoard(bDialog.getSelected(),
-							c.getX(), c.getY());
+					mainFrame.addResourceTileToBoard(selectedTile, c.getX(),
+							c.getY());
 				} else {
 					System.err
-					.println("There was a problem adding the tile to the board.");
+							.println("There was a problem adding the tile to the board.");
 				}
 
-				// Update RandomTiles Array
-				this.randomTiles = bDialog.getList();
-
 				// Decrease the TerrainCounter for RandomTiles Array
-				terrainTypeCounter[bDialog.getSelected().getType().getValue()]--;
+				terrainTypeCounter[selectedTile.getType().getValue()]--;
 
 			}
 		}
@@ -220,6 +222,7 @@ public class MainController {
 	 *            'plays' for any AI player.
 	 */
 	private void aiPick(final int aiNum) {
+		// Get the FreeTerrains Type counter
 		final int[] boardFreeTerrains = aiPlayersBoards[aiNum]
 				.getFreeTerrainCounter();
 		boolean canPick = false;
@@ -247,20 +250,21 @@ public class MainController {
 		if (canPick) {
 			r = new Random();
 			int pickedTileIndex = -1;
-			// TODO: change variable name (it's horrible)
-			boolean rightTile = false;
+			// Variable that says if the tile can fit in the board
+			boolean tileCanFit = false;
 			// Keeps picking tile until find one that fits in the board
-			while (!rightTile) {
+			while (!tileCanFit) {
 				pickedTileIndex = r.nextInt(randomTiles.size());
 				if (boardFreeTerrains[randomTiles.get(pickedTileIndex)
-				                      .getType().getValue()] != 0) {
-					rightTile = true;
+						.getType().getValue()] != 0) {
+					tileCanFit = true;
 				}
 			}
 
 			// Get the selectedTile
 			final ResourceTile selectedTile = randomTiles.get(pickedTileIndex);
 
+			// TODO: Not needed. Test
 			// Add the Tile to AI's board
 			final Coordinates c = aiPlayersBoards[aiNum]
 					.addResourceTile(selectedTile);

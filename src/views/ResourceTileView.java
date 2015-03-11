@@ -5,18 +5,29 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 import models.ResourceTile;
 import models.Tile;
+import utils.Constants;
 import utils.Types.ResourceTileType;
 
 public class ResourceTileView extends TileView {
 	// private final JLabel lblRes1;
 	private Image BackgroundImage = null;
 	private ImageIcon icon = null;
+	private final JLabel lblTitle;
 
 	public ResourceTileView(final ResourceTileType tileType) {
 		super();
+
+		lblTitle = new JLabel();
+		add(lblTitle);
+		lblTitle.setLocation(0, 0);
+		lblTitle.setSize(Constants.TILE_WIDTH, Constants.TILE_HEIGHT / 2);
+		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitle.setVisible(true);
 
 		// TODO: find a way to not use public/protected variables?
 		lblTitle.setForeground(Color.BLACK);
@@ -112,6 +123,20 @@ public class ResourceTileView extends TileView {
 	@Override
 	public void paintComponent(final Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(BackgroundImage, 0, 0, null);
+		int x, y;
+
+		/*
+		 * If the Tile has a image (a tile is placed on the tile placeholder,
+		 * center the image, if not, just use 0,0 as coordinates to paint.
+		 */
+		if (BackgroundImage != null) {
+			x = (this.getWidth() - BackgroundImage.getWidth(null)) / 2;
+			y = (this.getHeight() - BackgroundImage.getHeight(null)) / 2;
+		} else {
+			x = 0;
+			y = 0;
+		}
+		g.drawImage(BackgroundImage, x, y, null);
+		// g.drawImage(BackgroundImage, 0, 0, null);
 	}
 }

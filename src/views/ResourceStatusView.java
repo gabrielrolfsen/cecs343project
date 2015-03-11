@@ -1,4 +1,4 @@
-package models;
+package views;
 
 import java.awt.Color;
 
@@ -7,15 +7,14 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import utils.Types.ResourceCubeType;
-import views.ResourceCubeView;
 
-public class ResStats {
+public class ResourceStatusView {
 	private final JLabel[] lblGraphic;
 	private final JLabel[] lblValue;
 	private final int[] intValue;
 	private int myLeft, myTop;
 
-	public ResStats(final JPanel jfrm) {
+	public ResourceStatusView(final JPanel jfrm) {
 		int n;
 		lblGraphic = new JLabel[5];
 		lblValue = new JLabel[5];

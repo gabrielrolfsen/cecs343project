@@ -37,7 +37,8 @@ public class MainFrameView extends JFrame {
 			this.getInsets(), 0, 0);
 
 	public MainFrameView() {
-
+		// TODO: Remove that
+		setLocation(300, 300);
 		// Sets the size of the 'switch board' Button
 		btnSwitchBoard.setPreferredSize(new Dimension(100, 50));
 
@@ -49,13 +50,19 @@ public class MainFrameView extends JFrame {
 	 * @return the selected culture, all uppercase.
 	 */
 	public String culturePickDialog() {
-		final String[] boardNames = new String[] { BoardType.GREEK.toString(),
-				BoardType.NORSE.toString(), BoardType.EGYPTIAN.toString() };
 		final JFrame frame = new JFrame("Board Selection");
-		final String input = (String) JOptionPane.showInputDialog(frame,
-				"Please choose a board:", "Board Selection",
-				JOptionPane.QUESTION_MESSAGE, null, boardNames, boardNames[0]);
-		return input;
+		final CulturePickDialog c = new CulturePickDialog(frame);
+		c.setVisible(true);
+		System.out.println(c.getCulturePicked());
+		return c.getCulturePicked();
+		// final String[] boardNames = new String[] {
+		// BoardType.GREEK.toString(),
+		// BoardType.NORSE.toString(), BoardType.EGYPTIAN.toString() };
+		//
+		// final String input = (String) JOptionPane.showInputDialog(frame,
+		// "Please choose a board:", "Board Selection",
+		// JOptionPane.QUESTION_MESSAGE, null, boardNames, boardNames[0]);
+		// return input;
 	}
 
 	public void showGameReadyDialog() {
@@ -74,14 +81,16 @@ public class MainFrameView extends JFrame {
 		showBoard(currentBoard, board.getTypeName());
 	}
 
-	public Board getDisplayedBoard() {
-		return this.currentBoard.getBoard();
+	public BoardType getDisplayedBoardType() {
+		return this.currentBoard.getBoardType();
 	}
 
 	// Show the desired board on the JFrame
 	private void showBoard(final BoardView board, final String title) {
+
 		// Places the BoardView on the JFrame
 		setContentPane(board);
+
 		// Sets the correspondent layout and configurations
 		setLayout(new GridBagLayout());
 		setPreferredSize(new Dimension(Constants.BOARD_WIDTH,

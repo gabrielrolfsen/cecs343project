@@ -4,15 +4,11 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 import utils.Constants;
 
 public class TileView extends JPanel {
-
-	protected JLabel lblTitle;
 
 	private Dimension myDimension;
 	private Point myPoint;
@@ -24,12 +20,7 @@ public class TileView extends JPanel {
 		setLayout(null);
 
 		// Adds a JLabel which contains the tile's name
-		lblTitle = new JLabel();
-		add(lblTitle);
-		lblTitle.setLocation(0, 0);
-		lblTitle.setSize(Constants.TILE_WIDTH, Constants.TILE_HEIGHT / 2);
-		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitle.setVisible(true);
+
 		this.setVisible(true);
 	}
 

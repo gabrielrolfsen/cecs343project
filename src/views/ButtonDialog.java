@@ -29,9 +29,7 @@ import models.ResourceTile;
 public class ButtonDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	private ResourceTile tileSelected = null;
-	private int[] freeTerrainCounter = new int[6];
-	ArrayList<ResourceTile> tiles = new ArrayList<ResourceTile>();
+	private int indexSelected = -1;
 	final ActionListener confirmListener = new PickTileListener();
 	final ActionListener passTurnListener = new PassTurnListener();
 
@@ -40,8 +38,6 @@ public class ButtonDialog extends JDialog {
 		// TODO: Try to implement a way it doesn't block the main Frame (modal:
 		// false)
 		super(parentFrame, "Pick a terrain", true);
-		this.tiles = tiles;
-		this.freeTerrainCounter = terrainCounter;
 		int i = 0;
 
 		// Creates the layout for the Dialog
@@ -53,7 +49,7 @@ public class ButtonDialog extends JDialog {
 		for (i = 0; i < tiles.size(); i++) {
 			final JButton button = new JButton("", tiles.get(i).getIcon());
 			// If the user cannot pick the tile, the button is disabled
-			if (freeTerrainCounter[tiles.get(i).getType().getValue()] == 0) {
+			if (terrainCounter[tiles.get(i).getType().getValue()] == 0) {
 				button.setEnabled(false);
 			}
 			// Put the button index as Action Command
@@ -88,26 +84,8 @@ public class ButtonDialog extends JDialog {
 
 	}
 
-	/**
-	 * Return the selected Resource Tile.
-	 * 
-	 * @return the selected Resource Tile or null if the user passed the round.
-	 */
-	public ResourceTile getSelected() {
-		return this.tileSelected;
-	}
-
-	/**
-	 * Return the updated Resource Tile list.
-	 * 
-	 * @return the updated Resource Tile list.
-	 */
-	public ArrayList<ResourceTile> getList() {
-		return this.tiles;
-	}
-
-	public int[] getTerrainCounter() {
-		return this.freeTerrainCounter;
+	public int getIndexSelected() {
+		return this.indexSelected;
 	}
 
 	/**
@@ -124,10 +102,7 @@ public class ButtonDialog extends JDialog {
 			 * Get the tileSelected by using the array index number on the
 			 * button
 			 */
-			tileSelected = tiles.get(Integer.valueOf(e.getActionCommand()));
-
-			// Remove the button from the array.
-			tiles.remove(Integer.parseInt((e.getActionCommand())));
+			indexSelected = Integer.parseInt((e.getActionCommand()));
 
 			// Dispose the JDialog
 			setVisible(false);
@@ -147,8 +122,8 @@ public class ButtonDialog extends JDialog {
 	private class PassTurnListener implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			// Set the return object as null and dispose the JDialog
-			tileSelected = null;
+			// Set the index as -1, so the controller knows that turn was passed
+			indexSelected = -1;
 			dispose();
 		}
 	}

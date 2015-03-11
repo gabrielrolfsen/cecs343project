@@ -35,59 +35,59 @@ public class BuildingTileView extends TileView {
 
 		switch (tile.getType()) {
 		case HOUSE:
-			lblTitle.setText("House");
+			// lblTitle.setText("House");
 			lblDesc.setText("Villager");
 			break;
 		case WALL:
-			lblTitle.setText("Wall");
+			// lblTitle.setText("Wall");
 			lblDesc.setText("Defend City");
 			break;
 		case TOWER:
-			lblTitle.setText("Tower");
+			// lblTitle.setText("Tower");
 			lblDesc.setText("<html><center>Defend Production</center></html>");
 			break;
 		case STOREHOUSE:
-			lblTitle.setText("Storehouse");
+			// lblTitle.setText("Storehouse");
 			lblDesc.setText("<html><center>Store Resource Cubes</center></html>");
 			break;
 		case MARKET:
-			lblTitle.setText("Market");
+			// lblTitle.setText("Market");
 			lblDesc.setText("Free Trade");
 			break;
 		case ARMORY:
-			lblTitle.setText("Armory");
+			// lblTitle.setText("Armory");
 			lblDesc.setText("+1 Unit in Battle");
 			break;
 		case QUARRY:
-			lblTitle.setText("Quarry");
+			// lblTitle.setText("Quarry");
 			lblDesc.setText("<html><center>-1 Cost per Building</center></html>");
 			break;
 		case MONUMENT:
-			lblTitle.setText("Monument");
+			// lblTitle.setText("Monument");
 			lblDesc.setText("+2 Favor / Gather");
 			break;
 		case GRANARY:
-			lblTitle.setText("Granary");
+			// lblTitle.setText("Granary");
 			lblDesc.setText("+2 Food / Gather");
 			break;
 		case MINT:
-			lblTitle.setText("Gold Mint");
+			// lblTitle.setText("Gold Mint");
 			lblDesc.setText("+2 Gold / Gather");
 			break;
 		case WORKSHOP_WOOD:
-			lblTitle.setText("<html><center>Wood Workshop</center><html>");
+			// lblTitle.setText("<html><center>Wood Workshop</center><html>");
 			lblDesc.setText("+2 Wood / Gather");
 			break;
 		case WORKSHOP_SIEGE:
-			lblTitle.setText("<html><center>Siege Engine Workshop</center><html>");
+			// lblTitle.setText("<html><center>Siege Engine Workshop</center><html>");
 			lblDesc.setText("<html><center>Negates Walls and Towers +1 Building Destroyed</center><html>");
 			break;
 		case TEMPLE:
-			lblTitle.setText("Great Temple");
+			// lblTitle.setText("Great Temple");
 			lblDesc.setText("<html><center>Trade 8 favor for 1 Victory Point</center></html>");
 			break;
 		case WONDER:
-			lblTitle.setText("The Wonder");
+			// lblTitle.setText("The Wonder");
 			lblDesc.setText("End Game");
 			break;
 		}
