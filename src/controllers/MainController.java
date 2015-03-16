@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import models.Board;
+import models.Player;
 import models.ResourceTile;
 import models.ResourceTilePool;
 import utils.Constants;
@@ -49,35 +50,43 @@ public class MainController {
 	// Creates the ResourceTile Pool
 	final ResourceTilePool resPool = new ResourceTilePool();
 
-	// Player Board
-	public Board playerBoard = null;
-
-	// Array that hold the AI players' boards.
-	public Board[] aiPlayersBoards = new Board[Constants.NUM_AI_PLAYERS];
+	// Array containing current players 0 is always the user
+	public Player[] players = new Player[Constants.MAX_PLAYERS];
 
 	public MainController() throws Exception {
+
+		// Initialize Players
+		for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
+			players[i] = new Player();
+		}
 
 		// Pops a Dialog so user can pick a culture
 		userCulturePick();
 
 		// Show the player board in the main frame
-		mainFrame.setDisplayedBoard(playerBoard);
+		mainFrame.setDisplayedBoard(players[0].getBoard());
 
-		// Picks 18 random Tiles from the Resource Tile Pool
-		for (int i = 0; i < 18; i++) {
-			randomTiles.add(resPool.getSelectedTile(i));
-			// Increment the terrainTypeCounter for the specific tile type
-			terrainTypeCounter[resPool.getSelectedTile(i).getType().getValue()]++;
+		// Picks MAX_TILES_PICKING_PHASE Random Tiles from the Tile Pool
+		randomTiles = resPool.getRandomTiles(Constants.MAX_TILES_PICKING_PHASE);
+
+		// Counts the Resource Types on the Random Tiles array
+		for (final ResourceTile t : randomTiles) {
+			terrainTypeCounter[t.getType().getValue()]++;
 		}
 
 		// ResourceTile picking begins - 6 Turns each player
 		for (int i = 0; i < 3; i++) {
 			userPick();
-			aiPick(0);
 			aiPick(1);
+			aiPick(2);
+			aiPick(2);
 			aiPick(1);
-			aiPick(0);
 			userPick();
+		}
+
+		// Return the remaining tiles (if there's any) to the pool.
+		if (randomTiles.size() != 0) {
+			resPool.returnTilesToPool(randomTiles);
 		}
 
 		// TODO: Improve this dialog
@@ -90,9 +99,10 @@ public class MainController {
 				Board boardToDisplay = null;
 
 				final String[] boardNames = new String[] {
-						playerBoard.getTypeName(),
-						aiPlayersBoards[0].getTypeName(),
-						aiPlayersBoards[1].getTypeName() };
+						players[0].getBoard().getTypeName(),
+						players[1].getBoard().getTypeName(),
+						players[2].getBoard().getTypeName() };
+
 				final JFrame frame = new JFrame("Board Selection");
 				final String boardType = (String) JOptionPane.showInputDialog(
 						frame, "Please choose a board:", "Board Selection",
@@ -100,15 +110,15 @@ public class MainController {
 						boardNames[0]);
 
 				// Switch between the option selected
-				if (boardType
-						.equalsIgnoreCase(playerBoard.getType().toString())) {
-					boardToDisplay = playerBoard;
-				} else if (boardType.equalsIgnoreCase(aiPlayersBoards[0]
-						.getType().toString())) {
-					boardToDisplay = aiPlayersBoards[0];
-				} else if (boardType.equalsIgnoreCase(aiPlayersBoards[1]
-						.getType().toString())) {
-					boardToDisplay = aiPlayersBoards[1];
+				if (boardType.equalsIgnoreCase(players[0].getBoard()
+						.getTypeName())) {
+					boardToDisplay = players[0].getBoard();
+				} else if (boardType.equalsIgnoreCase(players[1].getBoard()
+						.getTypeName())) {
+					boardToDisplay = players[1].getBoard();
+				} else if (boardType.equalsIgnoreCase(players[2].getBoard()
+						.getTypeName())) {
+					boardToDisplay = players[2].getBoard();
 				} else {
 					// User canceled.
 				}
@@ -152,7 +162,8 @@ public class MainController {
 	 * pass the turn.
 	 */
 	private void userPick() {
-		final int[] boardFreeTerrains = playerBoard.getFreeTerrainCounter();
+		final int[] boardFreeTerrains = players[0].getBoard()
+				.getFreeTerrainCounter();
 		boolean canPick = false;
 		int i = 0;
 
@@ -172,7 +183,7 @@ public class MainController {
 
 			// Pops the ButtonDialog for the Tile Selection
 			final ButtonDialog bDialog = new ButtonDialog(mainFrame,
-					randomTiles, playerBoard.getFreeTerrainCounter());
+					randomTiles, players[0].getBoard().getFreeTerrainCounter());
 			bDialog.setVisible(true);
 
 			// Checks if the user has passed his turn or picked a tile
@@ -185,7 +196,8 @@ public class MainController {
 				 * Add tile to player's board and get the coordinates where it
 				 * was added
 				 */
-				final Coordinates c = playerBoard.addResourceTile(selectedTile);
+				final Coordinates c = players[0].getBoard().addResourceTile(
+						selectedTile);
 
 				// Removes the tile picked from the RandomTiles Array
 				randomTiles.remove(selectedTile);
@@ -223,7 +235,7 @@ public class MainController {
 	 */
 	private void aiPick(final int aiNum) {
 		// Get the FreeTerrains Type counter
-		final int[] boardFreeTerrains = aiPlayersBoards[aiNum]
+		final int[] boardFreeTerrains = players[aiNum].getBoard()
 				.getFreeTerrainCounter();
 		boolean canPick = false;
 		int i = 0;
@@ -266,8 +278,8 @@ public class MainController {
 
 			// TODO: Not needed. Test
 			// Add the Tile to AI's board
-			final Coordinates c = aiPlayersBoards[aiNum]
-					.addResourceTile(selectedTile);
+			final Coordinates c = players[aiNum].getBoard().addResourceTile(
+					selectedTile);
 
 			// Removes the tile picked from the RandomTiles Array
 			randomTiles.remove(pickedTileIndex);
@@ -286,21 +298,18 @@ public class MainController {
 	 *            String, the title to be used in the JFrame
 	 */
 	private void initBoard(final BoardType type) {
-		playerBoard = new Board(type);
-
-		// If Player = Greek, Ai0 = Egyptian, Ai1 = Norse
-		// If Player = Egyptian, Ai0 = Norse, Ai1 = Greek
-		// If Player = Norse, Ai0 = Greek, Ai1 = Egyptian
-		aiPlayersBoards[0] = new Board(
-				type == BoardType.GREEK ? BoardType.EGYPTIAN
-						: (type == BoardType.EGYPTIAN ? BoardType.NORSE
-								: BoardType.GREEK));
-		aiPlayersBoards[1] = new Board(
-				type == BoardType.GREEK ? BoardType.NORSE
-						: (type == BoardType.EGYPTIAN ? BoardType.GREEK
-								: BoardType.EGYPTIAN));
-
-		// Set the Boards on the main JFrame
+		/*
+		 * ------------- If Player = Greek, Ai0 = Egyptian, Ai1 = Norse.
+		 * ------------- If Player = Egyptian, Ai0 = Norse, Ai1 = Greek.
+		 * ------------- If Player = Norse, Ai0 = Greek, Ai1 = Egyptian.
+		 */
+		players[0].setBoard(type);
+		players[1].setBoard(type == BoardType.GREEK ? BoardType.EGYPTIAN
+				: (type == BoardType.EGYPTIAN ? BoardType.NORSE
+						: BoardType.GREEK));
+		players[2].setBoard(type == BoardType.GREEK ? BoardType.NORSE
+				: (type == BoardType.EGYPTIAN ? BoardType.GREEK
+						: BoardType.EGYPTIAN));
 	}
 
 	/**

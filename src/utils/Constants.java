@@ -13,9 +13,10 @@ package utils;
  */
 public final class Constants {
 
+	public static final int MAX_PLAYERS = 3;
 	public static final int NUM_AI_PLAYERS = 2;
 	public static final int MAX_TILES = 90;
-	public static final int MAX_TILES_SELECTED = 18;
+	public static final int MAX_TILES_PICKING_PHASE = 18;
 
 	// Graphical Dimensions Arrays
 	public static final int BOARD_HEIGHT = 825;
