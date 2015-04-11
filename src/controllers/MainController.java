@@ -18,8 +18,9 @@ import javax.swing.JOptionPane;
 
 import models.Board;
 import models.Player;
+import models.ResourceBank;
 import models.ResourceTile;
-import models.ResourceTilePool;
+import models.ResourceTileBank;
 import utils.Constants;
 import utils.Coordinates;
 import utils.Types.BoardType;
@@ -35,7 +36,8 @@ import views.MainFrameView;
 public class MainController {
 	private static final long serialVersionUID = 1L;
 
-	private final MainFrameView mainFrame = new MainFrameView();
+	private final MainFrameView mainFrame = MainFrameView.getInstance();
+	private final ResourceBank resourceBank = ResourceBank.getInstance();
 
 	// Array to place 18 random tiles picked from the tile pool
 	ArrayList<ResourceTile> randomTiles = new ArrayList<ResourceTile>();
@@ -48,7 +50,7 @@ public class MainController {
 	int[] terrainTypeCounter = new int[6];
 
 	// Creates the ResourceTile Pool
-	final ResourceTilePool resPool = new ResourceTilePool();
+	final ResourceTileBank resPool = new ResourceTileBank();
 
 	// Array containing current players 0 is always the user
 	public Player[] players = new Player[Constants.MAX_PLAYERS];
@@ -59,6 +61,11 @@ public class MainController {
 		for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
 			players[i] = new Player();
 		}
+
+		// TODO: Temp.
+		mainFrame.openTradeDialog(resourceBank.getResourceCounter(),
+				players[0].getResourceCounter());
+		System.exit(0);
 
 		// Pops a Dialog so user can pick a culture
 		userCulturePick();

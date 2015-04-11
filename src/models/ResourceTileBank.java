@@ -6,10 +6,10 @@ import java.util.Random;
 import utils.Types.ResourceTileType;
 import utils.Types.ResourceType;
 
-public class ResourceTilePool {
+public class ResourceTileBank {
 	private final ArrayList<ResourceTile> tilePool = new ArrayList<ResourceTile>();
 
-	public ResourceTilePool() {
+	public ResourceTileBank() {
 		InitPool();
 	}
 

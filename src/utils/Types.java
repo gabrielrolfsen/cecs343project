@@ -56,7 +56,7 @@ public class Types {
 	}
 
 	public enum ResourceCubeType {
-		FOOD(0), FAVOR(1), WOOD(2), GOLD(3), VICTORY(4);
+		FAVOR(0), FOOD(1), GOLD(2), WOOD(3), VICTORY(4);
 
 		private final int myValue;
 

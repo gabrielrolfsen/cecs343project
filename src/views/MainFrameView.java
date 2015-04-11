@@ -27,6 +27,8 @@ import utils.Types.BoardType;
  */
 public class MainFrameView extends JFrame {
 
+	private final static MainFrameView mInstance = new MainFrameView();
+
 	// BoardView where the boad is shown
 	private final BoardView currentBoard = new BoardView();
 
@@ -36,7 +38,7 @@ public class MainFrameView extends JFrame {
 			0, 0, 0.5, 0.5, GridBagConstraints.FIRST_LINE_START, 0,
 			this.getInsets(), 0, 0);
 
-	public MainFrameView() {
+	private MainFrameView() {
 		// TODO: Remove that
 		setLocation(300, 300);
 		// Sets the size of the 'switch board' Button
@@ -145,6 +147,31 @@ public class MainFrameView extends JFrame {
 	public void addSwitchBoardsButtonActionListener(
 			final ActionListener listener) {
 		btnSwitchBoard.addActionListener(listener);
+	}
+
+	/**
+	 * Triggered when a Trade Card is played. Pops up the trade dialog with the
+	 * player current resources and the bank resources.
+	 * 
+	 * @param bankResources
+	 *            Array containing the current bank resources
+	 * @param playerResources
+	 *            Array containing the current player resources
+	 * @return array with the quantities of resources that have to be added to
+	 *         the player resources and subtracted from the bank
+	 */
+	public int[] openTradeDialog(final int[] bankResources,
+			final int[] playerResources) {
+		final JFrame frame = new JFrame();
+		final TradeDialog c = new TradeDialog(frame, bankResources,
+				playerResources);
+		// Display the Dialog
+		c.setVisible(true);
+		return c.getUpdatedResources();
+	}
+
+	public static synchronized MainFrameView getInstance() {
+		return mInstance;
 	}
 
 }
