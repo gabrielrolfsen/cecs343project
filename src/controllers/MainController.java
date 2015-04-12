@@ -10,12 +10,14 @@ package controllers;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import models.BattleCard;
 import models.Board;
 import models.Player;
 import models.ResourceBank;
@@ -63,8 +65,17 @@ public class MainController {
 		}
 
 		// TODO: Temp.
-		mainFrame.openTradeDialog(resourceBank.getResourceCounter(),
-				players[0].getResourceCounter());
+		final ArrayList<BattleCard> availableUnits = new ArrayList<BattleCard>();
+		final int[] cost = new int[] { 0, 2, 0, 1 };
+		availableUnits.addAll(Arrays.asList(new BattleCard("Anubite", "N/A", 6,
+				cost), new BattleCard("Anubite 2", "N/A", 6, cost),
+				new BattleCard("Anubite 3", "N/A", 6, cost), new BattleCard(
+						"Anubite 4", "N/A", 6, cost)));
+		mainFrame.openRecruitDialog(players[0].getResourceCounter(), 3,
+				availableUnits);
+
+		// mainFrame.openTradeDialog(resourceBank.getResourceCounter(),
+		// players[0].getResourceCounter());
 		System.exit(0);
 
 		// Pops a Dialog so user can pick a culture

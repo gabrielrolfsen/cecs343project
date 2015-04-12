@@ -11,11 +11,13 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import models.BattleCard;
 import models.Board;
 import models.Tile;
 import utils.Constants;
@@ -168,6 +170,17 @@ public class MainFrameView extends JFrame {
 		// Display the Dialog
 		c.setVisible(true);
 		return c.getUpdatedResources();
+	}
+
+	public ArrayList<String> openRecruitDialog(final int[] playerResources,
+			final int qty, final ArrayList<BattleCard> availableUnits) {
+		final JFrame frame = new JFrame();
+		final RecruitDialog d = new RecruitDialog(frame, playerResources, qty,
+				availableUnits);
+		// Display the Dialog
+		d.setVisible(true);
+		return d.getSelectedUnits();
+
 	}
 
 	public static synchronized MainFrameView getInstance() {

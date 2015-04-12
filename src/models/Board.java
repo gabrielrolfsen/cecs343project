@@ -21,14 +21,10 @@ import utils.Types.ResourceTileType;
  */
 public class Board {
 
-	public ArrayList<TilePlaceHolder> getCityArea() {
-		return this.cityArea;
-	}
-
-	// TODO: Separate JPanel from model
 	private final BoardType type;
 	private int buildingsCounter = 0;
 	int freeTerrainCounter[] = new int[6];
+	// TODO: Add army
 
 	private ImageIcon icon = null;
 
@@ -122,14 +118,14 @@ public class Board {
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FOREST, 1, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 2, 2));
 		productionArea
-				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 2));
+		.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 0, 3));
 		productionArea
-				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 3));
+		.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 3));
 		productionArea
-				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 2, 3));
+		.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 2, 3));
 		productionArea
-				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 3));
+		.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 3));
 		icon = new ImageIcon("res/board_norse.png");
 		freeTerrainCounter[ResourceTileType.DESERT.getValue()] = 1;
 		freeTerrainCounter[ResourceTileType.FERTILE.getValue()] = 4;
@@ -184,7 +180,7 @@ public class Board {
 		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 3, 1));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 0, 2));
 		productionArea
-				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 2));
+		.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 2, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FOREST, 3, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 0, 3));
@@ -232,6 +228,10 @@ public class Board {
 		}
 		return typeName;
 
+	}
+
+	public ArrayList<TilePlaceHolder> getCityArea() {
+		return this.cityArea;
 	}
 
 	public ArrayList<TilePlaceHolder> getProductionArea() {

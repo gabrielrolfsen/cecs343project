@@ -58,14 +58,14 @@ public class Types {
 	public enum ResourceCubeType {
 		FAVOR(0), FOOD(1), GOLD(2), WOOD(3), VICTORY(4);
 
-		private final int myValue;
+		private final int n;
 
-		ResourceCubeType(final int v) {
-			myValue = v;
+		ResourceCubeType(final int n) {
+			this.n = n;
 		}
 
 		public int getValue() {
-			return myValue;
+			return n;
 		}
 	}
 
@@ -75,6 +75,25 @@ public class Types {
 
 		GridType(final int n) {
 			this.n = n;
+		}
+
+		public int getValue() {
+			return this.n;
+		}
+	}
+
+	// TODO: Possibly turn TRADE into TRADE_1 and TRADE_2
+	public enum CardType {
+		ATTACK(0), BUILD(1), EXPLORE(2), GATHER(3), NEXTAGE(4), RECRUIT(5), TRADE(
+				6);
+		private final int n;
+
+		CardType(final int n) {
+			this.n = n;
+		}
+
+		public int getValue() {
+			return this.n;
 		}
 	}
 
