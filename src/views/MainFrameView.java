@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 
 import models.BattleCard;
 import models.Board;
+import models.Player;
 import models.Tile;
 import utils.Constants;
 import utils.Types.BoardType;
@@ -59,14 +60,6 @@ public class MainFrameView extends JFrame {
 		c.setVisible(true);
 		System.out.println(c.getCulturePicked());
 		return c.getCulturePicked();
-		// final String[] boardNames = new String[] {
-		// BoardType.GREEK.toString(),
-		// BoardType.NORSE.toString(), BoardType.EGYPTIAN.toString() };
-		//
-		// final String input = (String) JOptionPane.showInputDialog(frame,
-		// "Please choose a board:", "Board Selection",
-		// JOptionPane.QUESTION_MESSAGE, null, boardNames, boardNames[0]);
-		// return input;
 	}
 
 	public void showGameReadyDialog() {
@@ -80,9 +73,12 @@ public class MainFrameView extends JFrame {
 	 * @param board
 	 *            Board type, the board to be displayed.
 	 */
-	public void setDisplayedBoard(final Board board) {
+	public void setDisplayedBoard(final Player player) {
+		final Board board = player.getBoard();
 		currentBoard.setBoard(board);
 		showBoard(currentBoard, board.getTypeName());
+		currentBoard.updateResources(player.getResourceCounter());
+		;
 	}
 
 	public BoardType getDisplayedBoardType() {
@@ -110,6 +106,10 @@ public class MainFrameView extends JFrame {
 		pack();
 		// Makes this JFrame visible
 		this.setVisible(true);
+	}
+
+	public void updatePlayerResources(final int[] resources) {
+		currentBoard.updateResources(resources);
 	}
 
 	/**

@@ -36,8 +36,11 @@ public class BoardView extends JPanel {
 
 	public BoardView() {
 		super();
-
 		boardResStats = new ResourceStatusView(this);
+	}
+
+	public void updateResources(final int[] resources) {
+		boardResStats.updateResources(resources);
 	}
 
 	private void setCityAreaGrid(final ArrayList<TilePlaceHolder> cityArea) {

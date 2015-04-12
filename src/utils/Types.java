@@ -59,13 +59,19 @@ public class Types {
 		FAVOR(0), FOOD(1), GOLD(2), WOOD(3), VICTORY(4);
 
 		private final int n;
+		private final String resNames[] = { "Favor", "Food", "Gold", "Wood",
+				"Victory" };
 
 		ResourceCubeType(final int n) {
 			this.n = n;
 		}
 
+		public String getName() {
+			return this.resNames[n];
+		}
+
 		public int getValue() {
-			return n;
+			return this.n;
 		}
 	}
 

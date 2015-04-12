@@ -30,7 +30,7 @@ public class Player {
 
 	public void updateResources(final int[] updatedResources) {
 		for (int i = 0; i < updatedResources.length; i++) {
-			mResources[i] += updatedResources[i];
+			mResources[i] -= updatedResources[i];
 		}
 	}
 

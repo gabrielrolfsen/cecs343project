@@ -6,6 +6,7 @@ import utils.Types.ResourceCubeType;
 
 public class ResourceCubeView extends ImageIcon {
 
+	// TODO: Refactor to remove this class
 	public ResourceCubeView(final ResourceCubeType newType) {
 		super();
 

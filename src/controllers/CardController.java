@@ -23,6 +23,7 @@ import views.MainFrameView;
  */
 public class CardController {
 
+	private final static CardController mInstance = new CardController();
 	private final MainFrameView mainFrame = MainFrameView.getInstance();
 	private final ResourceBank resourceBank = ResourceBank.getInstance();
 
@@ -39,6 +40,7 @@ public class CardController {
 		final int[] result = mainFrame.openTradeDialog(
 				resourceBank.getResourceCounter(), player.getResourceCounter());
 		player.updateResources(result);
+		mainFrame.updatePlayerResources(player.getResourceCounter());
 		resourceBank.updateResources(result);
 	}
 
@@ -78,6 +80,10 @@ public class CardController {
 		default:
 			break;
 		}
+	}
+
+	public static CardController getInstance() {
+		return mInstance;
 	}
 
 }

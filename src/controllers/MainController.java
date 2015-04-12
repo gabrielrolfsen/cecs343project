@@ -10,15 +10,13 @@ package controllers;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import models.BattleCard;
-import models.Board;
+import models.Card;
 import models.Player;
 import models.ResourceBank;
 import models.ResourceTile;
@@ -26,6 +24,7 @@ import models.ResourceTileBank;
 import utils.Constants;
 import utils.Coordinates;
 import utils.Types.BoardType;
+import utils.Types.CardType;
 import views.ButtonDialog;
 import views.MainFrameView;
 
@@ -40,6 +39,7 @@ public class MainController {
 
 	private final MainFrameView mainFrame = MainFrameView.getInstance();
 	private final ResourceBank resourceBank = ResourceBank.getInstance();
+	private final CardController cardController = CardController.getInstance();
 
 	// Array to place 18 random tiles picked from the tile pool
 	ArrayList<ResourceTile> randomTiles = new ArrayList<ResourceTile>();
@@ -65,24 +65,22 @@ public class MainController {
 		}
 
 		// TODO: Temp.
-		final ArrayList<BattleCard> availableUnits = new ArrayList<BattleCard>();
-		final int[] cost = new int[] { 0, 2, 0, 1 };
-		availableUnits.addAll(Arrays.asList(new BattleCard("Anubite", "N/A", 6,
-				cost), new BattleCard("Anubite 2", "N/A", 6, cost),
-				new BattleCard("Anubite 3", "N/A", 6, cost), new BattleCard(
-						"Anubite 4", "N/A", 6, cost)));
-		mainFrame.openRecruitDialog(players[0].getResourceCounter(), 3,
-				availableUnits);
-
-		// mainFrame.openTradeDialog(resourceBank.getResourceCounter(),
-		// players[0].getResourceCounter());
-		System.exit(0);
+		// final ArrayList<BattleCard> availableUnits = new
+		// ArrayList<BattleCard>();
+		// final int[] cost = new int[] { 0, 2, 0, 1 };
+		// availableUnits.addAll(Arrays.asList(new BattleCard("Anubite", "N/A",
+		// 6,
+		// cost), new BattleCard("Anubite 2", "N/A", 6, cost),
+		// new BattleCard("Anubite 3", "N/A", 6, cost), new BattleCard(
+		// "Anubite 4", "N/A", 6, cost)));
+		// mainFrame.openRecruitDialog(players[0].getResourceCounter(), 3,
+		// availableUnits);
 
 		// Pops a Dialog so user can pick a culture
 		userCulturePick();
 
 		// Show the player board in the main frame
-		mainFrame.setDisplayedBoard(players[0].getBoard());
+		mainFrame.setDisplayedBoard(players[0]);
 
 		// Picks MAX_TILES_PICKING_PHASE Random Tiles from the Tile Pool
 		randomTiles = resPool.getRandomTiles(Constants.MAX_TILES_PICKING_PHASE);
@@ -110,11 +108,13 @@ public class MainController {
 		// TODO: Improve this dialog
 		mainFrame.showGameReadyDialog();
 
+		cardController.play(players[0], new Card(CardType.TRADE, 1));
+
 		// Add Switch Button functionality
 		mainFrame.addSwitchBoardsButtonActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				Board boardToDisplay = null;
+				Player playerBoardToDisplay = null;
 
 				final String[] boardNames = new String[] {
 						players[0].getBoard().getTypeName(),
@@ -130,22 +130,22 @@ public class MainController {
 				// Switch between the option selected
 				if (boardType.equalsIgnoreCase(players[0].getBoard()
 						.getTypeName())) {
-					boardToDisplay = players[0].getBoard();
+					playerBoardToDisplay = players[0];
 				} else if (boardType.equalsIgnoreCase(players[1].getBoard()
 						.getTypeName())) {
-					boardToDisplay = players[1].getBoard();
+					playerBoardToDisplay = players[1];
 				} else if (boardType.equalsIgnoreCase(players[2].getBoard()
 						.getTypeName())) {
-					boardToDisplay = players[2].getBoard();
+					playerBoardToDisplay = players[2];
 				} else {
 					// User canceled.
 				}
 
 				// If the option was one different from the already
 				// displayed, change it
-				if (boardToDisplay.getType() != mainFrame
+				if (playerBoardToDisplay.getBoard().getType() != mainFrame
 						.getDisplayedBoardType()) {
-					mainFrame.setDisplayedBoard(boardToDisplay);
+					mainFrame.setDisplayedBoard(playerBoardToDisplay);
 				}
 			}
 		});
@@ -229,7 +229,7 @@ public class MainController {
 							c.getY());
 				} else {
 					System.err
-							.println("There was a problem adding the tile to the board.");
+					.println("There was a problem adding the tile to the board.");
 				}
 
 				// Decrease the TerrainCounter for RandomTiles Array
@@ -286,7 +286,7 @@ public class MainController {
 			while (!tileCanFit) {
 				pickedTileIndex = r.nextInt(randomTiles.size());
 				if (boardFreeTerrains[randomTiles.get(pickedTileIndex)
-						.getType().getValue()] != 0) {
+				                      .getType().getValue()] != 0) {
 					tileCanFit = true;
 				}
 			}

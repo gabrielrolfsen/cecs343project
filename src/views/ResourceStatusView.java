@@ -11,10 +11,10 @@ import utils.Types.ResourceCubeType;
 public class ResourceStatusView {
 	private final JLabel[] lblGraphic;
 	private final JLabel[] lblValue;
-	private final int[] intValue;
+	private int[] intValue;
 	private int myLeft, myTop;
 
-	public ResourceStatusView(final JPanel jfrm) {
+	public ResourceStatusView(final JPanel ParentPanel) {
 		int n;
 		lblGraphic = new JLabel[5];
 		lblValue = new JLabel[5];
@@ -34,12 +34,12 @@ public class ResourceStatusView {
 				new ResourceCubeView(ResourceCubeType.VICTORY));
 
 		for (n = 0; n < 5; n++) {
-			jfrm.add(lblGraphic[n]);
+			ParentPanel.add(lblGraphic[n]);
 			lblGraphic[n].setSize(30, 30);
 			lblGraphic[n].setVisible(true);
 
 			lblValue[n] = new JLabel("X ");
-			jfrm.add(lblValue[n]);
+			ParentPanel.add(lblValue[n]);
 			lblValue[n].setSize(50, 30);
 			lblValue[n].setHorizontalTextPosition(SwingConstants.LEFT);
 			lblValue[n].setVisible(true);
@@ -48,7 +48,7 @@ public class ResourceStatusView {
 			intValue[n] = 0;
 		}
 
-		updateValues();
+		refreshValues();
 		moveObjects();
 		setValue(ResourceCubeType.FOOD, 5);
 		setValue(ResourceCubeType.FAVOR, 5);
@@ -57,7 +57,7 @@ public class ResourceStatusView {
 		setValue(ResourceCubeType.VICTORY, 0);
 	}
 
-	private void updateValues() {
+	private void refreshValues() {
 		int i;
 		for (i = 0; i < 5; i++) {
 			lblValue[i].setText("X " + intValue[i]);
@@ -85,8 +85,13 @@ public class ResourceStatusView {
 		moveObjects();
 	}
 
+	public void updateResources(final int[] resources) {
+		this.intValue = resources;
+		refreshValues();
+	}
+
 	public void setValue(final ResourceCubeType resType, final int newValue) {
 		intValue[resType.getValue()] = newValue;
-		updateValues();
+		refreshValues();
 	}
 }

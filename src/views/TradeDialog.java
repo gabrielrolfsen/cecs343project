@@ -7,10 +7,15 @@
  */
 package views;
 
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
@@ -19,9 +24,8 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SpringLayout;
+import javax.swing.SwingConstants;
 
-import utils.SpringUtilities;
 import utils.Types.ResourceCubeType;
 
 /**
@@ -31,59 +35,68 @@ import utils.Types.ResourceCubeType;
 public class TradeDialog extends JDialog {
 
 	final ActionListener confirmListener = new ConfirmTradeListener();
-	final JSpinner[] spinners = new JSpinner[8];
+	final JSpinner[] spinners = new JSpinner[10];
 	int updatedResources[] = new int[4];
 
 	public TradeDialog(final JFrame parentFrame, final int[] bankResources,
 			final int[] playerResources) {
 		super(parentFrame, "Select Resources to Trade", true);
 
-		final JPanel panel = new JPanel(new SpringLayout());
-		// TODO: Fix the layout!
-
+		final GridBagLayout b = new GridBagLayout();
+		setResizable(false);
+		// Creates the layout for the Dialog
+		final JPanel panel = new JPanel(new GridBagLayout());
+		panel.setPreferredSize(new Dimension(300, 210));
+		// TODO: Use constraints on dimensions
+		// TODO: Remove "X" close button from dialog
 		final JLabel lblPlayer = new JLabel("Player");
-		panel.add(lblPlayer);
+		final GridBagConstraints c = new GridBagConstraints();
 
-		final SpinnerModel modelFavorPlayer = new SpinnerNumberModel(0, 0,
-				playerResources[ResourceCubeType.FAVOR.getValue()], 1);
-		spinners[0] = addLabeledSpinner(panel, "Favor", modelFavorPlayer);
+		c.weightx = 0.5;
+		c.gridx = 1;
+		c.gridy = 0;
 
-		final SpinnerModel modelFoodPlayer = new SpinnerNumberModel(0, 0,
-				playerResources[ResourceCubeType.FOOD.getValue()], 1);
-		spinners[1] = addLabeledSpinner(panel, "Food", modelFoodPlayer);
-
-		final SpinnerModel modelGoldPlayer = new SpinnerNumberModel(0, 0,
-				playerResources[ResourceCubeType.GOLD.getValue()], 1);
-		spinners[2] = addLabeledSpinner(panel, "Gold", modelGoldPlayer);
-
-		final SpinnerModel modelWoodPlayer = new SpinnerNumberModel(0, 0,
-				playerResources[ResourceCubeType.WOOD.getValue()], 1);
-		spinners[3] = addLabeledSpinner(panel, "Wood", modelWoodPlayer);
+		panel.add(lblPlayer, c);
 
 		final JLabel lblBank = new JLabel("Bank");
-		panel.add(lblBank);
+		c.gridx = 2;
+		c.gridy = 0;
 
-		final SpinnerModel modelFavorBank = new SpinnerNumberModel(0, 0,
-				bankResources[ResourceCubeType.FAVOR.getValue()], 1);
-		spinners[4] = addLabeledSpinner(panel, "Favor", modelFavorBank);
+		panel.add(lblBank, c);
 
-		final SpinnerModel modelFoodBank = new SpinnerNumberModel(0, 0,
-				bankResources[ResourceCubeType.FOOD.getValue()], 1);
-		spinners[5] = addLabeledSpinner(panel, "Food", modelFoodBank);
+		for (final ResourceCubeType type : ResourceCubeType.values()) {
+			final SpinnerModel model = new SpinnerNumberModel(0, 0,
+					playerResources[type.getValue()], 1);
+			final int index = type.getValue();
+			spinners[index] = addSpinner(panel, type.getName(), model, index,
+					true);
+		}
 
-		final SpinnerModel modelGoldBank = new SpinnerNumberModel(0, 0,
-				bankResources[ResourceCubeType.GOLD.getValue()], 1);
-		spinners[6] = addLabeledSpinner(panel, "Gold", modelGoldBank);
+		// Disable the Victory Point Trading
+		spinners[4].setEnabled(false);
 
-		final SpinnerModel modelWoodBank = new SpinnerNumberModel(0, 0,
-				bankResources[ResourceCubeType.WOOD.getValue()], 1);
-		spinners[7] = addLabeledSpinner(panel, "Wood", modelWoodBank);
+		for (final ResourceCubeType type : ResourceCubeType.values()) {
+			final SpinnerModel model = new SpinnerNumberModel(0, 0,
+					bankResources[type.getValue()], 1);
+			final int index = type.getValue() + 5;
+			spinners[index] = addSpinner(panel, type.getName(), model, index,
+					false);
+		}
+
+		// Disable the Victory Point Trading - Only available if player has
+		// wonder
+		spinners[9].setEnabled(false);
 
 		final JButton btnConfirm = new JButton("Trade");
 		btnConfirm.addActionListener(confirmListener);
-		panel.add(btnConfirm);
-
-		SpringUtilities.makeCompactGrid(panel, 5, 3, 10, 10, 6, 10);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.anchor = GridBagConstraints.PAGE_END; // bottom of space
+		c.insets = new Insets(10, 0, 0, 0); // top padding
+		c.ipady = 10; // padding
+		c.gridwidth = 3; // occupies 3 rows
+		c.gridx = 0;
+		c.gridy = 6;
+		panel.add(btnConfirm, c);
 
 		add(panel);
 		pack();
@@ -91,20 +104,35 @@ public class TradeDialog extends JDialog {
 
 	}
 
-	private JSpinner addLabeledSpinner(final JPanel c, final String label,
-			final SpinnerModel model) {
-		final JLabel l = new JLabel(label);
-		c.add(l);
-
+	private JSpinner addSpinner(final JPanel panel, final String label,
+			final SpinnerModel model, final int index, final boolean isLabeled) {
 		final JSpinner spinner = new JSpinner(model);
-		l.setLabelFor(spinner);
+		final GridBagConstraints c = new GridBagConstraints();
+		c.weightx = 0.5;
 
+		if (isLabeled) {
+			final JLabel l = new JLabel(label, SwingConstants.RIGHT);
+			c.gridx = (index / 5);
+			c.gridy = (index % 5) + 1;
+			panel.add(l, c);
+			l.setLabelFor(spinner);
+		}
+
+		// Settings to the spinner textfield
 		final JFormattedTextField tf = ((JSpinner.DefaultEditor) spinner
 				.getEditor()).getTextField();
+		final JComponent field = (spinner.getEditor());
+		Dimension prefSize = field.getPreferredSize();
+		prefSize = new Dimension(50, prefSize.height);
+		field.setPreferredSize(prefSize);
 		tf.setEditable(false);
 		tf.setFocusable(true);
 
-		c.add(spinner);
+		// * Button Layout Constraints * //
+		c.gridx = (index / 5) + 1;
+
+		// Add it to the Panel
+		panel.add(spinner, c);
 
 		return spinner;
 	}
@@ -131,7 +159,7 @@ public class TradeDialog extends JDialog {
 			int qty1 = 0;
 			int qty2 = 0;
 
-			final int qtySelected[] = new int[8];
+			final int qtySelected[] = new int[10];
 			for (int i = 0; i < spinners.length; i++) {
 				qtySelected[i] = (Integer) spinners[i].getValue();
 				if (i < 4) {
