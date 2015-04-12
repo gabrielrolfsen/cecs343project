@@ -22,6 +22,9 @@ public class Player {
 	private final ArrayList<Card> mHand = new ArrayList<Card>();
 	private final int mResources[] = new int[5];
 
+	public boolean human;
+	public boolean turnTaken;
+	
 	public Player() {
 		for (int i = 0; i < mResources.length - 1; i++) {
 			mResources[i] = 4;
