@@ -21,6 +21,7 @@ import models.BattleCard;
 import models.Board;
 import models.Player;
 import models.Tile;
+import models.Unit;
 import utils.Constants;
 import utils.Types.BoardType;
 
@@ -74,11 +75,12 @@ public class MainFrameView extends JFrame {
 	 *            Board type, the board to be displayed.
 	 */
 	public void setDisplayedBoard(final Player player) {
+		this.updatePlayerResources(player.getResourceCounter());
+		this.updatePlayerArmy(player.getArmy());
+
 		final Board board = player.getBoard();
 		currentBoard.setBoard(board);
 		showBoard(currentBoard, board.getTypeName());
-		currentBoard.updateResources(player.getResourceCounter());
-		;
 	}
 
 	public BoardType getDisplayedBoardType() {
@@ -106,6 +108,10 @@ public class MainFrameView extends JFrame {
 		pack();
 		// Makes this JFrame visible
 		this.setVisible(true);
+	}
+
+	public void updatePlayerArmy(final ArrayList<Unit> army) {
+		currentBoard.updateArmy(army);
 	}
 
 	public void updatePlayerResources(final int[] resources) {
@@ -172,7 +178,7 @@ public class MainFrameView extends JFrame {
 		return c.getUpdatedResources();
 	}
 
-	public ArrayList<BattleCard> openRecruitDialog(final int[] playerResources,
+	public ArrayList<Unit> openRecruitDialog(final int[] playerResources,
 			final int qty, final ArrayList<BattleCard> availableUnits) {
 		final JFrame frame = new JFrame();
 		final RecruitDialog d = new RecruitDialog(frame, playerResources, qty,

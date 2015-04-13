@@ -1,10 +1,3 @@
-/**
- *  
- *
- * @author Gabriel Franzoni
- * @version %I%, %G%
- * @since Feb 12, 2015
- */
 package models;
 
 import java.util.ArrayList;
@@ -24,8 +17,7 @@ public class Board {
 	private final BoardType type;
 	private int buildingsCounter = 0;
 	int freeTerrainCounter[] = new int[6];
-	// TODO: Add army
-
+	// TODO: put icon on view only
 	private ImageIcon icon = null;
 
 	private final ArrayList<TilePlaceHolder> productionArea = new ArrayList<TilePlaceHolder>();

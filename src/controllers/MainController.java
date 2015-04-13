@@ -231,7 +231,7 @@ public class MainController {
 							c.getY());
 				} else {
 					System.err
-							.println("There was a problem adding the tile to the board.");
+					.println("There was a problem adding the tile to the board.");
 				}
 
 				// Decrease the TerrainCounter for RandomTiles Array
@@ -288,7 +288,7 @@ public class MainController {
 			while (!tileCanFit) {
 				pickedTileIndex = r.nextInt(randomTiles.size());
 				if (boardFreeTerrains[randomTiles.get(pickedTileIndex)
-						.getType().getValue()] != 0) {
+				                      .getType().getValue()] != 0) {
 					tileCanFit = true;
 				}
 			}

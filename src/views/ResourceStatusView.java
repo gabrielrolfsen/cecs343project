@@ -9,18 +9,12 @@ import javax.swing.SwingConstants;
 import utils.Types.ResourceCubeType;
 
 public class ResourceStatusView {
-	private final JLabel[] lblGraphic;
-	private final JLabel[] lblValue;
-	private int[] intValue;
-	private int myLeft, myTop;
+	private final JLabel[] lblGraphic = new JLabel[5];
+	private final JLabel[] lblValue = new JLabel[5];
+	private int[] intValue = new int[5];
+	private int myLeft, myTop = 0;
 
-	public ResourceStatusView(final JPanel ParentPanel) {
-		int n;
-		lblGraphic = new JLabel[5];
-		lblValue = new JLabel[5];
-		intValue = new int[5];
-		myLeft = 0;
-		myTop = 0;
+	public ResourceStatusView(final JPanel parentPanel) {
 
 		lblGraphic[ResourceCubeType.FOOD.getValue()] = new JLabel(
 				new ResourceCubeView(ResourceCubeType.FOOD));
@@ -33,19 +27,19 @@ public class ResourceStatusView {
 		lblGraphic[ResourceCubeType.VICTORY.getValue()] = new JLabel(
 				new ResourceCubeView(ResourceCubeType.VICTORY));
 
-		for (n = 0; n < 5; n++) {
-			ParentPanel.add(lblGraphic[n]);
-			lblGraphic[n].setSize(30, 30);
-			lblGraphic[n].setVisible(true);
+		for (int i = 0; i < 5; i++) {
+			parentPanel.add(lblGraphic[i]);
+			lblGraphic[i].setSize(30, 30);
+			lblGraphic[i].setVisible(true);
 
-			lblValue[n] = new JLabel("X ");
-			ParentPanel.add(lblValue[n]);
-			lblValue[n].setSize(50, 30);
-			lblValue[n].setHorizontalTextPosition(SwingConstants.LEFT);
-			lblValue[n].setVisible(true);
-			lblValue[n].setForeground(Color.WHITE);
+			lblValue[i] = new JLabel("X ");
+			parentPanel.add(lblValue[i]);
+			lblValue[i].setSize(50, 30);
+			lblValue[i].setHorizontalTextPosition(SwingConstants.LEFT);
+			lblValue[i].setVisible(true);
+			lblValue[i].setForeground(Color.WHITE);
 
-			intValue[n] = 0;
+			intValue[i] = 0;
 		}
 
 		refreshValues();
@@ -58,19 +52,17 @@ public class ResourceStatusView {
 	}
 
 	private void refreshValues() {
-		int i;
-		for (i = 0; i < 5; i++) {
+		for (int i = 0; i < 5; i++) {
 			lblValue[i].setText("X " + intValue[i]);
 		}
 	}
 
 	private void moveObjects() {
-		int n;
 		int tempTop = myTop;
 
-		for (n = 0; n < 5; n++) {
-			lblGraphic[n].setLocation(myLeft, tempTop);
-			lblValue[n].setLocation(myLeft + 40, tempTop);
+		for (int i = 0; i < 5; i++) {
+			lblGraphic[i].setLocation(myLeft, tempTop);
+			lblValue[i].setLocation(myLeft + 40, tempTop);
 			tempTop += 50;
 		}
 	}

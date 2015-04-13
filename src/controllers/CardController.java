@@ -13,7 +13,7 @@ import models.BattleCard;
 import models.Card;
 import models.Player;
 import models.ResourceBank;
-import utils.Types.BoardType;
+import models.Unit;
 import utils.Types.ResourceCubeType;
 import views.MainFrameView;
 
@@ -39,40 +39,38 @@ public class CardController {
 
 		final int[] result = mainFrame.openTradeDialog(
 				resourceBank.getResourceCounter(), player.getResourceCounter());
-		player.incrementResources(result);
-		mainFrame.updatePlayerResources(player.getResourceCounter());
+		player.decrementResources(result);
 		resourceBank.decrementResources(result);
 	}
 
 	private void playRecruitCard(final Player player, final int qty) {
 		final ArrayList<BattleCard> availableUnits = new ArrayList<BattleCard>();
 
-		switch (player.getBoard().getType()) {
-		case NORSE:
-			break;
-		case EGYPTIAN:
-			for (final BattleCard card : resourceBank.getBattleCardsDeck()) {
-				if (card.getUnit().getType().getCulture() == BoardType.EGYPTIAN) {
-					availableUnits.add(card);
-				}
+		// Select the units that are from the player's culture
+		// TODO: Check the age (?)
+		for (final BattleCard card : resourceBank.getBattleCardsDeck()) {
+			if (card.getUnit().getType().getCulture() == player.getBoard()
+					.getType()) {
+				availableUnits.add(card);
 			}
-			break;
-		case GREEK:
-			break;
 		}
+		System.out.println(player.getResourceCounter()[0]);
+		// Pops up the Dialog and get selected units
+		final ArrayList<Unit> selectedUnits = mainFrame.openRecruitDialog(
+				player.getResourceCounter(), qty, availableUnits);
 
-		final ArrayList<BattleCard> selectedUnits = mainFrame
-				.openRecruitDialog(player.getResourceCounter(), qty,
-						availableUnits);
-
-		player.addUnits(selectedUnits);
-
-		// TODO: add the graphic units to the player board
+		if (selectedUnits != null) {
+			player.addUnits(selectedUnits);
+			// TODO: implement "add" method this one delete all units
+			mainFrame.updatePlayerArmy(selectedUnits);
+		}
 
 	}
 
 	public void play(final Player player, final Card card) {
 		switch (card.getType()) {
+		case ATTACK:
+			break;
 		case TRADE:
 			playTradeCard(player, card.getCost());
 			break;
@@ -82,6 +80,7 @@ public class CardController {
 		default:
 			break;
 		}
+		mainFrame.updatePlayerResources(player.getResourceCounter());
 	}
 
 	public static CardController getInstance() {

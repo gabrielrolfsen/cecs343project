@@ -24,6 +24,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import models.BattleCard;
+import models.Unit;
 
 /**
  * @author grolfsen
@@ -34,11 +35,11 @@ public class RecruitDialog extends JDialog {
 	final ArrayList<JCheckBox> checkBoxes = new ArrayList<JCheckBox>();
 	ConfirmListener confirmListener = new ConfirmListener();
 	SelectListener selectListener = new SelectListener();
-	ArrayList<BattleCard> mSelectedUnits = new ArrayList<BattleCard>();
+	ArrayList<Unit> mSelectedUnits = new ArrayList<Unit>();
 	ArrayList<BattleCard> availableUnits = new ArrayList<BattleCard>();
 	int maxSelection = 0;
 	int boxesSelected = 0;
-	int[] playerResources = new int[4];
+	int[] mPlayerResources;
 
 	public RecruitDialog(final JFrame parentFrame, final int[] playerResources,
 			final int qty, final ArrayList<BattleCard> availableUnits) {
@@ -46,7 +47,7 @@ public class RecruitDialog extends JDialog {
 				+ (qty > 1 ? "s" : "") + " to recruit.", true);
 		this.availableUnits = availableUnits;
 		this.maxSelection = qty;
-		this.playerResources = playerResources;
+		this.mPlayerResources = playerResources;
 
 		// Creates the layout for the Dialog
 		final JPanel panel = new JPanel(new GridBagLayout());
@@ -64,7 +65,7 @@ public class RecruitDialog extends JDialog {
 			// If the user cannot afford the unit, the checkbox is disabled
 			final int[] cardCost = availableUnits.get(i).getCost();
 			for (int j = 0; j < 4; j++) {
-				if (playerResources[j] < cardCost[j]) {
+				if (mPlayerResources[j] < cardCost[j]) {
 					box.setEnabled(false);
 					break;
 				}
@@ -98,7 +99,7 @@ public class RecruitDialog extends JDialog {
 
 	}
 
-	public ArrayList<BattleCard> getSelectedUnits() {
+	public ArrayList<Unit> getSelectedUnits() {
 		return this.mSelectedUnits;
 	}
 
@@ -120,28 +121,28 @@ public class RecruitDialog extends JDialog {
 			if (((JCheckBox) e.getSource()).isSelected()) {
 				boxesSelected++;
 
-				// Pre-calculate the player resources if he recruit the unit
+				// Pre-calculate the player resources if he recruits the
+				// selected unit
 				for (int i = 0; i < 4; i++) {
-					playerResources[i] -= unitCost[i];
-					System.out.println(i + ": " + playerResources[i]);
+					mPlayerResources[i] -= unitCost[i];
 				}
 
 				toggleCheckBoxes(false);
 			} else {
 				for (int i = 0; i < 4; i++) {
-					playerResources[i] += unitCost[i];
+					mPlayerResources[i] += unitCost[i];
 				}
 				toggleCheckBoxes(true);
 
 				boxesSelected--;
 			}
-			System.out.println("boxSel :" + boxesSelected);
+
 			if (boxesSelected != maxSelection) {
 				// Disable units that the player cannot afford
 				for (int i = 0; i < availableUnits.size(); i++) {
 					final int[] cardCost = availableUnits.get(i).getCost();
 					for (int j = 0; j < 4; j++) {
-						if (playerResources[j] < cardCost[j]
+						if (mPlayerResources[j] < cardCost[j]
 								&& !checkBoxes.get(i).isSelected()) {
 							checkBoxes.get(i).setEnabled(false);
 							break;
@@ -168,11 +169,12 @@ public class RecruitDialog extends JDialog {
 	private class ConfirmListener implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
+
 			// Get all selected checkboxes and store the names in a string
 			for (final JCheckBox j : checkBoxes) {
 				if (j.isSelected()) {
-					mSelectedUnits.add(availableUnits.get(Integer.parseInt(j
-							.getActionCommand())));
+					mSelectedUnits.add(availableUnits.get(
+							Integer.parseInt(j.getActionCommand())).getUnit());
 				}
 			}
 			// TODO: Check if player can afford it

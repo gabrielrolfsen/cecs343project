@@ -11,12 +11,12 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import models.Board;
 import models.Tile;
 import models.TilePlaceHolder;
+import models.Unit;
 import utils.Constants;
 import utils.Types.BoardType;
 import utils.Types.GridType;
@@ -28,15 +28,28 @@ import utils.Types.GridType;
 public class BoardView extends JPanel {
 
 	private BoardType boardType;
-	private final ResourceStatusView boardResStats;
+	private final ResourceStatusView boardResStats = new ResourceStatusView(
+			this);
 	private TileGridView productionAreaGrid;
 	private TileGridView cityAreaGrid;
+	private final ArrayList<UnitView> mArmy = new ArrayList<UnitView>();
 	private Image BackgroundImage = null;
-	private final ImageIcon icon = null;
 
 	public BoardView() {
 		super();
-		boardResStats = new ResourceStatusView(this);
+	}
+
+	public void updateArmy(final ArrayList<Unit> army) {
+		int i = 0;
+		// Clear the old array
+		mArmy.clear();
+		for (final Unit u : army) {
+			final UnitView uView = new UnitView(u.getType());
+			mArmy.add(uView);
+			uView.draw(this, i);
+			i++;
+		}
+
 	}
 
 	public void updateResources(final int[] resources) {
@@ -62,6 +75,7 @@ public class BoardView extends JPanel {
 	}
 
 	public void setBoard(final Board board) {
+		boardType = board.getType();
 		setProductionAreaGrid(board.getProductionArea());
 		setCityAreaGrid(board.getCityArea());
 		BackgroundImage = board.getIcon().getImage();

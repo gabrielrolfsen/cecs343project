@@ -25,20 +25,27 @@ public class Player {
 
 	public boolean human;
 	public boolean turnTaken;
-	
+
 	public Player() {
 		for (int i = 0; i < mResources.length - 1; i++) {
 			mResources[i] = 4;
 		}
 	}
 
-	public void addUnits(final ArrayList<BattleCard> unitCards) {
-
-		for (final BattleCard card : unitCards) {
-			final int[] cost = card.getCost();
-			decrementResources(cost);
-			army.add(card.getUnit());
+	/**
+	 * Add units to player's army and decrement the respectively player
+	 * resources
+	 * 
+	 * @param unitCards
+	 */
+	public void addUnits(final ArrayList<Unit> units) {
+		for (final Unit unit : units) {
+			army.add(unit);
 		}
+	}
+
+	public ArrayList<Unit> getArmy() {
+		return this.army;
 	}
 
 	public void incrementResources(final int[] updatedResources) {
