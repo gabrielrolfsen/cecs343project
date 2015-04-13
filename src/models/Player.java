@@ -23,6 +23,9 @@ public class Player {
 	private final int mResources[] = new int[5];
 	private final ArrayList<Unit> army = new ArrayList<Unit>();
 
+	public boolean human;
+	public boolean turnTaken;
+	
 	public Player() {
 		for (int i = 0; i < mResources.length - 1; i++) {
 			mResources[i] = 4;
