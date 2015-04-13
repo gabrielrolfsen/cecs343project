@@ -108,7 +108,9 @@ public class MainController {
 		// TODO: Improve this dialog
 		mainFrame.showGameReadyDialog();
 
-		cardController.play(players[0], new Card(CardType.TRADE, 1));
+		// TODO: DEBUG
+		cardController.play(players[0], new Card(CardType.TRADE, 2));
+		cardController.play(players[0], new Card(CardType.RECRUIT, 1, 2));
 
 		// Add Switch Button functionality
 		mainFrame.addSwitchBoardsButtonActionListener(new ActionListener() {
@@ -229,7 +231,7 @@ public class MainController {
 							c.getY());
 				} else {
 					System.err
-					.println("There was a problem adding the tile to the board.");
+							.println("There was a problem adding the tile to the board.");
 				}
 
 				// Decrease the TerrainCounter for RandomTiles Array
@@ -286,7 +288,7 @@ public class MainController {
 			while (!tileCanFit) {
 				pickedTileIndex = r.nextInt(randomTiles.size());
 				if (boardFreeTerrains[randomTiles.get(pickedTileIndex)
-				                      .getType().getValue()] != 0) {
+						.getType().getValue()] != 0) {
 					tileCanFit = true;
 				}
 			}

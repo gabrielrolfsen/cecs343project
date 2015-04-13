@@ -7,6 +7,8 @@
  */
 package models;
 
+import utils.Types.UnitType;
+
 /**
  * @author grolfsen
  *
@@ -14,19 +16,23 @@ package models;
 public class BattleCard {
 
 	private final String mName;
-	private final String mType;
+	private final Unit mUnit;
 	private final int mDice;
 	private int[] mCost = new int[4];
 	private final String mSpecialPower = "N/A";
 
 	// TODO: Bonus dice for special battle
 
-	public BattleCard(final String name, final String type, final int dice,
-			final int[] cost) {
-		this.mName = name;
-		this.mType = type;
-		this.mDice = dice;
-		this.mCost = cost;
+	public BattleCard(final UnitType type) {
+		this.mUnit = new Unit(type);
+		this.mName = type.getName();
+		// TODO: add dice on type
+		this.mDice = 3;
+		this.mCost = type.getCost();
+	}
+
+	public Unit getUnit() {
+		return this.mUnit;
 	}
 
 	public String getName() {

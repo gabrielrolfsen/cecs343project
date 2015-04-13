@@ -160,21 +160,21 @@ public class TradeDialog extends JDialog {
 			int qty2 = 0;
 
 			final int qtySelected[] = new int[10];
-			for (int i = 0; i < spinners.length; i++) {
+			for (int i = 0; i < 4; i++) {
 				qtySelected[i] = (Integer) spinners[i].getValue();
-				if (i < 4) {
-					qty1 += qtySelected[i];
-				}
-				if (i >= 4) {
-					qty2 += qtySelected[i];
-				}
+				qty1 += qtySelected[i];
+			}
+
+			for (int i = 5; i < spinners.length; i++) {
+				qtySelected[i] = (Integer) spinners[i].getValue();
+				qty2 += qtySelected[i];
 			}
 			if (qty1 != qty2) {
 				// TODO: Error message.
 				System.out.println("ERROR!");
 			} else {
 				for (int i = 0; i < 4; i++) {
-					updatedResources[i] = qtySelected[i] - qtySelected[i + 4];
+					updatedResources[i] = qtySelected[i] - qtySelected[i + 5];
 				}
 
 				dispose();

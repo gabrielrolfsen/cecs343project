@@ -7,7 +7,10 @@
  */
 package models;
 
+import java.util.ArrayList;
+
 import utils.Types.ResourceCubeType;
+import utils.Types.UnitType;
 
 /**
  * @author grolfsen
@@ -18,6 +21,8 @@ public class ResourceBank {
 	private static ResourceBank mInstance = null;
 
 	private final int mResources[] = new int[5];
+
+	private final ArrayList<BattleCard> battleCardsDeck = new ArrayList<BattleCard>();
 
 	private ResourceBank(final int numPlayers) {
 		/*
@@ -33,9 +38,17 @@ public class ResourceBank {
 		 * players are playing.
 		 */
 		mResources[ResourceCubeType.VICTORY.getValue()] = 30;
+
+		for (final UnitType type : UnitType.values()) {
+			battleCardsDeck.add(new BattleCard(type));
+		}
 	}
 
-	public void updateResources(final int[] updatedResources) {
+	public ArrayList<BattleCard> getBattleCardsDeck() {
+		return this.battleCardsDeck;
+	}
+
+	public void decrementResources(final int[] updatedResources) {
 		for (int i = 0; i < updatedResources.length; i++) {
 			mResources[i] -= updatedResources[i];
 		}

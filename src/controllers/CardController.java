@@ -8,12 +8,12 @@
 package controllers;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import models.BattleCard;
 import models.Card;
 import models.Player;
 import models.ResourceBank;
+import utils.Types.BoardType;
 import utils.Types.ResourceCubeType;
 import views.MainFrameView;
 
@@ -39,9 +39,9 @@ public class CardController {
 
 		final int[] result = mainFrame.openTradeDialog(
 				resourceBank.getResourceCounter(), player.getResourceCounter());
-		player.updateResources(result);
+		player.incrementResources(result);
 		mainFrame.updatePlayerResources(player.getResourceCounter());
-		resourceBank.updateResources(result);
+		resourceBank.decrementResources(result);
 	}
 
 	private void playRecruitCard(final Player player, final int qty) {
@@ -51,21 +51,23 @@ public class CardController {
 		case NORSE:
 			break;
 		case EGYPTIAN:
-			final int[] cost = new int[] { 0, 2, 0, 4 };
-			availableUnits.addAll(Arrays.asList(new BattleCard("Anubite",
-					"N/A", 6, cost),
-					new BattleCard("Anubite 2", "N/A", 6, cost),
-					new BattleCard("Anubite 3", "N/A", 6, cost),
-					new BattleCard("Anubite 4", "N/A", 6, cost)));
+			for (final BattleCard card : resourceBank.getBattleCardsDeck()) {
+				if (card.getUnit().getType().getCulture() == BoardType.EGYPTIAN) {
+					availableUnits.add(card);
+				}
+			}
 			break;
 		case GREEK:
 			break;
 		}
 
-		final ArrayList<String> selectedUnits = mainFrame.openRecruitDialog(
-				player.getResourceCounter(), qty, availableUnits);
+		final ArrayList<BattleCard> selectedUnits = mainFrame
+				.openRecruitDialog(player.getResourceCounter(), qty,
+						availableUnits);
 
-		// TODO: add the units to the player board
+		player.addUnits(selectedUnits);
+
+		// TODO: add the graphic units to the player board
 
 	}
 

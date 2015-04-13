@@ -172,7 +172,7 @@ public class MainFrameView extends JFrame {
 		return c.getUpdatedResources();
 	}
 
-	public ArrayList<String> openRecruitDialog(final int[] playerResources,
+	public ArrayList<BattleCard> openRecruitDialog(final int[] playerResources,
 			final int qty, final ArrayList<BattleCard> availableUnits) {
 		final JFrame frame = new JFrame();
 		final RecruitDialog d = new RecruitDialog(frame, playerResources, qty,

@@ -34,7 +34,7 @@ public class RecruitDialog extends JDialog {
 	final ArrayList<JCheckBox> checkBoxes = new ArrayList<JCheckBox>();
 	ConfirmListener confirmListener = new ConfirmListener();
 	SelectListener selectListener = new SelectListener();
-	ArrayList<String> mSelectedUnits = new ArrayList<String>();
+	ArrayList<BattleCard> mSelectedUnits = new ArrayList<BattleCard>();
 	ArrayList<BattleCard> availableUnits = new ArrayList<BattleCard>();
 	int maxSelection = 0;
 	int boxesSelected = 0;
@@ -98,7 +98,7 @@ public class RecruitDialog extends JDialog {
 
 	}
 
-	public ArrayList<String> getSelectedUnits() {
+	public ArrayList<BattleCard> getSelectedUnits() {
 		return this.mSelectedUnits;
 	}
 
@@ -171,7 +171,8 @@ public class RecruitDialog extends JDialog {
 			// Get all selected checkboxes and store the names in a string
 			for (final JCheckBox j : checkBoxes) {
 				if (j.isSelected()) {
-					mSelectedUnits.add(j.getText());
+					mSelectedUnits.add(availableUnits.get(Integer.parseInt(j
+							.getActionCommand())));
 				}
 			}
 			// TODO: Check if player can afford it

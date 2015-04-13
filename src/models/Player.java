@@ -21,6 +21,7 @@ public class Player {
 	private Board mBoard = null;
 	private final ArrayList<Card> mHand = new ArrayList<Card>();
 	private final int mResources[] = new int[5];
+	private final ArrayList<Unit> army = new ArrayList<Unit>();
 
 	public Player() {
 		for (int i = 0; i < mResources.length - 1; i++) {
@@ -28,7 +29,22 @@ public class Player {
 		}
 	}
 
-	public void updateResources(final int[] updatedResources) {
+	public void addUnits(final ArrayList<BattleCard> unitCards) {
+
+		for (final BattleCard card : unitCards) {
+			final int[] cost = card.getCost();
+			decrementResources(cost);
+			army.add(card.getUnit());
+		}
+	}
+
+	public void incrementResources(final int[] updatedResources) {
+		for (int i = 0; i < updatedResources.length; i++) {
+			mResources[i] += updatedResources[i];
+		}
+	}
+
+	public void decrementResources(final int[] updatedResources) {
 		for (int i = 0; i < updatedResources.length; i++) {
 			mResources[i] -= updatedResources[i];
 		}
