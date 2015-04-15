@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import models.BattleCard;
 import models.Card;
 import models.Player;
-import models.ResourceBank;
+import models.ResourcesBank;
 import models.Unit;
 import utils.Types.ResourceCubeType;
 import views.MainFrameView;
@@ -25,7 +25,7 @@ public class CardController {
 
 	private final static CardController mInstance = new CardController();
 	private final MainFrameView mainFrame = MainFrameView.getInstance();
-	private final ResourceBank resourceBank = ResourceBank.getInstance();
+	private final ResourcesBank resourceBank = ResourcesBank.getInstance();
 
 	private void playTradeCard(final Player player, final int price) {
 
@@ -41,6 +41,13 @@ public class CardController {
 				resourceBank.getResourceCounter(), player.getResourceCounter());
 		player.decrementResources(result);
 		resourceBank.decrementResources(result);
+	}
+
+	private void playExploreCard(final Player[] players, final int qty) {
+		final TerrainPickerController terrainController = TerrainPickerController
+				.getInstance();
+		terrainController.exploreCardRoutine(players);
+
 	}
 
 	private void playRecruitCard(final Player player, final int qty) {
@@ -67,20 +74,29 @@ public class CardController {
 
 	}
 
-	public void play(final Player player, final Card card) {
+	public void play(final Player[] players, final Card card) {
 		switch (card.getType()) {
 		case ATTACK:
 			break;
-		case TRADE:
-			playTradeCard(player, card.getCost());
+		case BUILD:
+			break;
+		case EXPLORE:
+			playExploreCard(players, card.getNum());
+			break;
+		case GATHER:
+			break;
+		case NEXTAGE:
 			break;
 		case RECRUIT:
-			playRecruitCard(player, card.getNum());
+			playRecruitCard(players[0], card.getNum());
+			break;
+		case TRADE:
+			playTradeCard(players[0], card.getCost());
 			break;
 		default:
 			break;
 		}
-		mainFrame.updatePlayerResources(player.getResourceCounter());
+		mainFrame.updatePlayerResources(players[0].getResourceCounter());
 	}
 
 	public static CardController getInstance() {

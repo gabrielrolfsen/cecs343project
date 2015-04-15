@@ -29,14 +29,14 @@ public class Types {
 
 	public enum ResourceTileType {
 		DESERT(0), FERTILE(1), FOREST(2), HILLS(3), MOUNTAINS(4), SWAMP(5);
-		private final int n;
+		private final int value;
 
 		ResourceTileType(final int n) {
-			this.n = n;
+			this.value = n;
 		}
 
 		public int getValue() {
-			return this.n;
+			return this.value;
 		}
 	}
 
@@ -46,12 +46,16 @@ public class Types {
 	}
 
 	public enum ResourceType {
-		ONE_FOOD(0), ONE_FAVOR(1), ONE_GOLD(2), ONE_WOOD(3), TWO_FOODS(4), TWO_FAVORS(
+		ONE_FAVOR(0), ONE_FOOD(1), ONE_GOLD(2), ONE_WOOD(3), TWO_FAVORS(4), TWO_FOODS(
 				5), TWO_GOLDS(6), TWO_WOODS(7);
-		private final int n;
+		private final int value;
 
 		ResourceType(final int n) {
-			this.n = n;
+			this.value = n;
+		}
+
+		public int getValue() {
+			return this.value;
 		}
 	}
 

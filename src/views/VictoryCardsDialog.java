@@ -20,7 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import utils.StretchIcon;
+import utils.Types.ResourceCubeType;
 import utils.Types.VictoryCardType;
 
 /**
@@ -34,12 +34,12 @@ public class VictoryCardsDialog extends JDialog {
 	private final JLabel[] lblCubesCounter = new JLabel[4];
 	private final JButton[] victoryCards = new JButton[4];
 	private int[] cubesCounter = new int[4];
-	private int mPlayerVictoryCubes = 0;
+	private final int[] mPlayerResources;
 
 	public VictoryCardsDialog(final JFrame parentFrame,
-			final int playerVictoryCubes, final int[] cubesCounter) {
+			final int[] playerResources, final int[] cubesCounter) {
 		super(parentFrame, "Place Victory Cubes", true);
-		this.mPlayerVictoryCubes = playerVictoryCubes;
+		this.mPlayerResources = playerResources;
 		this.cubesCounter = cubesCounter;
 
 		final JPanel panel = new JPanel(new GridBagLayout());
@@ -53,17 +53,15 @@ public class VictoryCardsDialog extends JDialog {
 			final int i = v.getValue();
 			final ImageIcon ii = new ImageIcon("res/victory_cards/"
 					+ v.toString().toLowerCase() + ".png");
-			final int scale = 3; // 2 times smaller
+			final int scale = 3; // 3 times smaller
 			final int width = ii.getIconWidth();
 			final int newWidth = width / scale;
 			final ImageIcon ic = new ImageIcon(ii.getImage().getScaledInstance(
 					newWidth, -1, java.awt.Image.SCALE_SMOOTH));
-			// ic = new ImageIcon("res/ResourceVictory.jpg");
-			final StretchIcon icon = new StretchIcon("res/victory_cards/"
-					+ v.toString().toLowerCase() + ".png");
+
 			final JButton btn = new JButton("", ic);
 
-			btn.setPreferredSize(new Dimension(150, 400));
+			// btn.setPreferredSize(new Dimension(150, 400));
 			btn.setActionCommand(String.valueOf(i));
 			btn.addActionListener(addCubeListener);
 
@@ -88,12 +86,12 @@ public class VictoryCardsDialog extends JDialog {
 		setLocationRelativeTo(parentFrame);
 	}
 
-	public int getPlayerVictoryCubes() {
-		return this.mPlayerVictoryCubes;
-	}
-
+	/**
+	 * Checks if player has at least one Victory Cube to add to a Victory Card,
+	 * if not, disable all buttons
+	 */
 	private void checkPlayerResources() {
-		if (mPlayerVictoryCubes == 0) {
+		if (mPlayerResources[ResourceCubeType.VICTORY.getValue()] == 0) {
 			for (final JButton btn : victoryCards) {
 				btn.setEnabled(false);
 			}
@@ -103,7 +101,7 @@ public class VictoryCardsDialog extends JDialog {
 	private class AddCubeListener implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			if (mPlayerVictoryCubes > 0) {
+			if (mPlayerResources[ResourceCubeType.VICTORY.getValue()] > 0) {
 				final int i = Integer.parseInt(e.getActionCommand());
 				// Get the current number on the label
 				int value = Integer.parseInt(lblCubesCounter[i].getText()
@@ -111,7 +109,8 @@ public class VictoryCardsDialog extends JDialog {
 				value++; // Increment it
 				lblCubesCounter[i].setText("x " + value); // Set new value
 				cubesCounter[i]++; // Increase the cubeCounter to the card
-				mPlayerVictoryCubes--; // Decrease player victory cubes
+				// Decrease player victory cubes
+				mPlayerResources[ResourceCubeType.VICTORY.getValue()]--;
 			}
 
 			// If player doesn't have more victory cubes, disable buttons
