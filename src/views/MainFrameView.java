@@ -42,11 +42,19 @@ public class MainFrameView extends JFrame {
 			0, 0, 0.5, 0.5, GridBagConstraints.FIRST_LINE_START, 0,
 			this.getInsets(), 0, 0);
 
+	// Button to add victory cubes to cards
+	final JButton btnVictoryCard = new JButton("Place Victory Cubes");
+	// TODO: Fix position
+	final GridBagConstraints victoryBtnConstants = new GridBagConstraints(4, 0,
+			0, 0, 0.5, 0.5, GridBagConstraints.FIRST_LINE_START, 0,
+			this.getInsets(), 0, 0);
+
 	private MainFrameView() {
 		// TODO: Remove that
 		setLocation(300, 300);
 		// Sets the size of the 'switch board' Button
 		btnSwitchBoard.setPreferredSize(new Dimension(100, 50));
+		btnVictoryCard.setPreferredSize(new Dimension(150, 50));
 
 	}
 
@@ -105,6 +113,7 @@ public class MainFrameView extends JFrame {
 
 		// Adds the switch board button
 		add(btnSwitchBoard, switchBtnConstants);
+		add(btnVictoryCard, victoryBtnConstants);
 		pack();
 		// Makes this JFrame visible
 		this.setVisible(true);
@@ -155,6 +164,10 @@ public class MainFrameView extends JFrame {
 	public void addSwitchBoardsButtonActionListener(
 			final ActionListener listener) {
 		btnSwitchBoard.addActionListener(listener);
+	}
+
+	public void addVictoryCardButtonActionListener(final ActionListener listener) {
+		btnVictoryCard.addActionListener(listener);
 	}
 
 	/**

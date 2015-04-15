@@ -27,6 +27,7 @@ import utils.Types.BoardType;
 import utils.Types.CardType;
 import views.ButtonDialog;
 import views.MainFrameView;
+import views.VictoryCardsDialog;
 
 /**
  * Main Controller class, that control all the game flow
@@ -64,18 +65,6 @@ public class MainController {
 			players[i] = new Player();
 		}
 
-		// TODO: Temp.
-		// final ArrayList<BattleCard> availableUnits = new
-		// ArrayList<BattleCard>();
-		// final int[] cost = new int[] { 0, 2, 0, 1 };
-		// availableUnits.addAll(Arrays.asList(new BattleCard("Anubite", "N/A",
-		// 6,
-		// cost), new BattleCard("Anubite 2", "N/A", 6, cost),
-		// new BattleCard("Anubite 3", "N/A", 6, cost), new BattleCard(
-		// "Anubite 4", "N/A", 6, cost)));
-		// mainFrame.openRecruitDialog(players[0].getResourceCounter(), 3,
-		// availableUnits);
-
 		// Pops a Dialog so user can pick a culture
 		userCulturePick();
 
@@ -91,14 +80,14 @@ public class MainController {
 		}
 
 		// ResourceTile picking begins - 6 Turns each player
-		for (int i = 0; i < 3; i++) {
-			userPick();
-			aiPick(1);
-			aiPick(2);
-			aiPick(2);
-			aiPick(1);
-			userPick();
-		}
+		// for (int i = 0; i < 3; i++) {
+		// userPick();
+		// aiPick(1);
+		// aiPick(2);
+		// aiPick(2);
+		// aiPick(1);
+		// userPick();
+		// }
 
 		// Return the remaining tiles (if there's any) to the pool.
 		if (randomTiles.size() != 0) {
@@ -109,8 +98,20 @@ public class MainController {
 		mainFrame.showGameReadyDialog();
 
 		// TODO: DEBUG
-		cardController.play(players[0], new Card(CardType.TRADE, 2));
+		// cardController.play(players[0], new Card(CardType.TRADE, 2));
 		cardController.play(players[0], new Card(CardType.RECRUIT, 1, 2));
+
+		mainFrame.addVictoryCardButtonActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				final int a[] = { 0, 2, 0, 0 };
+				final VictoryCardsDialog b = new VictoryCardsDialog(mainFrame,
+						3, a);
+				b.setVisible(true);
+				b.getPlayerVictoryCubes();
+			}
+		});
 
 		// Add Switch Button functionality
 		mainFrame.addSwitchBoardsButtonActionListener(new ActionListener() {

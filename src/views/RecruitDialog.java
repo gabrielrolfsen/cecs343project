@@ -59,6 +59,7 @@ public class RecruitDialog extends JDialog {
 
 			final JCheckBox box = new JCheckBox(availableUnits.get(i).getName());
 			box.addItemListener(selectListener);
+			// Associate index with check box
 			box.setActionCommand(Integer.toString(i));
 			checkBoxes.add(box);
 
@@ -101,6 +102,16 @@ public class RecruitDialog extends JDialog {
 
 	public ArrayList<Unit> getSelectedUnits() {
 		return this.mSelectedUnits;
+	}
+
+	private void toggleCheckBoxes(final boolean s) {
+		if (boxesSelected == maxSelection) {
+			for (final JCheckBox c : checkBoxes) {
+				if (!c.isSelected()) {
+					c.setEnabled(s);
+				}
+			}
+		}
 	}
 
 	/**
@@ -154,16 +165,6 @@ public class RecruitDialog extends JDialog {
 			}
 		}
 
-	}
-
-	private void toggleCheckBoxes(final boolean s) {
-		if (boxesSelected == maxSelection) {
-			for (final JCheckBox c : checkBoxes) {
-				if (!c.isSelected()) {
-					c.setEnabled(s);
-				}
-			}
-		}
 	}
 
 	private class ConfirmListener implements ActionListener {

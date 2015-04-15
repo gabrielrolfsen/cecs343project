@@ -45,6 +45,7 @@ public class ButtonDialog extends JDialog {
 		// TODO: Use constraints on dimensions
 		panel.setPreferredSize(new Dimension(350, 700));
 		final GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
 
 		for (i = 0; i < tiles.size(); i++) {
 			final JButton button = new JButton("", tiles.get(i).getIcon());
@@ -57,7 +58,6 @@ public class ButtonDialog extends JDialog {
 			// Set-up a JButton listener
 			button.addActionListener(confirmListener);
 			// * Button Layout Constraints * //
-			c.fill = GridBagConstraints.HORIZONTAL;
 			c.weightx = 0.5;
 			c.gridx = (i % 3);
 			c.gridy = (i / 3);

@@ -143,4 +143,25 @@ public class Types {
 
 	}
 
+	public enum VictoryCardType {
+		THE_LARGEST_ARMY(0, "The Largest Army"), THE_MOST_BUILDINGS(1,
+				"The Most Buildings"), THE_WONDER(2, "The Wonder"), WON_THE_LAST_BATTLE(
+				3, "Won the Last Battle");
+		private final String name;
+		private final int value;
+
+		VictoryCardType(final int n, final String s) {
+			this.value = n;
+			this.name = s;
+		}
+
+		public int getValue() {
+			return this.value;
+		}
+
+		public String getName() {
+			return this.name;
+		}
+
+	}
 }

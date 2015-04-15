@@ -28,7 +28,7 @@ public class Player {
 
 	public Player() {
 		for (int i = 0; i < mResources.length - 1; i++) {
-			mResources[i] = 4;
+			mResources[i] = 5;
 		}
 	}
 
