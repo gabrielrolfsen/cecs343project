@@ -9,6 +9,7 @@ package models;
 
 import java.util.ArrayList;
 
+import utils.Constants;
 import utils.Types.BoardType;
 import utils.Types.ResourceCubeType;
 
@@ -23,8 +24,9 @@ public class Player {
 	private final int mResources[] = new int[5];
 	private final ArrayList<Unit> army = new ArrayList<Unit>();
 
-	public boolean human;
-	public boolean turnTaken;
+	public boolean[] buildingOwned = new boolean[Constants.MAX_BUILDINGS];
+	public int housesOwned = 0;
+	private final int MAX_BUILDINGS = 14;
 
 	public Player() {
 		for (int i = 0; i < mResources.length - 1; i++) {

@@ -13,9 +13,11 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import models.Card;
 import models.Player;
 import utils.Constants;
 import utils.Types.BoardType;
+import utils.Types.CardType;
 import views.MainFrameView;
 import views.VictoryCardsDialog;
 
@@ -50,6 +52,9 @@ public class MainController {
 			players[i] = new Player();
 		}
 
+		mainFrame.showCardDialog();
+		System.exit(0);
+
 		// Pops a Dialog so user can pick a culture
 		userCulturePick();
 
@@ -67,7 +72,7 @@ public class MainController {
 
 		// TODO: DEBUG
 		// cardController.play(players[0], new Card(CardType.TRADE, 2));
-		// cardController.play(players, new Card(CardType.RECRUIT, 1, 2));
+		cardController.play(players, new Card(CardType.RECRUIT, 1, 2));
 
 		mainFrame.setVisible(true);
 
