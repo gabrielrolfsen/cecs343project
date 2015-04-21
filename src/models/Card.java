@@ -19,6 +19,10 @@ public class Card {
 	int mCost;
 	int mNum;
 
+	public Card(final CardType type) {
+		init(type, 0);
+	}
+
 	public Card(final CardType type, final int cost) {
 		init(type, cost);
 	}

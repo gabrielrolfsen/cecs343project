@@ -25,9 +25,12 @@ public class ResourcesBank {
 
 	private final int mResources[] = new int[5];
 
-	private final ArrayList<ResourceTile> tilePool = new ArrayList<ResourceTile>();
+	private final ArrayList<ResourceTile> mTilePool = new ArrayList<ResourceTile>();
 
-	private final ArrayList<BattleCard> battleCardsDeck = new ArrayList<BattleCard>();
+	private final ArrayList<BattleCard> mBattleCardsDeck = new ArrayList<BattleCard>();
+
+	// Counter of how many Victor Cubes each Victory Card has
+	private int mVictoryCubesOnCards[] = { 0, 0, 0, 0 };
 
 	private ResourcesBank(final int numPlayers) {
 		initPool();
@@ -47,12 +50,20 @@ public class ResourcesBank {
 		mResources[ResourceCubeType.VICTORY.getValue()] = 30;
 
 		for (final UnitType type : UnitType.values()) {
-			battleCardsDeck.add(new BattleCard(type));
+			mBattleCardsDeck.add(new BattleCard(type));
 		}
 	}
 
+	public int[] getVictoryCubesOnCards() {
+		return this.mVictoryCubesOnCards;
+	}
+
+	public void setVictoryCubesOnCards(final int[] victoryCubesOnCards) {
+		this.mVictoryCubesOnCards = victoryCubesOnCards;
+	}
+
 	public ArrayList<BattleCard> getBattleCardsDeck() {
-		return this.battleCardsDeck;
+		return this.mBattleCardsDeck;
 	}
 
 	public void decrementResources(final int[] updatedResources) {
@@ -112,7 +123,7 @@ public class ResourcesBank {
 		for (final ResourceTileType tileType : ResourceTileType.values()) {
 			for (final ResourceType resType : ResourceType.values()) {
 				for (int i = 0; i < qty[tileType.getValue()][resType.getValue()]; i++) {
-					tilePool.add(new ResourceTile(tileType, resType));
+					mTilePool.add(new ResourceTile(tileType, resType));
 				}
 			}
 		}
@@ -134,11 +145,11 @@ public class ResourcesBank {
 		final Random randomGenerator = new Random();
 
 		for (i = 0; i < qty; i++) {
-			j = randomGenerator.nextInt(tilePool.size());
+			j = randomGenerator.nextInt(mTilePool.size());
 			// Put the tile selected on the return array
-			randomTiles.add(tilePool.get(j));
+			randomTiles.add(mTilePool.get(j));
 			// Remove from the pool
-			tilePool.remove(j);
+			mTilePool.remove(j);
 		}
 		return randomTiles;
 	}
@@ -151,7 +162,7 @@ public class ResourcesBank {
 	 */
 	public void returnTilesToPool(final ArrayList<ResourceTile> returningTiles) {
 		for (final ResourceTile t : returningTiles) {
-			tilePool.add(t);
+			mTilePool.add(t);
 		}
 	}
 

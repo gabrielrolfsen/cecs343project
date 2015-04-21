@@ -31,9 +31,6 @@ public class MainController {
 	private final MainFrameView mainFrame = MainFrameView.getInstance();
 	private final CardController cardController = CardController.getInstance();
 
-	// TODO: store this variable somewhere else (DEBUG)
-	final int victoryCubesOnCards[] = { 0, 0, 0, 0 };
-
 	/*
 	 * Counter for each type of terrain inside the randomTiles array, each index
 	 * represent a terrainType and contains the number of tiles of this type in
@@ -67,17 +64,20 @@ public class MainController {
 		// TODO: Improve this dialog
 		mainFrame.showGameReadyDialog();
 
-		// TODO: DEBUG
-		// cardController.play(players[0], new Card(CardType.TRADE, 2));
-		// cardController.play(players, new Card(CardType.RECRUIT, 1, 2));
-
 		mainFrame.setVisible(true);
+
+		final TurnController turnController = new TurnController();
+
+		turnController.playTurn(players);
 
 		// Add "Place Victory Cubes" Button functionality
 		mainFrame.addVictoryCardButtonActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
+
+				final int victoryCubesOnCards[] = ResourcesBank.getInstance()
+						.getVictoryCubesOnCards();
 
 				final VictoryCardsDialog b = new VictoryCardsDialog(mainFrame,
 						players[0].getResourceCounter(), victoryCubesOnCards);

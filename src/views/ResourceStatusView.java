@@ -16,16 +16,10 @@ public class ResourceStatusView {
 
 	public ResourceStatusView(final JPanel parentPanel) {
 
-		lblGraphic[ResourceCubeType.FOOD.getValue()] = new JLabel(
-				new ResourceCubeView(ResourceCubeType.FOOD));
-		lblGraphic[ResourceCubeType.FAVOR.getValue()] = new JLabel(
-				new ResourceCubeView(ResourceCubeType.FAVOR));
-		lblGraphic[ResourceCubeType.WOOD.getValue()] = new JLabel(
-				new ResourceCubeView(ResourceCubeType.WOOD));
-		lblGraphic[ResourceCubeType.GOLD.getValue()] = new JLabel(
-				new ResourceCubeView(ResourceCubeType.GOLD));
-		lblGraphic[ResourceCubeType.VICTORY.getValue()] = new JLabel(
-				new ResourceCubeView(ResourceCubeType.VICTORY));
+		// Create a label for each Resource Cube Type
+		for (final ResourceCubeType type : ResourceCubeType.values()) {
+			lblGraphic[type.getValue()] = new JLabel(new ResourceCubeView(type));
+		}
 
 		for (int i = 0; i < 5; i++) {
 			parentPanel.add(lblGraphic[i]);
@@ -38,17 +32,11 @@ public class ResourceStatusView {
 			lblValue[i].setHorizontalTextPosition(SwingConstants.LEFT);
 			lblValue[i].setVisible(true);
 			lblValue[i].setForeground(Color.WHITE);
-
 			intValue[i] = 0;
 		}
 
 		refreshValues();
 		moveObjects();
-		setValue(ResourceCubeType.FOOD, 5);
-		setValue(ResourceCubeType.FAVOR, 5);
-		setValue(ResourceCubeType.GOLD, 5);
-		setValue(ResourceCubeType.WOOD, 5);
-		setValue(ResourceCubeType.VICTORY, 0);
 	}
 
 	private void refreshValues() {

@@ -17,6 +17,7 @@ public final class Constants {
 	public static final int NUM_AI_PLAYERS = 2;
 	public static final int MAX_TILES = 90;
 	public static final int MAX_TILES_PICKING_PHASE = 18;
+	public static final int MAX_BUILDINGS = 14;
 
 	// Graphical Dimensions Arrays
 	public static final int BOARD_HEIGHT = 825;

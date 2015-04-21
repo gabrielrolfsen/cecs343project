@@ -58,8 +58,46 @@ public class Types {
 	}
 
 	public enum BuildingTileType {
-		HOUSE, WALL, TOWER, STOREHOUSE, MARKET, ARMORY, QUARRY, MONUMENT, GRANARY, MINT, WORKSHOP_WOOD, WORKSHOP_SIEGE, TEMPLE, WONDER;
+		HOUSE(0, "House"), WALL(1, "Wall"), TOWER(2, "Tower"), STOREHOUSE(3,
+				"Storehouse"), MARKET(4, "Market"), ARMORY(5, "Armory"), QUARRY(
+				6, "Quarry"), MONUMENT(7, "Monument"), GRANARY(8, "Granary"), MINT(
+				9, "Mint"), WORKSHOP_WOOD(10, "Wood Workshop"), WORKSHOP_SIEGE(
+				11, "Siege Workshop"), TEMPLE(12, "Temple"), WONDER(13,
+				"Wonder");
 
+		private final int n;
+		private final String s;
+
+		BuildingTileType(final int n, final String s) {
+			this.n = n;
+			this.s = s;
+		}
+
+		public int getValue() {
+			return this.n;
+		}
+
+		public String getString() {
+			return this.s;
+		}
+
+		public static String getStringForInt(final int n) {
+			for (final BuildingTileType a : BuildingTileType.values()) {
+				if (a.n == n) {
+					return a.s;
+				}
+			}
+			throw new IllegalArgumentException("Invalid id");
+		}
+
+		public static BuildingTileType getTypeForInt(final int n) {
+			for (final BuildingTileType a : BuildingTileType.values()) {
+				if (a.n == n) {
+					return a;
+				}
+			}
+			throw new IllegalArgumentException("Invalid id");
+		}
 	}
 
 	public enum ResourceType {
@@ -90,6 +128,15 @@ public class Types {
 
 		public String getName() {
 			return this.name;
+		}
+
+		public static ResourceCubeType getType(final int n) {
+			for (final ResourceCubeType cube : ResourceCubeType.values()) {
+				if (cube.n == n) {
+					return cube;
+				}
+			}
+			return null;
 		}
 
 		public int getValue() {
@@ -129,6 +176,7 @@ public class Types {
 		}
 	}
 
+
 	// TODO: Possibly turn TRADE into TRADE_1 and TRADE_2
 	public enum CardType {
 		ATTACK(0), BUILD(1), EXPLORE(2), GATHER(3), NEXTAGE(4), RECRUIT(5), TRADE(
@@ -137,6 +185,15 @@ public class Types {
 
 		CardType(final int n) {
 			this.n = n;
+		}
+
+		public static CardType getType(final int n) {
+			for (final CardType card : CardType.values()) {
+				if (card.n == n) {
+					return card;
+				}
+			}
+			return null;
 		}
 
 		public int getValue() {

@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 
 import models.BattleCard;
 import models.Board;
+import models.Card;
 import models.Player;
 import models.Tile;
 import models.Unit;
@@ -50,7 +51,7 @@ public class MainFrameView extends JFrame {
 			this.getInsets(), 0, 0);
 
 	private MainFrameView() {
-		// TODO: Remove that
+		// XXX: Remove that
 		setLocation(300, 300);
 		// Sets the size of the 'switch board' Button
 		btnSwitchBoard.setPreferredSize(new Dimension(100, 50));
@@ -71,6 +72,10 @@ public class MainFrameView extends JFrame {
 		return c.getCulturePicked();
 	}
 
+	/**
+	 * Simple Procedure that show a Dialog displaying that the game is ready to
+	 * play.
+	 */
 	public void showGameReadyDialog() {
 		JOptionPane.showMessageDialog(this, "Game is ready to Play.",
 				"All Set!", JOptionPane.PLAIN_MESSAGE);
@@ -91,11 +96,19 @@ public class MainFrameView extends JFrame {
 		showBoard(currentBoard, board.getTypeName());
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public BoardType getDisplayedBoardType() {
 		return this.currentBoard.getBoardType();
 	}
 
-	// Show the desired board on the JFrame
+	/**
+	 * 
+	 * @param board
+	 * @param title
+	 */
 	private void showBoard(final BoardView board, final String title) {
 
 		// Places the BoardView on the JFrame
@@ -119,10 +132,18 @@ public class MainFrameView extends JFrame {
 		this.setVisible(true);
 	}
 
+	/**
+	 * 
+	 * @param army
+	 */
 	public void updatePlayerArmy(final ArrayList<Unit> army) {
 		currentBoard.updateArmy(army);
 	}
 
+	/**
+	 * 
+	 * @param resources
+	 */
 	public void updatePlayerResources(final int[] resources) {
 		currentBoard.updateResources(resources);
 	}
@@ -191,6 +212,13 @@ public class MainFrameView extends JFrame {
 		return c.getUpdatedResources();
 	}
 
+	/**
+	 * 
+	 * @param playerResources
+	 * @param qty
+	 * @param availableUnits
+	 * @return
+	 */
 	public ArrayList<Unit> openRecruitDialog(final int[] playerResources,
 			final int qty, final ArrayList<BattleCard> availableUnits) {
 		final JFrame frame = new JFrame();
@@ -199,7 +227,33 @@ public class MainFrameView extends JFrame {
 		// Display the Dialog
 		d.setVisible(true);
 		return d.getSelectedUnits();
+	}
 
+	/**
+	 * 
+	 * @param hand
+	 * @return
+	 */
+	public Card showHandDialog(final ArrayList<Card> hand) {
+		final JFrame frame = new JFrame();
+		final HandDialog dialog = new HandDialog(frame, hand);
+		// Display the Dialog
+		dialog.setVisible(true);
+
+		return dialog.getSelectedCard();
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public ArrayList<Card> showCardDialog(final int qty) {
+		final JFrame frame = new JFrame();
+		final CardDialog dialog = new CardDialog(frame, qty);
+		// Display the Dialog
+		dialog.setVisible(true);
+
+		return dialog.getSelectedCards();
 	}
 
 	public static synchronized MainFrameView getInstance() {

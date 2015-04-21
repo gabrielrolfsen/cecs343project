@@ -10,16 +10,14 @@ import utils.Constants;
 
 public class TileView extends JPanel {
 
-	private Dimension myDimension;
-	private Point myPoint;
+	private Dimension mDimension;
+	private Point mPoint;
 
 	public TileView() {
 		setSize(Constants.TILE_WIDTH, Constants.TILE_HEIGHT);
 		setLocation(0, 0);
 
 		setLayout(null);
-
-		// Adds a JLabel which contains the tile's name
 
 		this.setVisible(true);
 	}
@@ -42,20 +40,20 @@ public class TileView extends JPanel {
 	@Override
 	public void setSize(final int width, final int height) {
 		super.setSize(width, height);
-		myDimension = super.getSize();
+		mDimension = super.getSize();
 	}
 
 	@Override
 	public void setLocation(final int left, final int top) {
 		super.setLocation(left, top);
-		myPoint = super.getLocation();
+		mPoint = super.getLocation();
 	}
 
 	/**
 	 * Make the tile visible and set right Location.
 	 */
 	public void refresh() {
-		setLocation(myPoint);
-		setSize(myDimension);
+		setLocation(mPoint);
+		setSize(mDimension);
 	}
 }

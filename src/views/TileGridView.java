@@ -14,10 +14,10 @@ public class TileGridView {
 
 	private final TileView[] tileArray = new TileView[16];
 
-	public TileGridView(final JPanel jfrm, final GridType type,
+	public TileGridView(final JPanel parentPanel, final GridType type,
 			final ArrayList<TilePlaceHolder> tileList) {
 		int posXGrid = -1;
-		final Insets insFrame = jfrm.getInsets();
+		final Insets insFrame = parentPanel.getInsets();
 
 		// TODO: Change to constants?
 		// Calculates the top of the grid based on constant (window's size)
@@ -62,9 +62,9 @@ public class TileGridView {
 		// 0 1 2 3
 		for (int k = 15; k >= 0; k--) {
 			// Set size and location based on the position
-			tileArray[k].setSize(tileWidth, tileHeight);
+			// tileArray[k].setSize(tileWidth, tileHeight);
 			tileArray[k].setLocation(posXTile, posYTile);
-			jfrm.add(tileArray[k]);
+			parentPanel.add(tileArray[k]);
 
 			/*
 			 * Decrements tile's X position based on tile Width, jumps to the

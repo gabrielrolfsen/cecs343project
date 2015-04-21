@@ -28,10 +28,10 @@ import utils.Types.GridType;
 public class BoardView extends JPanel {
 
 	private BoardType boardType;
-	private final ResourceStatusView boardResStats = new ResourceStatusView(
+	private final ResourceStatusView mBoardResStats = new ResourceStatusView(
 			this);
-	private TileGridView productionAreaGrid;
-	private TileGridView cityAreaGrid;
+	private TileGridView mProductionAreaGrid;
+	private TileGridView mCityAreaGrid;
 	private final ArrayList<UnitView> mArmy = new ArrayList<UnitView>();
 	private Image BackgroundImage = null;
 
@@ -41,37 +41,38 @@ public class BoardView extends JPanel {
 
 	public void updateArmy(final ArrayList<Unit> army) {
 		int i = 0;
-		// Clear the old array
+
 		mArmy.clear();
 		for (final Unit u : army) {
-			final UnitView uView = new UnitView(u.getType());
+			final UnitView uView = new UnitView(this, u.getType(), i);
 			mArmy.add(uView);
-			uView.draw(this, i);
+			revalidate();
+			repaint();
 			i++;
 		}
 
 	}
 
 	public void updateResources(final int[] resources) {
-		boardResStats.updateResources(resources);
+		mBoardResStats.updateResources(resources);
 	}
 
 	private void setCityAreaGrid(final ArrayList<TilePlaceHolder> cityArea) {
-		cityAreaGrid = new TileGridView(this, GridType.BUILDING, cityArea);
+		mCityAreaGrid = new TileGridView(this, GridType.BUILDING, cityArea);
 	}
 
 	private void setProductionAreaGrid(
 			final ArrayList<TilePlaceHolder> productionArea) {
-		productionAreaGrid = new TileGridView(this, GridType.RESOURCE,
+		mProductionAreaGrid = new TileGridView(this, GridType.RESOURCE,
 				productionArea);
 	}
 
 	public void addResourceTile(final Tile t, final int posX, final int posY) {
-		productionAreaGrid.addTile(GridType.RESOURCE, t, posX, posY);
+		mProductionAreaGrid.addTile(GridType.RESOURCE, t, posX, posY);
 	}
 
 	public void addBuildingTile(final Tile t, final int posX, final int posY) {
-		productionAreaGrid.addTile(GridType.BUILDING, t, posX, posY);
+		mProductionAreaGrid.addTile(GridType.BUILDING, t, posX, posY);
 	}
 
 	public void setBoard(final Board board) {
@@ -86,18 +87,19 @@ public class BoardView extends JPanel {
 	}
 
 	public void refreshBoard() {
-		productionAreaGrid.refresh();
-		cityAreaGrid.refresh();
+		mProductionAreaGrid.refresh();
+		mCityAreaGrid.refresh();
 	}
 
 	@Override
 	public void paintComponent(final Graphics g) {
 		super.paintComponent(g);
+
 		g.drawImage(BackgroundImage, 0, 0, null);
 
 		// Set Resource Bar location
-		boardResStats.setTop(Constants.CUBES_BAR_Y_LOCATION);
-		boardResStats.setLeft(Constants.CUBES_BAR_X_LOCATION);
+		mBoardResStats.setTop(Constants.CUBES_BAR_Y_LOCATION);
+		mBoardResStats.setLeft(Constants.CUBES_BAR_X_LOCATION);
 
 		// TODO: Why is it necessary?
 		this.refreshBoard();

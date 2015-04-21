@@ -63,26 +63,7 @@ public class ResourceTileView extends TileView {
 		String resourceName = "";
 		String iconPath = "";
 
-		switch (tile.getType()) {
-		case DESERT:
-			typeName = "desert";
-			break;
-		case FOREST:
-			typeName = "forest";
-			break;
-		case FERTILE:
-			typeName = "fertile";
-			break;
-		case HILLS:
-			typeName = "hills";
-			break;
-		case MOUNTAINS:
-			typeName = "mountains";
-			break;
-		case SWAMP:
-			typeName = "swamp";
-			break;
-		}
+		typeName = tile.getType().toString().toLowerCase();
 
 		switch (tile.getResource()) {
 		case ONE_GOLD:
@@ -116,7 +97,7 @@ public class ResourceTileView extends TileView {
 		this.icon = new ImageIcon(iconPath, String.valueOf(tile.getType())
 				+ "-" + String.valueOf(tile.getResource()));
 
-		// Assign the background iamge the proper background
+		// Assign the background image the proper background
 		BackgroundImage = icon.getImage();
 	}
 
@@ -126,8 +107,9 @@ public class ResourceTileView extends TileView {
 		int x, y;
 
 		/*
-		 * If the Tile has a image (a tile is placed on the tile placeholder,
-		 * center the image, if not, just use 0,0 as coordinates to paint.
+		 * If the Tile has a image (a ResourceTile is placed on this tile
+		 * placeholder, center the image. If not, just use (0,0) as coordinates
+		 * to paint.
 		 */
 		if (BackgroundImage != null) {
 			x = (this.getWidth() - BackgroundImage.getWidth(null)) / 2;
@@ -137,6 +119,5 @@ public class ResourceTileView extends TileView {
 			y = 0;
 		}
 		g.drawImage(BackgroundImage, x, y, null);
-		// g.drawImage(BackgroundImage, 0, 0, null);
 	}
 }
