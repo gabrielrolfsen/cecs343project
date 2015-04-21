@@ -43,11 +43,10 @@ public class UnitView extends ImageIcon {
 
 	public void draw() {
 		final Insets insFrame = mParentPanel.getInsets();
-		mLabel.setText("AFFERSON");
-		mLabel.setSize(30, 30);
+		// mLabel.setText("AFFERSON");
 		mLabel.setLocation(200 + (mPos * 30), insFrame.top + 20);
 		mParentPanel.add(mLabel);
-		mLabel.setVisible(true);
+		// mLabel.setVisible(true);
 		mLabel.setBounds(150, 50, 30, 30);
 		// TODO: Debug
 		System.out.println("Drawing at x: " + mLabel.getX() + " y: "

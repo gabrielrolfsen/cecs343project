@@ -56,6 +56,7 @@ public class CardController {
 		// Select the units that are from the player's culture
 		// TODO: Check the age (?)
 		for (final BattleCard card : resourceBank.getBattleCardsDeck()) {
+
 			if (card.getUnit().getType().getCulture() == player.getBoard()
 					.getType()) {
 				availableUnits.add(card);
@@ -74,11 +75,25 @@ public class CardController {
 
 	}
 
+	private void playBuildCard(final Player player) {
+		final BuildController c = new BuildController();
+		c.play(player);
+	}
+
+	private void playGatherCard(final Player player, final int price) {
+
+	}
+
+	private void playNextAgeCard(final Player player, final int price) {
+
+	}
+
 	public void play(final Player[] players, final Card card) {
 		switch (card.getType()) {
 		case ATTACK:
 			break;
 		case BUILD:
+			playBuildCard(players[0]);
 			break;
 		case EXPLORE:
 			playExploreCard(players, card.getNum());

@@ -26,13 +26,6 @@ public class TurnController {
 	private final CardController cardController = CardController.getInstance();
 	private final ResourcesBank resourceBank = ResourcesBank.getInstance();
 
-	/**
-	 * 
-	 */
-	public TurnController() {
-		// TODO Auto-generated constructor stub
-	}
-
 	public void playTurn(final Player[] players) {
 
 		final int victoryCubesOnCards[] = ResourcesBank.getInstance()
@@ -47,13 +40,16 @@ public class TurnController {
 				.getAge().getValue() + 4);
 
 		for (int i = 0; i < 3; i++) {
-			final Card selectedCard = mainFrame.showHandDialog(hand);
-			// If player didn't pass the turn and still has cards to play
-			if (selectedCard != null && hand.size() > 0) {
-				// Play the selected Card
-				cardController.play(players, selectedCard);
-				// Updates Player's hand
-				hand.remove(selectedCard);
+			if (!hand.isEmpty()) {
+				final Card selectedCard = mainFrame.showHandDialog(hand);
+				// If player didn't pass the turn and still has cards to play
+				if (selectedCard != null) {
+					// Play the selected Card
+					cardController.play(players, selectedCard);
+					// Updates Player's hand
+					hand.remove(selectedCard);
+				}
+				// TODO: Add AIs turns
 			}
 		}
 		// Clear player's cards if there's any
@@ -62,11 +58,17 @@ public class TurnController {
 		// Conduct Spoilage
 		for (int i = 0; i < players.length; i++) {
 			final int[] res = players[i].getResourceCounter();
+			int maxQty = 5;
+
+			// TODO: Check if player has a Storehouse
+			if (1 > 2) {
+				maxQty = 8;
+			}
 			for (final int ii = 0; i < res.length; i++) {
-				if (res[ii] > 5) {
+				if (res[ii] > maxQty) {
 					resourceBank.replenishResource(
-							ResourceCubeType.getType(ii), res[ii] - 5);
-					res[ii] = 5;
+							ResourceCubeType.getType(ii), res[ii] - maxQty);
+					res[ii] = maxQty;
 				}
 			}
 

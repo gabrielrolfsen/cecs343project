@@ -51,7 +51,7 @@ public class MainFrameView extends JFrame {
 			this.getInsets(), 0, 0);
 
 	private MainFrameView() {
-		// TODO: Remove that
+		// XXX: Remove that
 		setLocation(300, 300);
 		// Sets the size of the 'switch board' Button
 		btnSwitchBoard.setPreferredSize(new Dimension(100, 50));
