@@ -14,7 +14,6 @@ import models.Card;
 import models.Player;
 import models.ResourcesBank;
 import models.Unit;
-import utils.Types.ResourceCubeType;
 import views.MainFrameView;
 
 /**
@@ -29,16 +28,24 @@ public class CardController {
 
 	private void playTradeCard(final Player player, final int price) {
 
-		// TODO: Check if player has a market
-		if (1 != 2) {
-			// TODO: Let the player choose the resource used to pay
-			player.updateResource(ResourceCubeType.GOLD, -price);
+		// If player has a market, he doesn't have to pay resources
+		if (!player.hasMarket()) {
+			mainFrame.showPaymentDialog(resourceBank.getResourceCounter(),
+					player.getResourceCounter(), price);
+			mainFrame.updatePlayerResources(player.getResourceCounter());
 		}
 
-		// TODO: Check if player owns a "Great Temple"
+		boolean allowVictoryCubes = false;
+
+		// If player has greatTemple and has at least 8 favor cubes, let him
+		// trade them for victory cubes
+		if (player.hasGreatTemple() && player.getResourceCounter()[0] > 7) {
+			allowVictoryCubes = true;
+		}
 
 		final int[] result = mainFrame.openTradeDialog(
-				resourceBank.getResourceCounter(), player.getResourceCounter());
+				resourceBank.getResourceCounter(), player.getResourceCounter(),
+				allowVictoryCubes);
 		player.decrementResources(result);
 		resourceBank.decrementResources(result);
 	}

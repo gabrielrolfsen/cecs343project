@@ -203,10 +203,10 @@ public class MainFrameView extends JFrame {
 	 *         the player resources and subtracted from the bank
 	 */
 	public int[] openTradeDialog(final int[] bankResources,
-			final int[] playerResources) {
+			final int[] playerResources, final boolean allowVictoryCubes) {
 		final JFrame frame = new JFrame();
 		final TradeDialog c = new TradeDialog(frame, bankResources,
-				playerResources);
+				playerResources, allowVictoryCubes);
 		// Display the Dialog
 		c.setVisible(true);
 		return c.getUpdatedResources();
@@ -227,6 +227,23 @@ public class MainFrameView extends JFrame {
 		// Display the Dialog
 		d.setVisible(true);
 		return d.getSelectedUnits();
+	}
+
+	/**
+	 * 
+	 * @param bankResources
+	 * @param playerResources
+	 * @param qty
+	 * @return
+	 */
+	public int[] showPaymentDialog(final int[] bankResources,
+			final int[] playerResources, final int qty) {
+		final JFrame frame = new JFrame();
+		final PaymentDialog dialog = new PaymentDialog(frame, bankResources,
+				playerResources, qty);
+		// Display the Dialog
+		dialog.setVisible(true);
+		return dialog.getUpdatedResources();
 	}
 
 	/**

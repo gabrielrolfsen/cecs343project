@@ -109,7 +109,8 @@ public class CardDialog extends JDialog {
 				mSelectionLabels[pos] = xLabel;
 
 				// Add card to Selected Cards Array
-				selectedCards.add(new Card(CardType.getType(pos)));
+				selectedCards.add(new Card(CardType.getType(pos), CardType
+						.getType(pos).getCost()));
 				xLabel.setBounds((pos * 180) + 40, 85, 110, 110);
 				layeredPane.add(xLabel, new Integer(100));
 

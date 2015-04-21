@@ -34,6 +34,8 @@ public class Player {
 		for (int i = 0; i < mResources.length - 1; i++) {
 			mResources[i] = 5;
 		}
+		// Place 1 Victory Cube for each player
+		mResources[ResourceCubeType.VICTORY.getValue()] = 1;
 	}
 
 	/**
@@ -78,6 +80,14 @@ public class Player {
 
 	public void setBoard(final BoardType boardType) {
 		this.mBoard = new Board(boardType);
+	}
+
+	public boolean hasMarket() {
+		return this.mBoard.hasMarket();
+	}
+
+	public boolean hasGreatTemple() {
+		return this.mBoard.hasGreatTemple();
 	}
 
 	public Board getBoard() {

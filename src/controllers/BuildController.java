@@ -1,5 +1,6 @@
 package controllers;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import models.Board;
@@ -11,11 +12,13 @@ import views.BuildView;
 
 public class BuildController {
 
-	private final BuildView curBuildView = new BuildView(this);
+	private final BuildView curBuildView;
 	private final BuildModel curBuildModel = new BuildModel();
 	private Player curPlayer;
 
-	public BuildController() {
+	BuildController() {
+		JFrame frame = new JFrame();
+		curBuildView = new BuildView(frame, this);
 		curBuildView.setVisible(false);
 	}
 

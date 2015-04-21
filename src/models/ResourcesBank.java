@@ -44,10 +44,10 @@ public class ResourcesBank {
 		}
 
 		/*
-		 * 30 Victory points are placed in the bank regardless of how many /*
-		 * players are playing.
+		 * 30 Victory points are placed in the bank regardless of how many
+		 * players are playing. But each player gets 1, so discount numPlayers
 		 */
-		mResources[ResourceCubeType.VICTORY.getValue()] = 30;
+		mResources[ResourceCubeType.VICTORY.getValue()] = 30 - numPlayers;
 
 		for (final UnitType type : UnitType.values()) {
 			mBattleCardsDeck.add(new BattleCard(type));
@@ -72,6 +72,12 @@ public class ResourcesBank {
 		}
 	}
 
+	public void incrementResources(final int[] updatedResources) {
+		for (int i = 0; i < updatedResources.length; i++) {
+			mResources[i] += updatedResources[i];
+		}
+	}
+
 	public void gatherResource(final ResourceCubeType type, final int qty) {
 		mResources[type.getValue()] -= qty;
 	}
@@ -84,6 +90,18 @@ public class ResourcesBank {
 		return this.mResources;
 	}
 
+	public int getRequestedResource(ResourceCubeType type, int quantityRequested) {
+		int returnValue;
+		if (mResources[type.getValue()] < quantityRequested) {
+			returnValue = mResources[type.getValue()];
+			mResources[type.getValue()] = 0;
+		} else {
+			returnValue = quantityRequested;
+			mResources[type.getValue()] -= quantityRequested;
+		}
+		return returnValue;
+	}
+	
 	public static synchronized ResourcesBank getInstance() {
 		if (mInstance == null) {
 			mInstance = new ResourcesBank(3);

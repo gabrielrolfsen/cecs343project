@@ -28,15 +28,32 @@ public class Types {
 	}
 
 	public enum ResourceTileType {
-		DESERT(0), FERTILE(1), FOREST(2), HILLS(3), MOUNTAINS(4), SWAMP(5);
+		DESERT(0, "Desert"), FERTILE(1, "Fertile"), FOREST(2, "Forest"), HILLS(3, "Hills"), MOUNTAINS(4, "Mountains"), 
+		SWAMP(5, "Swamp");
+		
 		private final int value;
+		private String s;
 
-		ResourceTileType(final int n) {
+		ResourceTileType(final int n, String s) {
 			this.value = n;
+			this.s = s;
 		}
 
 		public int getValue() {
 			return this.value;
+		}
+		
+		public String getString() {
+			return this.s;
+	}
+
+		public static ResourceTileType getTypeForString(String s) {
+			for(ResourceTileType r: ResourceTileType.values()) {
+				if (r.getString() == s) {
+					return r;
+				}
+			}
+			throw new IllegalArgumentException("Invalid id");
 		}
 	}
 
@@ -125,6 +142,25 @@ public class Types {
 		public int getValue() {
 			return this.n;
 		}
+		
+		public static ResourceCubeType getTypeForString(String s) {
+			for(ResourceCubeType r: ResourceCubeType.values()) {
+				if (r.getName() == s) {
+					return r;
+				}
+			}
+			throw new IllegalArgumentException("Invalid id");
+	}
+
+		public static ResourceCubeType getTypeForInt(int i) {
+			for(ResourceCubeType r: ResourceCubeType.values()) {
+				if (r.getValue() == i) {
+					return r;
+				}
+			}
+			throw new IllegalArgumentException("Invalid id");
+		}
+
 	}
 
 	public enum GridType {
@@ -140,27 +176,17 @@ public class Types {
 		}
 	}
 
-	public enum AgeType {
-		ARCHAIC(0), CLASSICAL(1), HEROIC(2), MYTHIC(3);
-		private final int value;
-
-		AgeType(final int i) {
-			this.value = i;
-		}
-
-		public int getValue() {
-			return this.value;
-		}
-	}
 
 	// TODO: Possibly turn TRADE into TRADE_1 and TRADE_2
 	public enum CardType {
-		ATTACK(0), BUILD(1), EXPLORE(2), GATHER(3), NEXTAGE(4), RECRUIT(5), TRADE(
-				6);
+		ATTACK(0, 0), BUILD(1, 0), EXPLORE(2, 0), GATHER(3, 0), NEXTAGE(4, 0), RECRUIT(
+				5, 0), TRADE(6, 2);
 		private final int n;
+		private final int cost;
 
-		CardType(final int n) {
+		CardType(final int n, final int cost) {
 			this.n = n;
+			this.cost = cost;
 		}
 
 		public static CardType getType(final int n) {
@@ -170,6 +196,10 @@ public class Types {
 				}
 			}
 			return null;
+		}
+
+		public int getCost() {
+			return this.cost;
 		}
 
 		public int getValue() {
@@ -236,5 +266,26 @@ public class Types {
 			return this.name;
 		}
 
+	}
+	
+	public enum AgeType {
+		ARCHAIC(0, "Archaic"), CLASSICAL(1, "Classical"), HEROIC(2, "Heroic"), MYTHIC(3, "Mythic");
+		
+		int n;
+		String s;
+		
+		AgeType(final int n, final String s) {
+			this.n = n;
+			this.s = s;
+		}
+
+		public int getValue() {
+			return this.n;
+		}
+
+		public String getString() {
+			return this.s;
+		}
+		
 	}
 }

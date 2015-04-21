@@ -13,8 +13,8 @@ import java.util.Collections;
 import java.util.Random;
 
 import models.Player;
-import models.ResourcesBank;
 import models.ResourceTile;
+import models.ResourcesBank;
 import utils.Constants;
 import utils.Coordinates;
 import views.ButtonDialog;
@@ -43,8 +43,8 @@ public class TerrainPickerController {
 
 	public void exploreCardRoutine(final Player[] players) {
 
-		// Picks 3 Random Tiles from the Tile Pool
-		randomTiles = resBank.getRandomTiles(3);
+		// Picks Random Tiles from the Tile Pool based on # of players
+		randomTiles = resBank.getRandomTiles(players.length + 1);
 
 		countResourceTypes();
 

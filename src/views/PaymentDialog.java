@@ -25,8 +25,6 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import utils.Types.ResourceCubeType;
 
@@ -34,17 +32,21 @@ import utils.Types.ResourceCubeType;
  * @author grolfsen
  *
  */
-public class TradeDialog extends JDialog {
+public class PaymentDialog extends JDialog {
 
 	final ActionListener confirmListener = new ConfirmTradeListener();
-	final JSpinner[] spinners = new JSpinner[10];
+	final JSpinner[] spinners = new JSpinner[5];
 	int updatedResources[] = new int[4];
+	int mQty;
 	int[] mPlayerResources = new int[5];
 
-	public TradeDialog(final JFrame parentFrame, final int[] bankResources,
-			final int[] playerResources, final boolean allowVictoryCubes) {
-		super(parentFrame, "Select Resources to Trade", true);
+	public PaymentDialog(final JFrame parentFrame, final int[] bankResources,
+			final int[] playerResources, final int qty) {
+		super(parentFrame, "Select Resources to Pay", true);
 		this.mPlayerResources = playerResources;
+		this.mQty = qty;
+		System.out.println("mQty: " + mQty);
+
 		final GridBagLayout b = new GridBagLayout();
 		setResizable(false);
 		// Creates the layout for the Dialog
@@ -52,7 +54,7 @@ public class TradeDialog extends JDialog {
 		panel.setPreferredSize(new Dimension(300, 210));
 		// TODO: Use constraints on dimensions
 		// TODO: Remove "X" close button from dialog
-		final JLabel lblPlayer = new JLabel("Player");
+		final JLabel lblPlayer = new JLabel("Quantity");
 		final GridBagConstraints c = new GridBagConstraints();
 
 		c.weightx = 0.5;
@@ -60,12 +62,6 @@ public class TradeDialog extends JDialog {
 		c.gridy = 0;
 
 		panel.add(lblPlayer, c);
-
-		final JLabel lblBank = new JLabel("Bank");
-		c.gridx = 2;
-		c.gridy = 0;
-
-		panel.add(lblBank, c);
 
 		for (final ResourceCubeType type : ResourceCubeType.values()) {
 			final SpinnerModel model = new SpinnerNumberModel(0, 0,
@@ -75,48 +71,7 @@ public class TradeDialog extends JDialog {
 					true);
 		}
 
-		// Disable Victory Cubes to trade
-		spinners[4].setEnabled(allowVictoryCubes);
-
-		for (final ResourceCubeType type : ResourceCubeType.values()) {
-			final SpinnerModel model = new SpinnerNumberModel(0, 0,
-					bankResources[type.getValue()], 1);
-			final int index = type.getValue() + 5;
-			spinners[index] = addSpinner(panel, type.getName(), model, index,
-					false);
-		}
-
-		/*
-		 * Set status for the Victory Point Trading - Only available if player
-		 * has a Great Temple
-		 */
-		spinners[9].setEnabled(allowVictoryCubes);
-		if (allowVictoryCubes) {
-			// Set the maximum for victory cubes
-			((SpinnerNumberModel) spinners[9].getModel())
-			.setMaximum(playerResources[0] / 8);
-
-			spinners[9].addChangeListener(new ChangeListener() {
-
-				@Override
-				public void stateChanged(final ChangeEvent e) {
-					final JSpinner spinner = (JSpinner) e.getSource();
-					final int favorCubes = (Integer) spinner.getValue() == 0 ? -8
-							: (Integer) spinner.getValue() * 8;
-					final int currentAmount = (Integer) spinners[0].getValue();
-					final int amountToAdd = favorCubes + currentAmount;
-
-					if (favorCubes + currentAmount <= playerResources[0]) {
-						spinners[0].setValue(amountToAdd < 0 ? 0 : amountToAdd);
-					} else {
-
-					}
-
-				}
-			});
-		}
-
-		final JButton btnConfirm = new JButton("Trade");
+		final JButton btnConfirm = new JButton("Confirm");
 		btnConfirm.addActionListener(confirmListener);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.anchor = GridBagConstraints.PAGE_END; // bottom of space
@@ -186,25 +141,20 @@ public class TradeDialog extends JDialog {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			int qty1 = 0;
-			int qty2 = 0;
 
-			final int qtySelected[] = new int[10];
-			for (int i = 0; i < 4; i++) {
+			final int qtySelected[] = new int[5];
+			for (int i = 0; i < 5; i++) {
 				qtySelected[i] = (Integer) spinners[i].getValue();
 				qty1 += qtySelected[i];
+
 			}
 
-			for (int i = 5; i < spinners.length - 1; i++) {
-				qtySelected[i] = (Integer) spinners[i].getValue();
-				qty2 += qtySelected[i];
-			}
-
-			if (qty1 != qty2 || (qtySelected[0] - qtySelected[9] * 8) >= 0) {
-				// TODO: Display error message.
-				System.out.println("ERROR! ");
+			if (qty1 != mQty) {
+				// TODO: Error message.
+				System.out.println("ERROR!");
 			} else {
-				for (int i = 0; i < 4; i++) {
-					updatedResources[i] = qtySelected[i] - qtySelected[i + 5];
+				for (int i = 0; i < 5; i++) {
+					mPlayerResources[i] -= qtySelected[i];
 				}
 
 				dispose();

@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 
 import utils.Coordinates;
 import utils.Types.BoardType;
+import utils.Types.BuildingTileType;
 import utils.Types.ResourceTileType;
 
 /**
@@ -19,6 +20,9 @@ public class Board {
 	int freeTerrainCounter[] = new int[6];
 	// TODO: put icon on view only
 	private ImageIcon icon = null;
+
+	private boolean hasMarket = false;
+	private boolean hasGreatTemple = false;
 
 	private final ArrayList<TilePlaceHolder> productionArea = new ArrayList<TilePlaceHolder>();
 	private final ArrayList<TilePlaceHolder> cityArea = new ArrayList<TilePlaceHolder>();
@@ -86,6 +90,11 @@ public class Board {
 				if (!t.isFilled()) {
 					t.setTile(tile);
 					this.buildingsCounter++;
+					if (tile.getType() == BuildingTileType.MARKET) {
+						hasMarket = true;
+					} else if (tile.getType() == BuildingTileType.TEMPLE) {
+						hasGreatTemple = true;
+					}
 					return true;
 				}
 			}
@@ -110,14 +119,14 @@ public class Board {
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FOREST, 1, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 2, 2));
 		productionArea
-		.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 2));
+				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 0, 3));
 		productionArea
-		.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 3));
+				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 3));
 		productionArea
-		.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 2, 3));
+				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 2, 3));
 		productionArea
-		.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 3));
+				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 3));
 		icon = new ImageIcon("res/board_norse.png");
 		freeTerrainCounter[ResourceTileType.DESERT.getValue()] = 1;
 		freeTerrainCounter[ResourceTileType.FERTILE.getValue()] = 4;
@@ -172,7 +181,7 @@ public class Board {
 		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 3, 1));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 0, 2));
 		productionArea
-		.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 2));
+				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 2, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FOREST, 3, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 0, 3));
@@ -220,6 +229,14 @@ public class Board {
 		}
 		return typeName;
 
+	}
+
+	public boolean hasMarket() {
+		return this.hasMarket;
+	}
+
+	public boolean hasGreatTemple() {
+		return this.hasGreatTemple;
 	}
 
 	public ArrayList<TilePlaceHolder> getCityArea() {

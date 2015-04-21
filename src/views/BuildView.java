@@ -5,45 +5,50 @@ import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JRadioButton;
 
-import controllers.BuildController;
 import utils.Types.BuildingTileType;
+import controllers.BuildController;
 
-public class BuildView extends JFrame
-					   implements ActionListener{
-	private BuildController curBuildControl;
-	
+public class BuildView extends JDialog
+implements ActionListener{
+private BuildController curBuildControl;
+
 	private final int MAX_BUTTONS = 14;
-	private JRadioButton[] btnBuilding;
-	private ButtonGroup bgBuilding;
-	private JButton btnPurchase;
-	
-	public BuildView(BuildController newBuildControl) {
-		curBuildControl = newBuildControl;
+	private final JRadioButton[] btnBuilding;
+	private final ButtonGroup bgBuilding;
+	private final JButton btnPurchase;
+
+	public BuildView(JFrame parentFrame, BuildController newBuildControl) {
+		super(parentFrame, "Select Building", true);
 		
+		curBuildControl = newBuildControl;
+
 		btnBuilding = new JRadioButton[MAX_BUTTONS];
 		bgBuilding = new ButtonGroup();
-		
+
 		int i;
-		for(i = 0; i < MAX_BUTTONS; i++) {
-			btnBuilding[i] = new JRadioButton(BuildingTileType.getStringForInt(i));
+		for (i = 0; i < MAX_BUTTONS; i++) {
+			btnBuilding[i] = new JRadioButton(
+					BuildingTileType.getStringForInt(i));
 			btnBuilding[i].addActionListener(this);
 			this.add(btnBuilding[i]);
 			bgBuilding.add(btnBuilding[i]);
 		}
-		
+
 		btnPurchase = new JButton("Purchase");
 		btnPurchase.setActionCommand(Integer.toString(-1));
 		btnPurchase.addActionListener(this);
 		this.add(btnPurchase);
 	}
-	
-	public void actionPerformed(ActionEvent e) {
+
+	@Override
+	public void actionPerformed(final ActionEvent e) {
 		int i;
 		for (i = 0; i < MAX_BUTTONS; i++) {
-			if(btnBuilding[i].isSelected()) {
+			if (btnBuilding[i].isSelected()) {
 				break;
 			}
 		}
