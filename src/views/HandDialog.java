@@ -35,15 +35,17 @@ public class HandDialog extends JDialog {
 	private final SelectListener selectListener = new SelectListener();
 	private Card selectedCard = null;
 
-	private final ArrayList<Card> playerHand = new ArrayList<Card>();
+	private ArrayList<Card> mPlayerHand = new ArrayList<Card>();
 
 	public HandDialog(final JFrame parentFrame, final ArrayList<Card> playerHand) {
 		super(parentFrame, "Select a Card to Play", true);
-		layeredPane.setPreferredSize(new Dimension(1300, 260));
+		this.mPlayerHand = playerHand;
 
 		// Calculate Panel Width based on the hand size
 		final int panelWidth = playerHand.size() * 300;
-		panel.setPreferredSize(new Dimension(1300, 260));
+
+		layeredPane.setPreferredSize(new Dimension(1300, 280));
+		panel.setPreferredSize(new Dimension(1300, 280));
 		setResizable(false);
 		final GridBagConstraints c = new GridBagConstraints();
 		c.weightx = 0.5;
@@ -71,6 +73,20 @@ public class HandDialog extends JDialog {
 			layeredPane.add(btn, c, new Integer(0));
 			i++;
 		}
+		final JButton passBtn = new JButton("Pass Turn");
+		passBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				dispose();
+			}
+		});
+		passBtn.setBounds(0, 257, 1260, 20);
+		layeredPane.add(passBtn, new Integer(0));
+
+		panel.add(layeredPane);
+		add(panel);
+		pack();
+		setLocationRelativeTo(parentFrame);
 	}
 
 	/**
@@ -88,7 +104,7 @@ public class HandDialog extends JDialog {
 			final int pos = Integer.parseInt(e.getActionCommand());
 
 			// Get the selected card from player's hand
-			selectedCard = playerHand.get(pos);
+			selectedCard = mPlayerHand.get(pos);
 
 			// Dismiss Dialog
 			setVisible(false);

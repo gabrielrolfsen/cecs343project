@@ -9,11 +9,12 @@ package views;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
+import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -34,23 +35,21 @@ public class CardDialog extends JDialog {
 
 	private final JLayeredPane layeredPane = new JLayeredPane();
 	final JPanel panel = new JPanel(new GridBagLayout());
+	private int qtyToSelect = 0;
 
 	private final AddSelectListener addSelectListener = new AddSelectListener();
-	private final ConfirmListener confirmListener = new ConfirmListener();
 	private final ArrayList<Card> selectedCards = new ArrayList<Card>();
+	private final JButton[] mBtns = new JButton[7];
+	private final JLabel[] mSelectionLabels = new JLabel[7];
 
-	private final ArrayList<Card> playerHand = new ArrayList<Card>();
-
-	public CardDialog(final JFrame parentFrame) {
+	public CardDialog(final JFrame parentFrame, final int qty) {
 		super(parentFrame, "Select Cards to your hand", true);
+		this.qtyToSelect = qty;
 		// Add a Layered Pane for Cards
 		layeredPane.setPreferredSize(new Dimension(1265, 280));
 
 		panel.setPreferredSize(new Dimension(1265, 280));
 		setResizable(false);
-		final GridBagConstraints c = new GridBagConstraints();
-		c.weightx = 0.5;
-		c.gridy = 0;
 
 		// Add the Buttons
 		for (final CardType v : CardType.values()) {
@@ -71,17 +70,21 @@ public class CardDialog extends JDialog {
 					ic.getIconHeight());
 			btn.setActionCommand(String.valueOf(i));
 			btn.addActionListener(addSelectListener);
-			c.gridx = i;
-			// Add the button to panel
-			layeredPane.add(btn, c, new Integer(0));
+			// Add button to array of buttons
+			mBtns[i] = btn;
+			// Add button to panel
+			layeredPane.add(btn, new Integer(0));
 		}
 		final JButton confirmBtn = new JButton("Add to hand");
-		// TODO: Confirm if it's necessary to add listener
-		confirmBtn.addActionListener(confirmListener);
-		c.gridy = 1;
-		c.gridx = 0;
+
+		confirmBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				dispose();
+			}
+		});
 		confirmBtn.setBounds(0, 257, 1260, 20);
-		layeredPane.add(confirmBtn, c, new Integer(0));
+		layeredPane.add(confirmBtn, new Integer(0));
 		panel.add(layeredPane);
 
 		add(panel);
@@ -93,37 +96,69 @@ public class CardDialog extends JDialog {
 		return this.selectedCards;
 	}
 
-	private class ConfirmListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(final ActionEvent arg0) {
-			setVisible(false);
-		}
-	}
-
 	private class AddSelectListener implements ActionListener {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			// Add selected card to array
-			// Draw an "O" on the button
-
-			final JLabel xLabel = new JLabel("X");
-			xLabel.setForeground(Color.red);
 			final int pos = Integer.parseInt(e.getActionCommand());
-			// Add card to Selected Cards Array
-			for (final CardType v : CardType.values()) {
-				if (v.getValue() == pos) {
-					selectedCards.add(new Card(v));
-				}
-			}
 
-			xLabel.setBounds(90 + pos * 180, 125, 30, 40);
-			layeredPane.add(xLabel, new Integer(100));
+			if (mSelectionLabels[pos] == null) {
+
+				final JLabel xLabel = new JLabel("X");
+				xLabel.setFont(new Font("Serif", Font.PLAIN, 120));
+				xLabel.setForeground(Color.red);
+				mSelectionLabels[pos] = xLabel;
+
+				// Add card to Selected Cards Array
+				selectedCards.add(new Card(CardType.getType(pos)));
+				xLabel.setBounds((pos * 180) + 40, 85, 110, 110);
+				layeredPane.add(xLabel, new Integer(100));
+
+				// Decrease Quantity of cards that player can select
+				qtyToSelect--;
+
+				/*
+				 * If There's no more selection Avaliable, disable all buttons
+				 * that were NOT selected.
+				 */
+				if (qtyToSelect == 0) {
+					for (int i = 0; i < 7; i++) {
+						if (mSelectionLabels[i] == null) {
+							mBtns[i].setEnabled(false);
+						}
+					}
+				}
+			} else {
+				// Remove the Label from Panel and from array
+				layeredPane.remove(mSelectionLabels[pos]);
+				mSelectionLabels[pos] = null;
+
+				// Reactive Disabled Buttons
+				if (qtyToSelect == 0) {
+					for (int i = 0; i < 7; i++) {
+						if (mSelectionLabels[i] == null) {
+							mBtns[i].setEnabled(true);
+						}
+					}
+				}
+
+				// TODO: Possibly refactoring is needed
+				final Iterator<Card> iter = selectedCards.iterator();
+
+				// Remove Card from SelectedCards Array
+				while (iter.hasNext()) {
+					final Card card = iter.next();
+
+					if (card.getType() == CardType.getType(pos)) {
+						iter.remove();
+					}
+				}
+				qtyToSelect++;
+			}
 
 			// Refresh the layout
 			layeredPane.revalidate();
 			layeredPane.repaint();
 		}
-	}
 
+	}
 }

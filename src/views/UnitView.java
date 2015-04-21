@@ -32,8 +32,6 @@ public class UnitView extends ImageIcon {
 		this.mPos = pos;
 		final ImageIcon icon = new ImageIcon("res/units/"
 				+ type.toString().toLowerCase() + ".png");
-		System.out.println("res/units/" + type.toString().toLowerCase()
-				+ ".png");
 		setImage(icon.getImage());
 		draw();
 
@@ -50,6 +48,7 @@ public class UnitView extends ImageIcon {
 		mLabel.setLocation(200 + (mPos * 30), insFrame.top + 20);
 		mParentPanel.add(mLabel);
 		mLabel.setVisible(true);
+		mLabel.setBounds(150, 50, 30, 30);
 		// TODO: Debug
 		System.out.println("Drawing at x: " + mLabel.getX() + " y: "
 				+ mLabel.getY());

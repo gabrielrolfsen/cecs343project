@@ -113,6 +113,15 @@ public class Types {
 			return this.name;
 		}
 
+		public static ResourceCubeType getType(final int n) {
+			for (final ResourceCubeType cube : ResourceCubeType.values()) {
+				if (cube.n == n) {
+					return cube;
+				}
+			}
+			return null;
+		}
+
 		public int getValue() {
 			return this.n;
 		}
@@ -131,6 +140,19 @@ public class Types {
 		}
 	}
 
+	public enum AgeType {
+		ARCHAIC(0), CLASSICAL(1), HEROIC(2), MYTHIC(3);
+		private final int value;
+
+		AgeType(final int i) {
+			this.value = i;
+		}
+
+		public int getValue() {
+			return this.value;
+		}
+	}
+
 	// TODO: Possibly turn TRADE into TRADE_1 and TRADE_2
 	public enum CardType {
 		ATTACK(0), BUILD(1), EXPLORE(2), GATHER(3), NEXTAGE(4), RECRUIT(5), TRADE(
@@ -139,6 +161,15 @@ public class Types {
 
 		CardType(final int n) {
 			this.n = n;
+		}
+
+		public static CardType getType(final int n) {
+			for (final CardType card : CardType.values()) {
+				if (card.n == n) {
+					return card;
+				}
+			}
+			return null;
 		}
 
 		public int getValue() {

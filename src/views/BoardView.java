@@ -41,19 +41,13 @@ public class BoardView extends JPanel {
 
 	public void updateArmy(final ArrayList<Unit> army) {
 		int i = 0;
-		// Clear JPanel and Array
-		for (final UnitView u : mArmy) {
-			final java.awt.Container parent = u.getLabel().getParent();
-			remove(parent);
-			parent.validate();
-			parent.repaint();
-			System.out.println("A");
-		}
 
 		mArmy.clear();
 		for (final Unit u : army) {
 			final UnitView uView = new UnitView(this, u.getType(), i);
 			mArmy.add(uView);
+			revalidate();
+			repaint();
 			i++;
 		}
 

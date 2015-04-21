@@ -13,11 +13,10 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import models.Card;
 import models.Player;
+import models.ResourcesBank;
 import utils.Constants;
 import utils.Types.BoardType;
-import utils.Types.CardType;
 import views.MainFrameView;
 import views.VictoryCardsDialog;
 
@@ -31,9 +30,6 @@ public class MainController {
 	private static MainController mInstance = new MainController();
 	private final MainFrameView mainFrame = MainFrameView.getInstance();
 	private final CardController cardController = CardController.getInstance();
-
-	// TODO: store this variable somewhere else (DEBUG)
-	final int victoryCubesOnCards[] = { 0, 0, 0, 0 };
 
 	/*
 	 * Counter for each type of terrain inside the randomTiles array, each index
@@ -52,9 +48,6 @@ public class MainController {
 			players[i] = new Player();
 		}
 
-		mainFrame.showCardDialog();
-		System.exit(0);
-
 		// Pops a Dialog so user can pick a culture
 		userCulturePick();
 
@@ -70,17 +63,20 @@ public class MainController {
 		// TODO: Improve this dialog
 		mainFrame.showGameReadyDialog();
 
-		// TODO: DEBUG
-		// cardController.play(players[0], new Card(CardType.TRADE, 2));
-		cardController.play(players, new Card(CardType.RECRUIT, 1, 2));
-
 		mainFrame.setVisible(true);
+
+		final TurnController turnController = new TurnController();
+
+		turnController.playTurn(players);
 
 		// Add "Place Victory Cubes" Button functionality
 		mainFrame.addVictoryCardButtonActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
+
+				final int victoryCubesOnCards[] = ResourcesBank.getInstance()
+						.getVictoryCubesOnCards();
 
 				final VictoryCardsDialog b = new VictoryCardsDialog(mainFrame,
 						players[0].getResourceCounter(), victoryCubesOnCards);

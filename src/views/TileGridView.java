@@ -62,7 +62,7 @@ public class TileGridView {
 		// 0 1 2 3
 		for (int k = 15; k >= 0; k--) {
 			// Set size and location based on the position
-			tileArray[k].setSize(tileWidth, tileHeight);
+			// tileArray[k].setSize(tileWidth, tileHeight);
 			tileArray[k].setLocation(posXTile, posYTile);
 			parentPanel.add(tileArray[k]);
 

@@ -10,6 +10,7 @@ package models;
 import java.util.ArrayList;
 
 import utils.Constants;
+import utils.Types.AgeType;
 import utils.Types.BoardType;
 import utils.Types.ResourceCubeType;
 
@@ -20,6 +21,7 @@ import utils.Types.ResourceCubeType;
 public class Player {
 
 	private Board mBoard = null;
+	private final AgeType mAge = AgeType.ARCHAIC;
 	private final ArrayList<Card> mHand = new ArrayList<Card>();
 	private final int mResources[] = new int[5];
 	private final ArrayList<Unit> army = new ArrayList<Unit>();
@@ -46,6 +48,10 @@ public class Player {
 		}
 	}
 
+	public AgeType getAge() {
+		return this.mAge;
+	}
+
 	public ArrayList<Unit> getArmy() {
 		return this.army;
 	}
@@ -63,7 +69,7 @@ public class Player {
 	}
 
 	public void updateResource(final ResourceCubeType type, final int qty) {
-		mResources[type.getValue()] += qty;
+		this.mResources[type.getValue()] += qty;
 	}
 
 	public int[] getResourceCounter() {

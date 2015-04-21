@@ -247,9 +247,9 @@ public class MainFrameView extends JFrame {
 	 * 
 	 * @return
 	 */
-	public ArrayList<Card> showCardDialog() {
+	public ArrayList<Card> showCardDialog(final int qty) {
 		final JFrame frame = new JFrame();
-		final CardDialog dialog = new CardDialog(frame);
+		final CardDialog dialog = new CardDialog(frame, qty);
 		// Display the Dialog
 		dialog.setVisible(true);
 

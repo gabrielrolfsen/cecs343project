@@ -43,7 +43,7 @@ public class VictoryCardsDialog extends JDialog {
 		this.cubesCounter = cubesCounter;
 
 		final JPanel panel = new JPanel(new GridBagLayout());
-		panel.setPreferredSize(new Dimension(800, 300));
+		panel.setPreferredSize(new Dimension(800, 330));
 		setResizable(false);
 		final GridBagConstraints c = new GridBagConstraints();
 		c.weightx = 0.5;
@@ -80,6 +80,18 @@ public class VictoryCardsDialog extends JDialog {
 		}
 
 		checkPlayerResources();
+
+		final JButton dismissBtn = new JButton("Dismiss Dialog");
+		dismissBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent arg0) {
+				dispose();
+			}
+		});
+		c.gridx = 0;
+		c.gridy = 2;
+		c.gridwidth = 4;
+		panel.add(dismissBtn, c);
 
 		add(panel);
 		pack();
