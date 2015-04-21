@@ -61,6 +61,12 @@ public class ResourcesBank {
 		}
 	}
 
+	public void incrementResources(final int[] updatedResources) {
+		for (int i = 0; i < updatedResources.length; i++) {
+			mResources[i] += updatedResources[i];
+		}
+	}
+
 	public void gatherResource(final ResourceCubeType type, final int qty) {
 		mResources[type.getValue()] -= qty;
 	}

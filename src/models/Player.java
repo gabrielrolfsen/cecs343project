@@ -9,6 +9,7 @@ package models;
 
 import java.util.ArrayList;
 
+import utils.Types.AgeType;
 import utils.Types.BoardType;
 import utils.Types.ResourceCubeType;
 
@@ -25,11 +26,13 @@ public class Player {
 
 	public boolean human;
 	public boolean turnTaken;
-
+	public AgeType currentAge;
+	
 	public Player() {
 		for (int i = 0; i < mResources.length - 1; i++) {
 			mResources[i] = 5;
 		}
+		currentAge = AgeType.ARCHAIC;
 	}
 
 	/**

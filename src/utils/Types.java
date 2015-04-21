@@ -204,4 +204,25 @@ public class Types {
 		}
 
 	}
+	
+	public enum AgeType {
+		ARCHAIC(0, "Archaic"), CLASSICAL(1, "Classical"), HEROIC(2, "Heroic"), MYTHIC(3, "Mythic");
+		
+		int n;
+		String s;
+		
+		AgeType(final int n, final String s) {
+			this.n = n;
+			this.s = s;
+		}
+
+		public int getValue() {
+			return this.n;
+		}
+
+		public String getString() {
+			return this.s;
+		}
+		
+	}
 }
