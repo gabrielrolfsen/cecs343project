@@ -30,7 +30,7 @@ public class GatherControl {
 		gather(player2);
 	}
 	
-	public void gather(Player curPlayer) {
+	private void gather(Player curPlayer) {
 		String resourceType;
 		int[] requestedResources;
 		
@@ -71,8 +71,14 @@ public class GatherControl {
 		// Get the player's resource Tiles
 		resourceTile = getTileArray(curPlayer);
 		
-		// Prompt human for Terrain choice
-		playerChoice = humanTerrainChoice();
+		if (curPlayer.human) {		
+			// Prompt human for Terrain choice
+			playerChoice = humanTerrainChoice();
+		} else {
+			// Choose for AI
+			// TODO Choose better for AI
+			playerChoice = ResourceTileType.FERTILE;
+		}
 		
 		// Count Resources gathered from players resource tiles
 		int i;
@@ -120,8 +126,14 @@ public class GatherControl {
 		// Get the player's resource Tiles
 		resourceTile = getTileArray(curPlayer);
 		
-		// Prompt human for Terrain choice
-		playerChoice = humanResourceChoice();
+		if (curPlayer.human) {
+			// Prompt human for Terrain choice
+			playerChoice = humanResourceChoice();
+		} else {
+			// Choose for AI
+			// TODO Choose better for AI
+			playerChoice = ResourceCubeType.FOOD;
+		}
 
 		// Set search criteria
 		switch (playerChoice) {

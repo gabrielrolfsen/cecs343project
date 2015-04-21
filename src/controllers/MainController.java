@@ -50,7 +50,8 @@ public class MainController {
 		for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
 			players[i] = new Player();
 		}
-
+		players[0].human = true;
+		
 		// Pops a Dialog so user can pick a culture
 		userCulturePick();
 
