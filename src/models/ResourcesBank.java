@@ -73,6 +73,18 @@ public class ResourcesBank {
 		return this.mResources;
 	}
 
+	public int getRequestedResource(ResourceCubeType type, int quantityRequested) {
+		int returnValue;
+		if (mResources[type.getValue()] < quantityRequested) {
+			returnValue = mResources[type.getValue()];
+			mResources[type.getValue()] = 0;
+		} else {
+			returnValue = quantityRequested;
+			mResources[type.getValue()] -= quantityRequested;
+		}
+		return returnValue;
+	}
+	
 	public static synchronized ResourcesBank getInstance() {
 		if (mInstance == null) {
 			mInstance = new ResourcesBank(3);

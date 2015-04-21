@@ -28,15 +28,32 @@ public class Types {
 	}
 
 	public enum ResourceTileType {
-		DESERT(0), FERTILE(1), FOREST(2), HILLS(3), MOUNTAINS(4), SWAMP(5);
+		DESERT(0, "Desert"), FERTILE(1, "Fertile"), FOREST(2, "Forest"), HILLS(3, "Hills"), MOUNTAINS(4, "Mountains"), 
+		SWAMP(5, "Swamp");
+		
 		private final int value;
+		private String s;
 
-		ResourceTileType(final int n) {
+		ResourceTileType(final int n, String s) {
 			this.value = n;
+			this.s = s;
 		}
 
 		public int getValue() {
 			return this.value;
+		}
+		
+		public String getString() {
+			return this.s;
+		}
+		
+		public static ResourceTileType getTypeForString(String s) {
+			for(ResourceTileType r: ResourceTileType.values()) {
+				if (r.getString() == s) {
+					return r;
+				}
+			}
+			throw new IllegalArgumentException("Invalid id");
 		}
 	}
 
@@ -78,6 +95,25 @@ public class Types {
 		public int getValue() {
 			return this.n;
 		}
+		
+		public static ResourceCubeType getTypeForString(String s) {
+			for(ResourceCubeType r: ResourceCubeType.values()) {
+				if (r.getName() == s) {
+					return r;
+				}
+			}
+			throw new IllegalArgumentException("Invalid id");
+		}
+
+		public static ResourceCubeType getTypeForInt(int i) {
+			for(ResourceCubeType r: ResourceCubeType.values()) {
+				if (r.getValue() == i) {
+					return r;
+				}
+			}
+			throw new IllegalArgumentException("Invalid id");
+		}
+
 	}
 
 	public enum GridType {

@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import models.Player;
+import models.ResourcesBank;
 import utils.Constants;
 import utils.Types.BoardType;
 import views.MainFrameView;
@@ -121,6 +122,12 @@ public class MainController {
 				}
 			}
 		});
+		
+		// Test Gather
+		//GatherControl gc = new GatherControl(ResourcesBank.getInstance());
+		//gc.gather(players[0]);
+		//mainFrame.setDisplayedBoard(players[0]);
+		
 	}
 
 	/**
