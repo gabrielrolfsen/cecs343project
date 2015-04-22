@@ -12,18 +12,18 @@ import javax.swing.JRadioButton;
 import utils.Types.BuildingTileType;
 import controllers.BuildController;
 
-public class BuildView extends JDialog
-implements ActionListener{
-private BuildController curBuildControl;
+public class BuildView extends JDialog implements ActionListener {
+	private final BuildController curBuildControl;
 
 	private final int MAX_BUTTONS = 14;
 	private final JRadioButton[] btnBuilding;
 	private final ButtonGroup bgBuilding;
 	private final JButton btnPurchase;
 
-	public BuildView(JFrame parentFrame, BuildController newBuildControl) {
+	public BuildView(final JFrame parentFrame,
+			final BuildController newBuildControl) {
 		super(parentFrame, "Select Building", true);
-		
+
 		curBuildControl = newBuildControl;
 
 		btnBuilding = new JRadioButton[MAX_BUTTONS];

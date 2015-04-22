@@ -16,9 +16,9 @@ public class BuildController {
 	private final BuildModel curBuildModel = new BuildModel();
 	private Player curPlayer;
 
-	BuildController() {
-		JFrame frame = new JFrame();
-		curBuildView = new BuildView(frame, this);
+	public BuildController() {
+		final JFrame parentFrame = new JFrame();
+		curBuildView = new BuildView(parentFrame, this);
 		curBuildView.setVisible(false);
 	}
 

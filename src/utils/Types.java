@@ -28,13 +28,13 @@ public class Types {
 	}
 
 	public enum ResourceTileType {
-		DESERT(0, "Desert"), FERTILE(1, "Fertile"), FOREST(2, "Forest"), HILLS(3, "Hills"), MOUNTAINS(4, "Mountains"), 
-		SWAMP(5, "Swamp");
-		
-		private final int value;
-		private String s;
+		DESERT(0, "Desert"), FERTILE(1, "Fertile"), FOREST(2, "Forest"), HILLS(
+				3, "Hills"), MOUNTAINS(4, "Mountains"), SWAMP(5, "Swamp");
 
-		ResourceTileType(final int n, String s) {
+		private final int value;
+		private final String s;
+
+		ResourceTileType(final int n, final String s) {
 			this.value = n;
 			this.s = s;
 		}
@@ -42,13 +42,13 @@ public class Types {
 		public int getValue() {
 			return this.value;
 		}
-		
+
 		public String getString() {
 			return this.s;
-	}
+		}
 
-		public static ResourceTileType getTypeForString(String s) {
-			for(ResourceTileType r: ResourceTileType.values()) {
+		public static ResourceTileType getTypeForString(final String s) {
+			for (final ResourceTileType r : ResourceTileType.values()) {
 				if (r.getString() == s) {
 					return r;
 				}
@@ -142,25 +142,15 @@ public class Types {
 		public int getValue() {
 			return this.n;
 		}
-		
-		public static ResourceCubeType getTypeForString(String s) {
-			for(ResourceCubeType r: ResourceCubeType.values()) {
+
+		public static ResourceCubeType getTypeForString(final String s) {
+			for (final ResourceCubeType r : ResourceCubeType.values()) {
 				if (r.getName() == s) {
 					return r;
 				}
 			}
 			throw new IllegalArgumentException("Invalid id");
-	}
-
-		public static ResourceCubeType getTypeForInt(int i) {
-			for(ResourceCubeType r: ResourceCubeType.values()) {
-				if (r.getValue() == i) {
-					return r;
-				}
-			}
-			throw new IllegalArgumentException("Invalid id");
 		}
-
 	}
 
 	public enum GridType {
@@ -175,7 +165,6 @@ public class Types {
 			return this.n;
 		}
 	}
-
 
 	// TODO: Possibly turn TRADE into TRADE_1 and TRADE_2
 	public enum CardType {
@@ -267,13 +256,14 @@ public class Types {
 		}
 
 	}
-	
+
 	public enum AgeType {
-		ARCHAIC(0, "Archaic"), CLASSICAL(1, "Classical"), HEROIC(2, "Heroic"), MYTHIC(3, "Mythic");
-		
+		ARCHAIC(0, "Archaic"), CLASSICAL(1, "Classical"), HEROIC(2, "Heroic"), MYTHIC(
+				3, "Mythic");
+
 		int n;
 		String s;
-		
+
 		AgeType(final int n, final String s) {
 			this.n = n;
 			this.s = s;
@@ -286,6 +276,6 @@ public class Types {
 		public String getString() {
 			return this.s;
 		}
-		
+
 	}
 }

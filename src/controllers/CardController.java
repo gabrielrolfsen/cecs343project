@@ -106,8 +106,10 @@ public class CardController {
 			playExploreCard(players, card.getNum());
 			break;
 		case GATHER:
+			playGatherCard(players[0], card.getNum());
 			break;
 		case NEXTAGE:
+			playNextAgeCard(players[0], card.getNum());
 			break;
 		case RECRUIT:
 			playRecruitCard(players[0], card.getNum());
