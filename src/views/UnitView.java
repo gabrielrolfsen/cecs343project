@@ -21,10 +21,10 @@ import utils.Types.UnitType;
  */
 public class UnitView extends ImageIcon {
 
-	final private JPanel mParentPanel;
-	UnitType mType;
-	final JLabel mLabel = new JLabel(this);
-	int mPos;
+	private final JPanel mParentPanel;
+	private final UnitType mType;
+	private final JLabel mLabel = new JLabel(this);
+	private final int mPos;
 
 	public UnitView(final JPanel parentPanel, final UnitType type, final int pos) {
 		this.mParentPanel = parentPanel;
@@ -43,7 +43,7 @@ public class UnitView extends ImageIcon {
 
 	public void draw() {
 		final Insets insFrame = mParentPanel.getInsets();
-		// mLabel.setText("AFFERSON");
+		mLabel.setText(mType.getName().toString());
 		mLabel.setLocation(200 + (mPos * 30), insFrame.top + 20);
 		mParentPanel.add(mLabel);
 		// mLabel.setVisible(true);

@@ -7,181 +7,249 @@
  */
 package views;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import models.BattleCard;
 import models.Unit;
+import utils.EnabledJComboBoxRenderer;
 
 /**
  * @author grolfsen
  *
  */
-public class RecruitDialog extends JDialog {
+public class RecruitDialog extends JDialog implements ListSelectionListener {
 
-	final ArrayList<JCheckBox> checkBoxes = new ArrayList<JCheckBox>();
-	ConfirmListener confirmListener = new ConfirmListener();
-	SelectListener selectListener = new SelectListener();
-	ArrayList<Unit> mSelectedUnits = new ArrayList<Unit>();
 	ArrayList<BattleCard> availableUnits = new ArrayList<BattleCard>();
 	int maxSelection = 0;
 	int boxesSelected = 0;
 	int[] mPlayerResources;
 
+	private final DefaultListModel listModel;
+	private final JComboBox unitsAvailable;
+	private final JList list;
+	private final JButton removeButton = new JButton("Remove");
+	private final JButton confirmButton = new JButton("Recruit Units");
+	private final JButton cancelButton = new JButton("Cancel");
+
+	final DefaultListSelectionModel comboModel = new DefaultListSelectionModel();
+
 	public RecruitDialog(final JFrame parentFrame, final int[] playerResources,
 			final int qty, final ArrayList<BattleCard> availableUnits) {
-		super(parentFrame, "Select up to " + qty + " unit"
-				+ (qty > 1 ? "s" : "") + " to recruit.", true);
+		super(parentFrame, "Add up to " + qty + " unit" + (qty > 1 ? "s" : "")
+				+ " to recruit.", true);
 		this.availableUnits = availableUnits;
-		this.maxSelection = qty;
 		this.mPlayerResources = playerResources;
 
-		// Creates the layout for the Dialog
-		final JPanel panel = new JPanel(new GridBagLayout());
-		// TODO: Use constraints on dimensions
-		panel.setPreferredSize(new Dimension(350, 300));
-		final GridBagConstraints c = new GridBagConstraints();
+		setResizable(false);
 
+		listModel = new DefaultListModel();
+		list = new JList(listModel);
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list.setSelectedIndex(0);
+		list.addListSelectionListener(this);
+		list.setVisibleRowCount(5);
+		final JScrollPane listScrollPane = new JScrollPane(list);
+
+		final JButton addButton = new JButton("Add");
+
+		addButton.setActionCommand("Add");
+		addButton.addActionListener(new AddListener());
+		addButton.setEnabled(true);
+
+		final String[] unitNameList = new String[availableUnits.size()];
 		for (int i = 0; i < availableUnits.size(); i++) {
-
-			final JCheckBox box = new JCheckBox(availableUnits.get(i).getName());
-			box.addItemListener(selectListener);
-			// Associate index with check box
-			box.setActionCommand(Integer.toString(i));
-			checkBoxes.add(box);
-
-			// If the user cannot afford the unit, the checkbox is disabled
-			final int[] cardCost = availableUnits.get(i).getCost();
-			for (int j = 0; j < 4; j++) {
-				if (mPlayerResources[j] < cardCost[j]) {
-					box.setEnabled(false);
-					break;
-				}
-			}
-
-			// * Button Layout Constraints * //
-			c.fill = GridBagConstraints.HORIZONTAL;
-			c.weightx = 0.5;
-			c.gridx = (i % 3);
-			c.gridy = (i / 3);
-			// Add it to the Panel
-			panel.add(box, c);
+			unitNameList[i] = availableUnits.get(i).getName();
 		}
 
-		final JButton passBtn = new JButton("Recruit");
-		passBtn.addActionListener(confirmListener);
-		// * Button Layout Constraints * //
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.ipady = 0; // reset to default
-		c.weighty = 1.0; // request any extra vertical space
-		c.anchor = GridBagConstraints.PAGE_END; // bottom of space
-		c.insets = new Insets(10, 0, 0, 0); // top padding
-		c.gridx = 0;
-		c.gridwidth = 3;
-		c.gridy = (availableUnits.size() / 3) + 1; // set y based on array size
-		panel.add(passBtn, c);
+		unitsAvailable = new JComboBox(unitNameList);
 
-		add(panel);
+		// comboModel.setSelectionInterval(0, 2);
+		unitsAvailable.setRenderer(new EnabledJComboBoxRenderer(comboModel));
+
+		final ControlBtnsListener ctrlBtnListener = new ControlBtnsListener();
+		confirmButton.addActionListener(ctrlBtnListener);
+		cancelButton.addActionListener(ctrlBtnListener);
+
+		removeButton.addActionListener(new RemoveListener());
+
+		final JPanel buttonPane = new JPanel();
+
+		final JPanel controlButtonsPane = new JPanel();
+		controlButtonsPane.setLayout(new GridLayout(1, 4));
+		controlButtonsPane.add(confirmButton);
+		controlButtonsPane.add(cancelButton);
+
+		buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
+		buttonPane.add(removeButton);
+		buttonPane.add(Box.createHorizontalStrut(5));
+		buttonPane.add(new JSeparator(SwingConstants.VERTICAL));
+		buttonPane.add(Box.createHorizontalStrut(5));
+		buttonPane.add(unitsAvailable);
+		buttonPane.add(addButton);
+
+		buttonPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+		add(listScrollPane, BorderLayout.PAGE_START);
+		add(buttonPane, BorderLayout.CENTER);
+		add(controlButtonsPane, BorderLayout.PAGE_END);
 		pack();
 		setLocationRelativeTo(parentFrame);
 
 	}
 
 	public ArrayList<Unit> getSelectedUnits() {
-		return this.mSelectedUnits;
-	}
-
-	private void toggleCheckBoxes(final boolean s) {
-		if (boxesSelected == maxSelection) {
-			for (final JCheckBox c : checkBoxes) {
-				if (!c.isSelected()) {
-					c.setEnabled(s);
-				}
-			}
+		final ArrayList<Unit> selectedUnits = new ArrayList<Unit>();
+		for (int i = 0; i < listModel.getSize(); i++) {
+			final String unitName = listModel.getElementAt(i).toString();
+			selectedUnits.add(getUnit(unitName));
 		}
+
+		return selectedUnits;
 	}
 
-	/**
-	 * Listener that limit the amount of checkboxes to be selected.
-	 * 
-	 * @author grolfsen
-	 *
-	 */
-	private class SelectListener implements ItemListener {
+	@Override
+	public void valueChanged(final ListSelectionEvent e) {
+		if (e.getValueIsAdjusting() == false) {
 
-		// TODO: improve logic
-		@Override
-		public void itemStateChanged(final ItemEvent e) {
-			final int index = Integer.parseInt(((JCheckBox) e.getSource())
-					.getActionCommand());
-			final int unitCost[] = availableUnits.get(index).getCost();
+			if (list.getSelectedIndex() == -1) {
+				// No selection, disable fire button.
+				removeButton.setEnabled(false);
 
-			if (((JCheckBox) e.getSource()).isSelected()) {
-				boxesSelected++;
-
-				// Pre-calculate the player resources if he recruits the
-				// selected unit
-				for (int i = 0; i < 4; i++) {
-					mPlayerResources[i] -= unitCost[i];
-				}
-
-				toggleCheckBoxes(false);
 			} else {
-				for (int i = 0; i < 4; i++) {
-					mPlayerResources[i] += unitCost[i];
-				}
-				toggleCheckBoxes(true);
-
-				boxesSelected--;
-			}
-
-			if (boxesSelected != maxSelection) {
-				// Disable units that the player cannot afford
-				for (int i = 0; i < availableUnits.size(); i++) {
-					final int[] cardCost = availableUnits.get(i).getCost();
-					for (int j = 0; j < 4; j++) {
-						if (mPlayerResources[j] < cardCost[j]
-								&& !checkBoxes.get(i).isSelected()) {
-							checkBoxes.get(i).setEnabled(false);
-							break;
-						} else if (checkBoxes.get(i).isEnabled() == false) {
-							checkBoxes.get(i).setEnabled(true);
-						}
-					}
-				}
+				// Selection, enable the fire button.
+				removeButton.setEnabled(true);
 			}
 		}
-
 	}
 
-	private class ConfirmListener implements ActionListener {
+	private class ControlBtnsListener implements ActionListener {
+
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-
-			// Get all selected checkboxes and store the names in a string
-			for (final JCheckBox j : checkBoxes) {
-				if (j.isSelected()) {
-					mSelectedUnits.add(availableUnits.get(
-							Integer.parseInt(j.getActionCommand())).getUnit());
-				}
+			// If it is the cancel button, clear the list first
+			if (((JButton) e.getSource()).getText().equals("Cancel")) {
+				listModel.clear();
 			}
-			// TODO: Check if player can afford it
-			// Closes the dialog
-			setVisible(false);
 			dispose();
 		}
 	}
+
+	private class RemoveListener implements ActionListener {
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			// This method can be called only if
+			// there's a valid selection
+			// so go ahead and remove whatever's selected.
+			int index = list.getSelectedIndex();
+
+			final int[] unitCost = getUnitCost(list.getSelectedValue()
+					.toString());
+
+			// Increase Player Resources
+			for (int i = 0; i < 4; i++) {
+				mPlayerResources[i] += unitCost[i];
+			}
+
+			listModel.remove(index);
+
+			final int size = listModel.getSize();
+
+			if (size == 0) { // Nobody's left, disable firing.
+				removeButton.setEnabled(false);
+
+			} else { // Select an index.
+				if (index == listModel.getSize()) {
+					// removed item in last position
+					index--;
+				}
+
+				list.setSelectedIndex(index);
+				list.ensureIndexIsVisible(index);
+			}
+		}
+	}
+
+	private class AddListener implements ActionListener {
+
+		// Required by ActionListener.
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			final String unitName = unitsAvailable.getSelectedItem().toString();
+
+			// Verify if player can afford the Unit
+			final int[] unitCost = getUnitCost(unitName);
+			for (int i = 0; i < 4; i++) {
+				System.out.println(unitCost[i] + " - " + mPlayerResources[i]);
+				if (unitCost[i] > mPlayerResources[i]) {
+
+					// Player cannot afford it
+					return;
+				}
+			}
+			// Decrease Player Resources
+			for (int i = 0; i < 4; i++) {
+				mPlayerResources[i] -= unitCost[i];
+			}
+
+			int index = list.getSelectedIndex(); // get selected index
+			if (index == -1) { // no selection, so insert at beginning
+				index = 0;
+			} else { // add after the selected item
+				index++;
+			}
+
+			// Add element to the list
+			listModel.addElement(unitsAvailable.getSelectedItem().toString());
+
+			// Select the new item and make it visible.
+			list.setSelectedIndex(index);
+			list.ensureIndexIsVisible(index);
+		}
+
+	}
+
+	private int[] getUnitCost(final String s) {
+		int[] cost = null;
+		for (final BattleCard card : availableUnits) {
+			if (card.getName().equals(s)) {
+				cost = card.getCost();
+				break;
+			}
+		}
+		return cost;
+	}
+
+	private Unit getUnit(final String s) {
+		Unit unit = null;
+		for (final BattleCard card : availableUnits) {
+			if (card.getName().equals(s)) {
+				unit = card.getUnit();
+				break;
+			}
+		}
+		return unit;
+	}
+
 }

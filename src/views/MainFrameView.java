@@ -34,7 +34,7 @@ public class MainFrameView extends JFrame {
 
 	private final static MainFrameView mInstance = new MainFrameView();
 
-	// BoardView where the boad is shown
+	// BoardView where the board is shown
 	private final BoardView currentBoard = new BoardView();
 
 	// Button to switch between boards
@@ -222,8 +222,8 @@ public class MainFrameView extends JFrame {
 	public ArrayList<Unit> openRecruitDialog(final int[] playerResources,
 			final int qty, final ArrayList<BattleCard> availableUnits) {
 		final JFrame frame = new JFrame();
-		final RecruitDialog d = new RecruitDialog(frame, playerResources, qty,
-				availableUnits);
+		final RecruitDialog d = new RecruitDialog(frame, playerResources,
+				qty, availableUnits);
 		// Display the Dialog
 		d.setVisible(true);
 		return d.getSelectedUnits();

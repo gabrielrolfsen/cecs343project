@@ -39,6 +39,14 @@ public class BoardView extends JPanel {
 		super();
 	}
 
+	/**
+	 * Update army to be displayed on the board according to the current player.
+	 * If the player recruits a new unit, this method is called. If the player
+	 * switch between boards, this method is called as well.
+	 * 
+	 * @param army
+	 *            Army to be displayed on the board
+	 */
 	public void updateArmy(final ArrayList<Unit> army) {
 		int i = 0;
 
@@ -53,28 +61,56 @@ public class BoardView extends JPanel {
 
 	}
 
+	/**
+	 * 
+	 * @param resources
+	 */
 	public void updateResources(final int[] resources) {
 		mBoardResStats.updateResources(resources);
 	}
 
+	/**
+	 * 
+	 * @param cityArea
+	 */
 	private void setCityAreaGrid(final ArrayList<TilePlaceHolder> cityArea) {
 		mCityAreaGrid = new TileGridView(this, GridType.BUILDING, cityArea);
 	}
 
+	/**
+	 * 
+	 * @param productionArea
+	 */
 	private void setProductionAreaGrid(
 			final ArrayList<TilePlaceHolder> productionArea) {
 		mProductionAreaGrid = new TileGridView(this, GridType.RESOURCE,
 				productionArea);
 	}
 
+	/**
+	 * 
+	 * @param t
+	 * @param posX
+	 * @param posY
+	 */
 	public void addResourceTile(final Tile t, final int posX, final int posY) {
 		mProductionAreaGrid.addTile(GridType.RESOURCE, t, posX, posY);
 	}
 
+	/**
+	 * 
+	 * @param t
+	 * @param posX
+	 * @param posY
+	 */
 	public void addBuildingTile(final Tile t, final int posX, final int posY) {
 		mProductionAreaGrid.addTile(GridType.BUILDING, t, posX, posY);
 	}
 
+	/**
+	 * 
+	 * @param board
+	 */
 	public void setBoard(final Board board) {
 		boardType = board.getType();
 		setProductionAreaGrid(board.getProductionArea());
@@ -82,10 +118,17 @@ public class BoardView extends JPanel {
 		BackgroundImage = board.getIcon().getImage();
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public BoardType getBoardType() {
 		return this.boardType;
 	}
 
+	/**
+	 * 
+	 */
 	public void refreshBoard() {
 		mProductionAreaGrid.refresh();
 		mCityAreaGrid.refresh();
