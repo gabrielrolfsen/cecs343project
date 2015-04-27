@@ -9,12 +9,10 @@ package controllers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import models.BattleCard;
 import models.Player;
 import models.ResourcesBank;
 import utils.Constants;
@@ -45,22 +43,15 @@ public class MainController {
 
 	private MainController() {
 
-		final ArrayList<BattleCard> availableUnits = new ArrayList<BattleCard>();
-
-		// Select the units that are from the player's culture
-		// TODO: Check the age (?)
 		final ResourcesBank resourceBank = ResourcesBank.getInstance();
-		for (final BattleCard card : resourceBank.getBattleCardsDeck()) {
-
-			availableUnits.add(card);
-
-		}
 
 		// Initialize Players
 		for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
 			players[i] = new Player();
 		}
 		players[0].human = true;
+
+		cardController.setPlayers(players);
 
 		// Pops a Dialog so user can pick a culture
 		userCulturePick();
@@ -89,7 +80,7 @@ public class MainController {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 
-				final int victoryCubesOnCards[] = ResourcesBank.getInstance()
+				final int victoryCubesOnCards[] = resourceBank
 						.getVictoryCubesOnCards();
 
 				final VictoryCardsDialog b = new VictoryCardsDialog(mainFrame,
@@ -136,12 +127,6 @@ public class MainController {
 				}
 			}
 		});
-
-		// Test Gather
-		// GatherControl gc = new GatherControl(ResourcesBank.getInstance());
-		// gc.gather(players[0]);
-		// mainFrame.setDisplayedBoard(players[0]);
-
 	}
 
 	/**
@@ -191,7 +176,7 @@ public class MainController {
 		return this.players;
 	}
 
-	public static MainController getInstance() {
+	public synchronized static MainController getInstance() {
 		return mInstance;
 	}
 

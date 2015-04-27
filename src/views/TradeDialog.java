@@ -45,7 +45,7 @@ public class TradeDialog extends JDialog {
 			final int[] playerResources, final boolean allowVictoryCubes) {
 		super(parentFrame, "Select Resources to Trade", true);
 		this.mPlayerResources = playerResources;
-		final GridBagLayout b = new GridBagLayout();
+
 		setResizable(false);
 		// Creates the layout for the Dialog
 		final JPanel panel = new JPanel(new GridBagLayout());
@@ -94,7 +94,7 @@ public class TradeDialog extends JDialog {
 		if (allowVictoryCubes) {
 			// Set the maximum for victory cubes
 			((SpinnerNumberModel) spinners[9].getModel())
-			.setMaximum(playerResources[0] / 8);
+					.setMaximum(playerResources[0] / 8);
 
 			spinners[9].addChangeListener(new ChangeListener() {
 

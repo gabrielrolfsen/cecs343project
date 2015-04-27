@@ -29,7 +29,6 @@ public class TerrainPickerController {
 	private static TerrainPickerController mInstance = new TerrainPickerController();
 	private final MainFrameView mainFrame = MainFrameView.getInstance();
 	private final ResourcesBank resBank = ResourcesBank.getInstance();
-	private final MainController mainController = MainController.getInstance();
 
 	private ArrayList<ResourceTile> randomTiles = new ArrayList<ResourceTile>();
 	/*
@@ -41,16 +40,29 @@ public class TerrainPickerController {
 
 	public Player[] players = new Player[Constants.MAX_PLAYERS];
 
-	public void exploreCardRoutine(final Player[] players) {
+	public void exploreCardRoutine(final Player[] players,
+			final int startingPlayer) {
 
 		// Picks Random Tiles from the Tile Pool based on # of players
 		randomTiles = resBank.getRandomTiles(players.length + 1);
 
+		// Count the Types on the Random Tiles
 		countResourceTypes();
 
-		userPick();
-		aiPick(1);
-		aiPick(2);
+		// TODO: HARDCODED!!
+		if (startingPlayer == 0) {
+			userPick();
+			aiPick(1);
+			aiPick(2);
+		} else if (startingPlayer == 1) {
+			aiPick(1);
+			aiPick(2);
+			userPick();
+		} else {
+			aiPick(2);
+			userPick();
+			aiPick(1);
+		}
 
 		returnTilesToPool();
 	}
@@ -151,7 +163,7 @@ public class TerrainPickerController {
 							c.getY());
 				} else {
 					System.err
-							.println("There was a problem adding the tile to the board.");
+					.println("There was a problem adding the tile to the board.");
 				}
 
 				// Decrease the TerrainCounter for RandomTiles Array
@@ -179,7 +191,6 @@ public class TerrainPickerController {
 				.getFreeTerrainCounter();
 		boolean canPick = false;
 		int i = 0;
-		Random r = new Random();
 
 		// Create a list with numbers 0 to 5 (types of terrains)
 		final ArrayList<Integer> nums = new ArrayList<Integer>();
@@ -200,7 +211,7 @@ public class TerrainPickerController {
 
 		// If there's any available choice, the AI will try to pick one tile
 		if (canPick) {
-			r = new Random();
+			final Random r = new Random();
 			int pickedTileIndex = -1;
 			// Variable that says if the tile can fit in the board
 			boolean tileCanFit = false;
@@ -208,7 +219,7 @@ public class TerrainPickerController {
 			while (!tileCanFit) {
 				pickedTileIndex = r.nextInt(randomTiles.size());
 				if (boardFreeTerrains[randomTiles.get(pickedTileIndex)
-						.getType().getValue()] != 0) {
+				                      .getType().getValue()] != 0) {
 					tileCanFit = true;
 				}
 			}

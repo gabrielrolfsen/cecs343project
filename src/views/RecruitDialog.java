@@ -85,7 +85,7 @@ public class RecruitDialog extends JDialog implements ListSelectionListener {
 
 		unitsAvailable = new JComboBox(unitNameList);
 
-		// comboModel.setSelectionInterval(0, 2);
+		comboModel.setSelectionInterval(0, unitNameList.length);
 		unitsAvailable.setRenderer(new EnabledJComboBoxRenderer(comboModel));
 
 		final ControlBtnsListener ctrlBtnListener = new ControlBtnsListener();

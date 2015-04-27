@@ -8,6 +8,7 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import utils.Constants;
 import utils.Types.AgeType;
@@ -22,7 +23,7 @@ public class Player {
 
 	private Board mBoard = null;
 	private final AgeType mAge = AgeType.ARCHAIC;
-	private final ArrayList<Card> mHand = new ArrayList<Card>();
+	private ArrayList<Card> mHand = new ArrayList<Card>();
 	private final int mResources[] = new int[5];
 	private final ArrayList<Unit> army = new ArrayList<Unit>();
 
@@ -44,6 +45,28 @@ public class Player {
 
 		currentAge = AgeType.ARCHAIC;
 
+	}
+
+	/**
+	 * Returns a Random Perm. Action Card from players hand
+	 * 
+	 * @return
+	 */
+	public Card getRandomCardFromHand() {
+		final Random r = new Random();
+		return mHand.get(r.nextInt(mHand.size()));
+	}
+
+	public ArrayList<Card> getHand() {
+		return this.mHand;
+	}
+
+	public void removeCardFromHand(final Card card) {
+		mHand.remove(card);
+	}
+
+	public void addHand(final ArrayList<Card> hand) {
+		this.mHand = hand;
 	}
 
 	/**
@@ -78,8 +101,12 @@ public class Player {
 		}
 	}
 
-	public void updateResource(final ResourceCubeType type, final int qty) {
+	public void incrementResource(final ResourceCubeType type, final int qty) {
 		this.mResources[type.getValue()] += qty;
+	}
+
+	public void decrementResource(final ResourceCubeType type, final int qty) {
+		this.mResources[type.getValue()] -= qty;
 	}
 
 	public int[] getResourceCounter() {
@@ -92,6 +119,10 @@ public class Player {
 
 	public boolean hasMarket() {
 		return this.mBoard.hasMarket();
+	}
+
+	public boolean hasStoreHouse() {
+		return this.mBoard.hasStoreHouse();
 	}
 
 	public boolean hasGreatTemple() {

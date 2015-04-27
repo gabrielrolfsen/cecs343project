@@ -26,104 +26,130 @@ public class CardController {
 	private final MainFrameView mainFrame = MainFrameView.getInstance();
 	private final ResourcesBank resourceBank = ResourcesBank.getInstance();
 
-	private void playTradeCard(final Player player, final int price) {
+	private Player[] mPlayers;
+
+	/**
+	 * 
+	 * @param price
+	 * @param i
+	 */
+	private void playTradeCard(final int price, final int i) {
 
 		// If player has a market, he doesn't have to pay resources
-		if (!player.hasMarket()) {
+		if (!mPlayers[i].hasMarket()) {
 			mainFrame.showPaymentDialog(resourceBank.getResourceCounter(),
-					player.getResourceCounter(), price);
-			mainFrame.updatePlayerResources(player.getResourceCounter());
+					mPlayers[i].getResourceCounter(), price);
+			mainFrame.updatePlayerResources(mPlayers[i].getResourceCounter());
 		}
 
 		boolean allowVictoryCubes = false;
 
 		// If player has greatTemple and has at least 8 favor cubes, let him
 		// trade them for victory cubes
-		if (player.hasGreatTemple() && player.getResourceCounter()[0] > 7) {
+		if (mPlayers[i].hasGreatTemple()
+				&& mPlayers[i].getResourceCounter()[0] > 7) {
 			allowVictoryCubes = true;
 		}
 
 		final int[] result = mainFrame.openTradeDialog(
-				resourceBank.getResourceCounter(), player.getResourceCounter(),
-				allowVictoryCubes);
-		player.decrementResources(result);
+				resourceBank.getResourceCounter(),
+				mPlayers[i].getResourceCounter(), allowVictoryCubes);
+		mPlayers[i].decrementResources(result);
 		resourceBank.decrementResources(result);
 	}
 
-	private void playExploreCard(final Player[] players, final int qty) {
+	/**
+	 * 
+	 * @param qty
+	 * @param i
+	 */
+	private void playExploreCard(final int qty, final int i) {
 		final TerrainPickerController terrainController = TerrainPickerController
 				.getInstance();
-		terrainController.exploreCardRoutine(players);
-
+		terrainController.exploreCardRoutine(mPlayers, i);
 	}
 
-	private void playRecruitCard(final Player player, final int qty) {
+	/**
+	 * 
+	 * @param qty
+	 * @param i
+	 */
+	private void playRecruitCard(final int qty, final int i) {
 		final ArrayList<BattleCard> availableUnits = new ArrayList<BattleCard>();
 
 		// Select the units that are from the player's culture
 		// TODO: Check the age (?)
 		for (final BattleCard card : resourceBank.getBattleCardsDeck()) {
 
-			if (card.getUnit().getType().getCulture() == player.getBoard()
+			if (card.getUnit().getType().getCulture() == mPlayers[i].getBoard()
 					.getType()) {
 				availableUnits.add(card);
 			}
 		}
-		System.out.println(player.getResourceCounter()[0]);
+		System.out.println(mPlayers[i].getResourceCounter()[0]);
 		// Pops up the Dialog and get selected units
 		final ArrayList<Unit> selectedUnits = mainFrame.openRecruitDialog(
-				player.getResourceCounter(), qty, availableUnits);
+				mPlayers[i].getResourceCounter(), qty, availableUnits);
 
 		if (selectedUnits != null) {
-			player.addUnits(selectedUnits);
+			mPlayers[i].addUnits(selectedUnits);
 			// TODO: implement "add" method this one delete all units
 			mainFrame.updatePlayerArmy(selectedUnits);
 		}
 
 	}
 
-	private void playBuildCard(final Player player) {
+	private void playBuildCard(final int i) {
 		final BuildController c = new BuildController();
-		c.play(player);
+		c.play(mPlayers[i]);
 	}
 
-	private void playGatherCard(final Player player, final int price) {
-
+	private void playGatherCard(final int price, final int i) {
+		final GatherControl c = new GatherControl(resourceBank);
+		c.play(mPlayers[0], mPlayers[1], mPlayers[2]);
 	}
 
-	private void playNextAgeCard(final Player player, final int price) {
-
+	private void playNextAgeCard(final int price, final int i) {
+		final NextAgeController c = new NextAgeController(resourceBank);
+		c.play(mPlayers[i]);
 	}
 
-	public void play(final Player[] players, final Card card) {
+	public void setPlayers(final Player[] players) {
+		this.mPlayers = players;
+	}
+
+	public void play(final Card card, final int playNum) {
+
 		switch (card.getType()) {
 		case ATTACK:
 			break;
 		case BUILD:
-			playBuildCard(players[0]);
+			playBuildCard(playNum);
 			break;
 		case EXPLORE:
-			playExploreCard(players, card.getNum());
+			playExploreCard(card.getNum(), playNum);
 			break;
 		case GATHER:
-			playGatherCard(players[0], card.getNum());
+			playGatherCard(card.getNum(), playNum);
 			break;
 		case NEXTAGE:
-			playNextAgeCard(players[0], card.getNum());
+			playNextAgeCard(card.getNum(), playNum);
 			break;
 		case RECRUIT:
-			playRecruitCard(players[0], card.getNum());
+			playRecruitCard(card.getNum(), playNum);
 			break;
 		case TRADE:
-			playTradeCard(players[0], card.getCost());
+			playTradeCard(card.getCost(), playNum);
 			break;
 		default:
 			break;
 		}
-		mainFrame.updatePlayerResources(players[0].getResourceCounter());
+		// Update Player Resources
+		// TODO: Don't need to do with AI
+		mainFrame.updatePlayerResources(mPlayers[playNum].getResourceCounter());
 	}
 
-	public static CardController getInstance() {
+	public synchronized static CardController getInstance() {
 		return mInstance;
 	}
 

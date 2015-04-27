@@ -23,6 +23,7 @@ public class Board {
 
 	private boolean hasMarket = false;
 	private boolean hasGreatTemple = false;
+	private boolean hasStoreHouse = false;
 
 	private final ArrayList<TilePlaceHolder> productionArea = new ArrayList<TilePlaceHolder>();
 	private final ArrayList<TilePlaceHolder> cityArea = new ArrayList<TilePlaceHolder>();
@@ -94,6 +95,8 @@ public class Board {
 						hasMarket = true;
 					} else if (tile.getType() == BuildingTileType.TEMPLE) {
 						hasGreatTemple = true;
+					} else if (tile.getType() == BuildingTileType.STOREHOUSE) {
+						hasStoreHouse = true;
 					}
 					return true;
 				}
@@ -237,6 +240,10 @@ public class Board {
 
 	public boolean hasGreatTemple() {
 		return this.hasGreatTemple;
+	}
+
+	public boolean hasStoreHouse() {
+		return this.hasStoreHouse;
 	}
 
 	public ArrayList<TilePlaceHolder> getCityArea() {

@@ -174,7 +174,7 @@ public class GatherControl {
 		int i;
 		for (i = 0; i < 4; i++) {
 			curType = ResourceCubeType.getType(i);
-			curPlayer.updateResource(curType,
+			curPlayer.incrementResource(curType,
 					bank.getRequestedResource(curType, requested[i]));
 		}
 	}

@@ -7,6 +7,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import utils.Types.BuildingTileType;
@@ -24,6 +25,8 @@ public class BuildView extends JDialog implements ActionListener {
 			final BuildController newBuildControl) {
 		super(parentFrame, "Select Building", true);
 
+		final JPanel panel = new JPanel();
+
 		curBuildControl = newBuildControl;
 
 		btnBuilding = new JRadioButton[MAX_BUTTONS];
@@ -34,14 +37,15 @@ public class BuildView extends JDialog implements ActionListener {
 			btnBuilding[i] = new JRadioButton(
 					BuildingTileType.getStringForInt(i));
 			btnBuilding[i].addActionListener(this);
-			this.add(btnBuilding[i]);
+			panel.add(btnBuilding[i]);
 			bgBuilding.add(btnBuilding[i]);
 		}
 
 		btnPurchase = new JButton("Purchase");
 		btnPurchase.setActionCommand(Integer.toString(-1));
 		btnPurchase.addActionListener(this);
-		this.add(btnPurchase);
+		panel.add(btnPurchase);
+		pack();
 	}
 
 	@Override
