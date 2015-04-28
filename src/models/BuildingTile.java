@@ -1,6 +1,7 @@
 package models;
 
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 import utils.Types.BuildingTileType;
 
@@ -11,53 +12,14 @@ public class BuildingTile extends Tile {
 
 	public BuildingTile(final BuildingTileType type) {
 		this.type = type;
+		setIcon();
 	}
 
 	private void setIcon() {
-		switch (this.type) {
-		case HOUSE:
-
-			break;
-		case WALL:
-
-			break;
-		case TOWER:
-
-			break;
-		case STOREHOUSE:
-
-			break;
-		case MARKET:
-
-			break;
-		case ARMORY:
-
-			break;
-		case QUARRY:
-
-			break;
-		case MONUMENT:
-
-			break;
-		case GRANARY:
-
-			break;
-		case MINT:
-
-			break;
-		case WORKSHOP_WOOD:
-
-			break;
-		case WORKSHOP_SIEGE:
-
-			break;
-		case TEMPLE:
-
-			break;
-		case WONDER:
-
-			break;
-		}
+		String iconPath;
+		
+		iconPath = "res/building_tiles/" + type.getString() + ".png";
+		this.icon = new ImageIcon(iconPath, type.getString());
 	}
 
 	public BuildingTileType getType() {

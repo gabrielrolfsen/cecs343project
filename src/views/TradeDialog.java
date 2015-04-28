@@ -40,12 +40,13 @@ public class TradeDialog extends JDialog {
 	final JSpinner[] spinners = new JSpinner[10];
 	int updatedResources[] = new int[4];
 	int[] mPlayerResources = new int[5];
+	private final boolean mAllowVictoryCubes;
 
 	public TradeDialog(final JFrame parentFrame, final int[] bankResources,
 			final int[] playerResources, final boolean allowVictoryCubes) {
 		super(parentFrame, "Select Resources to Trade", true);
 		this.mPlayerResources = playerResources;
-
+		this.mAllowVictoryCubes = allowVictoryCubes;
 		setResizable(false);
 		// Creates the layout for the Dialog
 		final JPanel panel = new JPanel(new GridBagLayout());
@@ -94,7 +95,7 @@ public class TradeDialog extends JDialog {
 		if (allowVictoryCubes) {
 			// Set the maximum for victory cubes
 			((SpinnerNumberModel) spinners[9].getModel())
-					.setMaximum(playerResources[0] / 8);
+			.setMaximum(playerResources[0] / 8);
 
 			spinners[9].addChangeListener(new ChangeListener() {
 
@@ -199,8 +200,13 @@ public class TradeDialog extends JDialog {
 				qty2 += qtySelected[i];
 			}
 
-			if (qty1 != qty2 || (qtySelected[0] - qtySelected[9] * 8) >= 0) {
+			System.out.println(qty1);
+			System.out.println(qty2);
+			if (qty1 != qty2) {
 				// TODO: Display error message.
+				System.out.println("ERROR! ");
+			} else if (mAllowVictoryCubes == true
+					&& (qtySelected[0] - qtySelected[9] * 8) >= 0) {
 				System.out.println("ERROR! ");
 			} else {
 				for (int i = 0; i < 4; i++) {
