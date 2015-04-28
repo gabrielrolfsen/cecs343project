@@ -38,6 +38,9 @@ public class TurnController {
 				mainFrame, players[0].getResourceCounter(), victoryCubesOnCards);
 		victoryDialog.setVisible(true);
 
+		// Update the Main Frame to show player's Resources
+		mainFrame.updatePlayerResources(players[0].getResourceCounter());
+
 		// AIs Players Turn to Place Victory Cubes
 		final Random r = new Random();
 		for (int i = 1; i < 3; i++) {
@@ -57,8 +60,8 @@ public class TurnController {
 
 			// Create a list with numbers 0 to 7 (types of cards)
 			final ArrayList<Integer> nums = new ArrayList<Integer>();
-			for (i = 0; i < 7; i++) {
-				nums.add(i);
+			for (int x = 0; x < 7; x++) {
+				nums.add(x);
 			}
 			// Shuffle it
 			Collections.shuffle(nums);
@@ -131,5 +134,4 @@ public class TurnController {
 		// Rotate Starting Player
 
 	}
-
 }
