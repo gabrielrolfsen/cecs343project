@@ -23,6 +23,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import models.Card;
 import utils.Types.CardType;
@@ -35,20 +40,60 @@ public class CardDialog extends JDialog {
 
 	private final JLayeredPane layeredPane = new JLayeredPane();
 	final JPanel panel = new JPanel(new GridBagLayout());
-	private int qtyToSelect = 0;
+	private int mMaxQtyToSelect = 0;
 
 	private final AddSelectListener addSelectListener = new AddSelectListener();
 	private final ArrayList<Card> selectedCards = new ArrayList<Card>();
 	private final JButton[] mBtns = new JButton[7];
 	private final JLabel[] mSelectionLabels = new JLabel[7];
+	private final JSpinner mSpinnerRandomCard = new JSpinner();
+	private int lastSpinnerValue = 0;
 
 	public CardDialog(final JFrame parentFrame, final int qty) {
 		super(parentFrame, "Select Cards to your hand", true);
-		this.qtyToSelect = qty;
+		this.mMaxQtyToSelect = qty;
 		// Add a Layered Pane for Cards
-		layeredPane.setPreferredSize(new Dimension(1265, 280));
+		layeredPane.setPreferredSize(new Dimension(1265, 340));
 
-		panel.setPreferredSize(new Dimension(1265, 280));
+		// Set the Random Card Spinner with a maximum of "qty"
+		final SpinnerModel spinnerModel = new SpinnerNumberModel(0, 0, qty, 1);
+		mSpinnerRandomCard.setModel(spinnerModel);
+
+		mSpinnerRandomCard.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(final ChangeEvent arg0) {
+				final int value = ((Integer) ((JSpinner) arg0.getSource())
+						.getValue());
+				System.out.println("VALUE: " + value);
+				System.out.println("mMaxQty: " + mMaxQtyToSelect);
+				System.out.println("lastSpinner: " + lastSpinnerValue);
+				if (value > lastSpinnerValue) {
+					mMaxQtyToSelect--;
+				} else {
+					mMaxQtyToSelect++;
+				}
+
+				lastSpinnerValue = value;
+
+				if (mMaxQtyToSelect == 0) {
+					for (int i = 0; i < 7; i++) {
+						if (mSelectionLabels[i] == null) {
+							mBtns[i].setEnabled(false);
+						}
+					}
+				} else {
+					for (int i = 0; i < 7; i++) {
+						if (mSelectionLabels[i] == null) {
+							mBtns[i].setEnabled(true);
+						}
+					}
+
+				}
+			}
+		});
+
+		panel.setPreferredSize(new Dimension(1265, 340));
 		setResizable(false);
 
 		// Add the Buttons
@@ -85,6 +130,9 @@ public class CardDialog extends JDialog {
 		});
 		confirmBtn.setBounds(0, 257, 1260, 20);
 		layeredPane.add(confirmBtn, new Integer(0));
+		mSpinnerRandomCard.setBounds(0, 300, 40, 40);
+		layeredPane.add(mSpinnerRandomCard, new Integer(0));
+
 		panel.add(layeredPane);
 
 		add(panel);
@@ -101,8 +149,8 @@ public class CardDialog extends JDialog {
 		public void actionPerformed(final ActionEvent e) {
 			final int pos = Integer.parseInt(e.getActionCommand());
 
+			// If the selected Card was NOT previously selected
 			if (mSelectionLabels[pos] == null) {
-
 				final JLabel xLabel = new JLabel("X");
 				xLabel.setFont(new Font("Serif", Font.PLAIN, 120));
 				xLabel.setForeground(Color.red);
@@ -115,32 +163,21 @@ public class CardDialog extends JDialog {
 				layeredPane.add(xLabel, new Integer(100));
 
 				// Decrease Quantity of cards that player can select
-				qtyToSelect--;
+				mMaxQtyToSelect--;
 
 				/*
 				 * If There's no more selection Avaliable, disable all buttons
 				 * that were NOT selected.
 				 */
-				if (qtyToSelect == 0) {
+				if (mMaxQtyToSelect == 0) {
 					for (int i = 0; i < 7; i++) {
 						if (mSelectionLabels[i] == null) {
 							mBtns[i].setEnabled(false);
 						}
 					}
 				}
+				// If card Selected WAS previously selected
 			} else {
-				// Remove the Label from Panel and from array
-				layeredPane.remove(mSelectionLabels[pos]);
-				mSelectionLabels[pos] = null;
-
-				// Reactive Disabled Buttons
-				if (qtyToSelect == 0) {
-					for (int i = 0; i < 7; i++) {
-						if (mSelectionLabels[i] == null) {
-							mBtns[i].setEnabled(true);
-						}
-					}
-				}
 
 				// TODO: Possibly refactoring is needed
 				final Iterator<Card> iter = selectedCards.iterator();
@@ -153,8 +190,37 @@ public class CardDialog extends JDialog {
 						iter.remove();
 					}
 				}
-				qtyToSelect++;
+
+				// Remove the Label from Panel and from array
+				layeredPane.remove(mSelectionLabels[pos]);
+				mSelectionLabels[pos] = null;
+
+				// Reactive Disabled Buttons
+				if (mMaxQtyToSelect == 0) {
+					for (int i = 0; i < 7; i++) {
+						if (mSelectionLabels[i] == null) {
+							mBtns[i].setEnabled(true);
+						}
+					}
+				}
+
+				// Increment Max Qty To Select
+				mMaxQtyToSelect++;
 			}
+
+			System.out.println("MAX QTY: " + mMaxQtyToSelect);
+			/*
+			 * If RandomCards JSpinner has a number greater than the max Qty
+			 * allowed to select, set it to maximum instead.
+			 */
+			if ((Integer) mSpinnerRandomCard.getValue() > mMaxQtyToSelect) {
+				mSpinnerRandomCard.setValue(mMaxQtyToSelect);
+			}
+
+			// Change Maximum Value allowed on JSpinner
+			final SpinnerNumberModel s = (SpinnerNumberModel) mSpinnerRandomCard
+					.getModel();
+			s.setMaximum(mMaxQtyToSelect);
 
 			// Refresh the layout
 			layeredPane.revalidate();
