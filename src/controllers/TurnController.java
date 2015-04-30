@@ -50,9 +50,18 @@ public class TurnController {
 			players[i].decrementResource(ResourceCubeType.VICTORY, 1);
 		}
 
-		// Show Dialog with all cards so Human Player can pick them
-		final ArrayList<Card> humanPlayerHand = mainFrame
-				.showCardDialog(players[0].getAge().getValue() + 4);
+		final ArrayList<Card> humanPlayerHand = players[0].getHand();
+
+		final int qtyRandomCards = mainFrame.showCardDialog(humanPlayerHand,
+				players[0].getAge().getValue() + 4);
+
+		/*
+		 * Place Random Action Cards on player's hand according to the quantity
+		 * he selected
+		 */
+		for (int i = 0; i < qtyRandomCards; i++) {
+			humanPlayerHand.add(players[0].getRandomActionCard());
+		}
 
 		// AI Players Turn to Place Cards into their hands
 		for (int i = 1; i < 3; i++) {
@@ -72,7 +81,7 @@ public class TurnController {
 				final CardType type = CardType.getType(nums.get(ii));
 				System.out.println(nums.get(ii));
 				// Add to temporary hand
-				hand.add(new Card(type, type.getCost()));
+				hand.add(new Card(type));
 			}
 			System.out.println("lol" + hand.size());
 			// Add the Hand to player's hand

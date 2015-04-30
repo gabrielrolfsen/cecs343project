@@ -3,10 +3,11 @@
  *
  * @author Gabriel Franzoni
  * @version %I%, %G%
- * @since Mar 12, 2015
+ * @since Apr 29, 2015
  */
 package models;
 
+import utils.Types.BoardType;
 import utils.Types.CardType;
 
 /**
@@ -15,26 +16,24 @@ import utils.Types.CardType;
  */
 public class Card {
 
-	CardType mType;
-	int mCost;
-	int mNum;
+	private final BoardType mCulture;
+	private final CardType mType;
+	private final int mNum;
+	private final int mCost;
 
+	/**
+	 * 
+	 */
 	public Card(final CardType type) {
-		init(type, 0);
-	}
-
-	public Card(final CardType type, final int cost) {
-		init(type, cost);
-	}
-
-	public Card(final CardType type, final int cost, final int num) {
-		this.mNum = num;
-		init(type, cost);
-	}
-
-	private void init(final CardType type, final int cost) {
 		this.mType = type;
-		this.mCost = cost;
+		this.mNum = type.getNum();
+		this.mCost = type.getPrice();
+		this.mCulture = type.getCulture();
+		// TODO Auto-generated constructor stub
+	}
+
+	public BoardType getCulture() {
+		return this.mCulture;
 	}
 
 	public int getCost() {

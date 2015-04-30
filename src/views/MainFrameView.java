@@ -222,8 +222,8 @@ public class MainFrameView extends JFrame {
 	public ArrayList<Unit> openRecruitDialog(final int[] playerResources,
 			final int qty, final ArrayList<BattleCard> availableUnits) {
 		final JFrame frame = new JFrame();
-		final RecruitDialog d = new RecruitDialog(frame, playerResources,
-				qty, availableUnits);
+		final RecruitDialog d = new RecruitDialog(frame, playerResources, qty,
+				availableUnits);
 		// Display the Dialog
 		d.setVisible(true);
 		return d.getSelectedUnits();
@@ -264,13 +264,13 @@ public class MainFrameView extends JFrame {
 	 * 
 	 * @return
 	 */
-	public ArrayList<Card> showCardDialog(final int qty) {
+	public int showCardDialog(final ArrayList<Card> hand, final int qty) {
 		final JFrame frame = new JFrame();
-		final CardDialog dialog = new CardDialog(frame, qty);
+		final CardDialog dialog = new CardDialog(frame, hand, qty);
 		// Display the Dialog
 		dialog.setVisible(true);
 
-		return dialog.getSelectedCards();
+		return dialog.getQtyRandomCardsSelected();
 	}
 
 	public static synchronized MainFrameView getInstance() {

@@ -8,11 +8,14 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
+import java.util.Stack;
 
 import utils.Constants;
 import utils.Types.AgeType;
 import utils.Types.BoardType;
+import utils.Types.CardType;
 import utils.Types.ResourceCubeType;
 
 /**
@@ -24,37 +27,31 @@ public class Player {
 	private Board mBoard = null;
 	private final AgeType mAge = AgeType.ARCHAIC;
 	private ArrayList<Card> mHand = new ArrayList<Card>();
-	private final int mResources[] = new int[5];
+	private final Stack<Card> mDeckRandomCards = new Stack<Card>();
+	private final int mResources[] = { 5, 5, 5, 5, 1 };
 	private final ArrayList<Unit> army = new ArrayList<Unit>();
 
 	public boolean human;
 	public boolean turnTaken;
-	public AgeType currentAge;
+	public AgeType currentAge = AgeType.ARCHAIC;
 
 	public boolean[] buildingOwned = new boolean[Constants.MAX_BUILDINGS];
 	public int housesOwned = 0;
 	private final int MAX_BUILDINGS = 14;
 
-	public Player() {
-		for (int i = 0; i < mResources.length - 1; i++) {
-			mResources[i] = 5;
-		}
-
-		// Place 1 Victory Cube for each player
-		mResources[ResourceCubeType.VICTORY.getValue()] = 1;
-
-		currentAge = AgeType.ARCHAIC;
-
-	}
-
 	/**
-	 * Returns a Random Perm. Action Card from players hand
+	 * Returns a Random Permanent/Random Action Card from players hand. Used for
+	 * AI
 	 * 
 	 * @return
 	 */
 	public Card getRandomCardFromHand() {
 		final Random r = new Random();
 		return mHand.get(r.nextInt(mHand.size()));
+	}
+
+	public Card getRandomActionCard() {
+		return mDeckRandomCards.pop();
 	}
 
 	public ArrayList<Card> getHand() {
@@ -115,6 +112,20 @@ public class Player {
 
 	public void setBoard(final BoardType boardType) {
 		this.mBoard = new Board(boardType);
+
+		// Initialize Deck of Random Action Cards
+		for (final CardType c : CardType.values()) {
+			if (c.getType() == CardType.RANDOM) {
+				// If the card is from the player's culture
+				if (c.getCulture() == mBoard.getType()) {
+					mDeckRandomCards.add(new Card(c));
+				}
+			}
+		}
+
+		// Shuffle Deck of Random Action Cards
+		Collections.shuffle(mDeckRandomCards);
+
 	}
 
 	public boolean hasMarket() {

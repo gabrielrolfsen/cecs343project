@@ -166,34 +166,97 @@ public class Types {
 		}
 	}
 
-	// TODO: Possibly turn TRADE into TRADE_1 and TRADE_2
 	public enum CardType {
-		ATTACK(0, 0), BUILD(1, 0), EXPLORE(2, 0), GATHER(3, 0), NEXTAGE(4, 0), RECRUIT(
-				5, 0), TRADE(6, 2);
-		private final int n;
-		private final int cost;
+		PERMANENT(), ATTACK(PERMANENT, 0, 0), BUILD(PERMANENT, 1, 0), EXPLORE(
+				PERMANENT, 2, 0), GATHER(PERMANENT, 3, 0), NEXTAGE(PERMANENT,
+						4, 0), RECRUIT(PERMANENT, 5, 0), TRADE(PERMANENT, 6, 2), RANDOM(), BUILD_EGYPTIAN(
+								RANDOM, BoardType.EGYPTIAN, 3, "Nephthys", 2), EXPLORE_EGYPTIAN(
+										RANDOM, BoardType.EGYPTIAN, 0, "Ptah", 1), GATHER_EGYPTIAN(
+				RANDOM, BoardType.EGYPTIAN, 0, "Ra", 3), NEXT_AGE_EGYPTIAN(
+				RANDOM, BoardType.EGYPTIAN, 0, "Hathor", 1), RECRUIT_EGYPTIAN(
+				RANDOM, BoardType.EGYPTIAN, 6, "Bast", 1), BUILD_GREEK(RANDOM,
+				BoardType.GREEK, 3, "Hera", 1), EXPLORE_GREEK(RANDOM,
+				BoardType.GREEK, 0, "Arthmis", 1), GATHER_GREEK(RANDOM,
+				BoardType.GREEK, 0, "Poseidon", 1), NEXT_AGE_GREEK(RANDOM,
+				BoardType.GREEK, 0, "Hephaestus", 2), RECRUIT_GREEK(RANDOM,
+				BoardType.GREEK, 4, "Apollo", 1), TRADE_GEREK(RANDOM,
+				BoardType.GREEK, 0, "Hermes", 1), BUILD_NORSE(RANDOM,
+				BoardType.NORSE, 4, "Njord", 1), EXPLORE_NORSE(RANDOM,
+				BoardType.NORSE, 0, "Baldr", 1), GATHER_NORSE(RANDOM,
+				BoardType.NORSE, 0, "Freyja", 1), NEXT_AGE_NORSE(RANDOM,
+				BoardType.NORSE, 0, "Odin", 1), RECRUIT_NORSE(RANDOM,
+				BoardType.NORSE, 3, "Hel", 1), TRADE_NORSE(RANDOM,
+				BoardType.NORSE, 0, "Forseti", 1);
 
-		CardType(final int n, final int cost) {
-			this.n = n;
-			this.cost = cost;
+		private final int id;
+		private final CardType type;
+		private final BoardType culture;
+		private final String godName;
+		private final int num;
+		private final int price;
+
+		CardType(final CardType type, final BoardType culture, final int num,
+				final String godName, final int price) {
+			this.id = 0;
+			this.type = type;
+			this.culture = culture;
+			this.godName = godName;
+			this.price = price;
+			this.num = num;
 		}
 
+		CardType() {
+			this.id = 0;
+			this.type = null;
+			this.culture = null;
+			this.godName = null;
+			this.price = 0;
+			this.num = 0;
+		}
+
+		CardType(final CardType type, final int id, final int num) {
+			this.id = id;
+			this.type = type;
+			this.culture = null;
+			this.godName = null;
+			this.price = 0;
+			this.num = num;
+		}
+
+		// TODO: Fix that
 		public static CardType getType(final int n) {
 			for (final CardType card : CardType.values()) {
-				if (card.n == n) {
+				if (card.id == n) {
 					return card;
 				}
 			}
 			return null;
 		}
 
-		public int getCost() {
-			return this.cost;
+		public int getId() {
+			return this.id;
 		}
 
-		public int getValue() {
-			return this.n;
+		public CardType getType() {
+			return this.type;
 		}
+
+		public BoardType getCulture() {
+			return this.culture;
+		}
+
+		public String getGodName() {
+			return this.godName;
+		}
+
+		public int getNum() {
+			return this.num;
+		}
+
+		public int getPrice() {
+			return this.price;
+		}
+
 	}
 
 	public enum UnitType {
@@ -209,7 +272,23 @@ public class Types {
 				BoardType.EGYPTIAN, "Phoenix", new int[] { 3, 0, 0, 2 }), SPEARMAN(
 				BoardType.EGYPTIAN, "Spearman", new int[] { 0, 1, 0, 1 }), MUMMY(
 				BoardType.EGYPTIAN, "Mummy", new int[] { 2, 0, 3, 0 }), TEST(
-				BoardType.NORSE, "Test", new int[] { 0, 3, 4, 5 });
+				BoardType.NORSE, "Test", new int[] { 0, 3, 4, 5 }), CENTAUR(
+																												BoardType.GREEK, "Centaur", new int[] { 1, 0, 3, 0 }), CYCLOP(
+																														BoardType.GREEK, "Cyclop", new int[] { 3, 3, 0, 0 }), MANTICORE(
+																																BoardType.GREEK, "Manticore", new int[] { 2, 2, 0, 0 }), CLASSICAL_GREEK_HERO(
+																																		BoardType.GREEK, "Classical Greek Hero",
+																																		new int[] { 0, 3, 3, 0 }), TOXOTES(BoardType.GREEK, "Toxotes",
+																																				new int[] { 0, 0, 0, 1 }), HEROIC_GREEK_HERO(BoardType.GREEK,
+																																						"Heroic Greek Hero", new int[] { 0, 3, 4, 0 }), HYDRA(
+																																								BoardType.GREEK, "Hydra", new int[] { 2, 0, 2, 0 }), MINOTAUR(
+																																										BoardType.GREEK, "Centaur", new int[] { 1, 0, 3, 0 }), MYTHICAL_GREEK_HERO(
+																																												BoardType.GREEK, "Mythical Greek Hero",
+																																												new int[] { 4, 0, 4, 0 }), HIPPOKON(BoardType.GREEK,
+																																														"Hippokon", new int[] { 0, 1, 1, 0 }), HOPLITE(BoardType.GREEK,
+																																																"Hoplite", new int[] { 0, 1, 0, 1 }), MEDUSA(BoardType.GREEK,
+																																																		"Medusa", new int[] { 3, 1, 0, 0 }), NIDHOGG(BoardType.NORSE,
+																																																				"Nidhogg", new int[] { 1, 0, 4, 0 }), THROWING_AXEMAN(
+																																																						BoardType.NORSE, "Throwing Axeman", new int[] { 0, 1, 0, 1 });
 
 		private final BoardType type;
 		private final String name;
