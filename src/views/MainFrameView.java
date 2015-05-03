@@ -25,6 +25,7 @@ import models.Tile;
 import models.Unit;
 import utils.Constants;
 import utils.Types.BoardType;
+import utils.Types.CardType;
 
 /**
  * @author grolfsen
@@ -39,16 +40,14 @@ public class MainFrameView extends JFrame {
 
 	// Button to switch between boards
 	final JButton btnSwitchBoard = new JButton("Switch Board");
-	final GridBagConstraints switchBtnConstants = new GridBagConstraints(0, 0,
-			0, 0, 0.5, 0.5, GridBagConstraints.FIRST_LINE_START, 0,
-			this.getInsets(), 0, 0);
+	final GridBagConstraints switchBtnConstants = new GridBagConstraints(0, 0, 0, 0, 0.5, 0.5,
+			GridBagConstraints.FIRST_LINE_START, 0, this.getInsets(), 0, 0);
 
 	// Button to add victory cubes to cards
 	final JButton btnVictoryCard = new JButton("Place Victory Cubes");
 	// TODO: Fix position
-	final GridBagConstraints victoryBtnConstants = new GridBagConstraints(4, 0,
-			0, 0, 0.5, 0.5, GridBagConstraints.FIRST_LINE_START, 0,
-			this.getInsets(), 0, 0);
+	final GridBagConstraints victoryBtnConstants = new GridBagConstraints(4, 0, 0, 0, 0.5, 0.5,
+			GridBagConstraints.FIRST_LINE_START, 0, this.getInsets(), 0, 0);
 
 	private MainFrameView() {
 		// XXX: Remove that
@@ -77,8 +76,7 @@ public class MainFrameView extends JFrame {
 	 * play.
 	 */
 	public void showGameReadyDialog() {
-		JOptionPane.showMessageDialog(this, "Game is ready to Play.",
-				"All Set!", JOptionPane.PLAIN_MESSAGE);
+		JOptionPane.showMessageDialog(this, "Game is ready to Play.", "All Set!", JOptionPane.PLAIN_MESSAGE);
 	}
 
 	/**
@@ -116,8 +114,7 @@ public class MainFrameView extends JFrame {
 
 		// Sets the correspondent layout and configurations
 		setLayout(new GridBagLayout());
-		setPreferredSize(new Dimension(Constants.BOARD_WIDTH,
-				Constants.BOARD_HEIGHT));
+		setPreferredSize(new Dimension(Constants.BOARD_WIDTH, Constants.BOARD_HEIGHT));
 		setResizable(false);
 		setTitle(title);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -182,8 +179,7 @@ public class MainFrameView extends JFrame {
 	 * @param listener
 	 *            ActionListener, listener to be added.
 	 */
-	public void addSwitchBoardsButtonActionListener(
-			final ActionListener listener) {
+	public void addSwitchBoardsButtonActionListener(final ActionListener listener) {
 		btnSwitchBoard.addActionListener(listener);
 	}
 
@@ -202,11 +198,10 @@ public class MainFrameView extends JFrame {
 	 * @return array with the quantities of resources that have to be added to
 	 *         the player resources and subtracted from the bank
 	 */
-	public int[] openTradeDialog(final int[] bankResources,
-			final int[] playerResources, final boolean allowVictoryCubes) {
+	public int[] openTradeDialog(final int[] bankResources, final int[] playerResources,
+			final boolean allowVictoryCubes, final CardType type) {
 		final JFrame frame = new JFrame();
-		final TradeDialog c = new TradeDialog(frame, bankResources,
-				playerResources, allowVictoryCubes);
+		final TradeDialog c = new TradeDialog(frame, type, bankResources, playerResources, allowVictoryCubes);
 		// Display the Dialog
 		c.setVisible(true);
 		return c.getUpdatedResources();
@@ -219,11 +214,10 @@ public class MainFrameView extends JFrame {
 	 * @param availableUnits
 	 * @return
 	 */
-	public ArrayList<Unit> openRecruitDialog(final int[] playerResources,
-			final int qty, final ArrayList<BattleCard> availableUnits) {
+	public ArrayList<Unit> openRecruitDialog(final int[] playerResources, final int qty,
+			final ArrayList<BattleCard> availableUnits) {
 		final JFrame frame = new JFrame();
-		final RecruitDialog d = new RecruitDialog(frame, playerResources, qty,
-				availableUnits);
+		final RecruitDialog d = new RecruitDialog(frame, playerResources, qty, availableUnits);
 		// Display the Dialog
 		d.setVisible(true);
 		return d.getSelectedUnits();
@@ -236,11 +230,9 @@ public class MainFrameView extends JFrame {
 	 * @param qty
 	 * @return
 	 */
-	public int[] showPaymentDialog(final int[] bankResources,
-			final int[] playerResources, final int qty) {
+	public int[] showPaymentDialog(final int[] bankResources, final int[] playerResources, final int qty) {
 		final JFrame frame = new JFrame();
-		final PaymentDialog dialog = new PaymentDialog(frame, bankResources,
-				playerResources, qty);
+		final PaymentDialog dialog = new PaymentDialog(frame, bankResources, playerResources, qty);
 		// Display the Dialog
 		dialog.setVisible(true);
 		return dialog.getUpdatedResources();

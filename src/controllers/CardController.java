@@ -14,6 +14,8 @@ import models.Card;
 import models.Player;
 import models.ResourcesBank;
 import models.Unit;
+import utils.Types.CardType;
+import utils.Types.UnitType;
 import views.MainFrameView;
 
 /**
@@ -29,16 +31,17 @@ public class CardController {
 	private Player[] mPlayers;
 
 	/**
+	 * Execute Trade Card Routine.
 	 * 
 	 * @param price
 	 * @param i
 	 */
-	private void playTradeCard(final int price, final int i) {
+	private void playTradeCard(final int price, final int i, final CardType type) {
 
 		// If player has a market, he doesn't have to pay resources
-		if (!mPlayers[i].hasMarket()) {
-			mainFrame.showPaymentDialog(resourceBank.getResourceCounter(),
-					mPlayers[i].getResourceCounter(), price);
+		if (!mPlayers[i].hasMarket() || type == CardType.TRADE_NORSE) {
+			mainFrame.showPaymentDialog(resourceBank.getResourceCounter(), mPlayers[i].getResourceCounter(),
+					price);
 			mainFrame.updatePlayerResources(mPlayers[i].getResourceCounter());
 		}
 
@@ -46,52 +49,72 @@ public class CardController {
 
 		// If player has greatTemple and has at least 8 favor cubes, let him
 		// trade them for victory cubes
-		if (mPlayers[i].hasGreatTemple()
-				&& mPlayers[i].getResourceCounter()[0] > 7) {
+		if (mPlayers[i].hasGreatTemple() && mPlayers[i].getResourceCounter()[0] > 7) {
 			allowVictoryCubes = true;
 		}
 
-		final int[] result = mainFrame.openTradeDialog(
-				resourceBank.getResourceCounter(),
-				mPlayers[i].getResourceCounter(), allowVictoryCubes);
+		final int[] result = mainFrame.openTradeDialog(resourceBank.getResourceCounter(),
+				mPlayers[i].getResourceCounter(), allowVictoryCubes, type);
 		mPlayers[i].decrementResources(result);
 		resourceBank.decrementResources(result);
 	}
 
 	/**
+	 * Execute Explore Card Routine.
 	 * 
 	 * @param qty
 	 * @param i
 	 */
-	private void playExploreCard(final int qty, final int i) {
-		final TerrainPickerController terrainController = TerrainPickerController
-				.getInstance();
-		terrainController.exploreCardRoutine(mPlayers, i);
+	private void playExploreCard(final int qty, final int i, final CardType type) {
+		final TerrainPickerController terrainController = TerrainPickerController.getInstance();
+		terrainController.exploreCardRoutine(mPlayers, i, type);
 	}
 
 	/**
+	 * Execute Recruit Card Routine.
 	 * 
 	 * @param qty
 	 * @param i
 	 */
-	private void playRecruitCard(final int qty, final int i) {
+	private void playRecruitCard(final int qty, final int i, final CardType type) {
 		final ArrayList<BattleCard> availableUnits = new ArrayList<BattleCard>();
 
 		// Select the units that are from the player's culture
 		// TODO: Check the age (?)
 		for (final BattleCard card : resourceBank.getBattleCardsDeck()) {
 
-			if (card.getUnit().getType().getCulture() == mPlayers[i].getBoard()
-					.getType()) {
+			if (card.getUnit().getType().getCulture() == mPlayers[i].getBoard().getType()) {
 				availableUnits.add(card);
 			}
 		}
 		System.out.println(mPlayers[i].getResourceCounter()[0]);
 		// Pops up the Dialog and get selected units
-		final ArrayList<Unit> selectedUnits = mainFrame.openRecruitDialog(
-				mPlayers[i].getResourceCounter(), qty, availableUnits);
+		final ArrayList<Unit> selectedUnits = mainFrame.openRecruitDialog(mPlayers[i].getResourceCounter(),
+				qty, availableUnits);
 
+		// If player hasn't given up playing the card
 		if (selectedUnits != null) {
+			if (type == CardType.RECRUIT_EGYPTIAN) {
+				switch (mPlayers[i].getAge()) {
+				case CLASSICAL:
+					selectedUnits.add(new Unit(UnitType.PRIEST));
+					break;
+				case HEROIC:
+					selectedUnits.add(new Unit(UnitType.PHARAOH));
+					break;
+				case MYTHIC:
+					selectedUnits.add(new Unit(UnitType.SON_OF_OSIRIS));
+					break;
+				default:
+					break;
+				}
+			} else if (type == CardType.RECRUIT_GREEK) {
+				selectedUnits.add(new Unit(UnitType.TOXOTES));
+				selectedUnits.add(new Unit(UnitType.TOXOTES));
+			} else if (type == CardType.RECRUIT_NORSE) {
+				// TODO: add two mortal units of players' choice
+			}
+
 			mPlayers[i].addUnits(selectedUnits);
 			// TODO: implement "add" method this one delete all units
 			mainFrame.updatePlayerArmy(selectedUnits);
@@ -99,54 +122,106 @@ public class CardController {
 
 	}
 
-	private void playBuildCard(final int i) {
-		final BuildController c = new BuildController();
+	/**
+	 * Execute Build Card Routine.
+	 * 
+	 * @param i
+	 * @param type
+	 */
+	private void playBuildCard(final int i, final CardType type) {
+		final BuildController c = new BuildController(type);
 		c.play(mPlayers[i]);
 	}
 
-	private void playGatherCard(final int price, final int i) {
+	/**
+	 * Execute Gather Card Routine.
+	 * 
+	 * @param price
+	 * @param i
+	 * @param type
+	 */
+	private void playGatherCard(final int i, final CardType type) {
 		final GatherControl c = new GatherControl(resourceBank);
-		c.play(mPlayers[0], mPlayers[1], mPlayers[2]);
+		c.play(mPlayers[0], mPlayers[1], mPlayers[2], type);
 	}
 
-	private void playNextAgeCard(final int price, final int i) {
+	/**
+	 * Execute NextAge Card Routine.
+	 * 
+	 * @param price
+	 * @param i
+	 * @param type
+	 */
+	private void playNextAgeCard(final int i, final CardType type) {
 		final NextAgeController c = new NextAgeController(resourceBank);
-		c.play(mPlayers[i]);
+		c.play(mPlayers[i], type);
 	}
 
+	/**
+	 * Points the variable to players that are playing. Probably can be
+	 * refactored.
+	 * 
+	 * @param players
+	 */
 	public void setPlayers(final Player[] players) {
 		this.mPlayers = players;
 	}
 
+	/**
+	 * Method that handles both Random Action Cards and Permanent Action Cards.
+	 * Random Action Cards differ form Permanent Action Cards on CardType, so
+	 * each method handles each CardType differently.
+	 * 
+	 * @param card
+	 *            The card to be played.
+	 * @param playNum
+	 *            Number of the player that played the card.
+	 */
 	public void play(final Card card, final int playNum) {
 
 		switch (card.getType()) {
 		case ATTACK:
 			break;
+		case BUILD_NORSE:
+		case BUILD_GREEK:
+		case BUILD_EGYPTIAN:
 		case BUILD:
-			playBuildCard(playNum);
+			playBuildCard(playNum, card.getType());
 			break;
+		case EXPLORE_NORSE:
+		case EXPLORE_GREEK:
+		case EXPLORE_EGYPTIAN:
 		case EXPLORE:
-			playExploreCard(card.getNum(), playNum);
+			playExploreCard(card.getNum(), playNum, card.getType());
 			break;
+		case GATHER_NORSE:
+		case GATHER_GREEK:
+		case GATHER_EGYPTIAN:
 		case GATHER:
-			playGatherCard(card.getNum(), playNum);
+			playGatherCard(playNum, card.getType());
 			break;
+		case NEXT_AGE_NORSE:
+		case NEXT_AGE_GREEK:
+		case NEXT_AGE_EGYPTIAN:
 		case NEXTAGE:
-			playNextAgeCard(card.getNum(), playNum);
+			playNextAgeCard(playNum, card.getType());
 			break;
+		case RECRUIT_NORSE:
+		case RECRUIT_GREEK:
+		case RECRUIT_EGYPTIAN:
 		case RECRUIT:
-			playRecruitCard(card.getNum(), playNum);
+			playRecruitCard(card.getNum(), playNum, card.getType());
 			break;
+		case TRADE_NORSE:
+		case TRADE_GREEK:
+		case TRADE_EGYPTIAN:
 		case TRADE:
-			playTradeCard(card.getCost(), playNum);
-			break;
+			playTradeCard(card.getCost(), playNum, card.getType());
 		default:
 			break;
 		}
-		// Update Player Resources
-		// TODO: Don't need to do with AI
-		mainFrame.updatePlayerResources(mPlayers[playNum].getResourceCounter());
+		// Update Human Player Resources
+		mainFrame.updatePlayerResources(mPlayers[0].getResourceCounter());
 	}
 
 	public synchronized static CardController getInstance() {

@@ -10,6 +10,7 @@ import models.Player;
 import models.ResourceTile;
 import models.ResourcesBank;
 import models.TilePlaceHolder;
+import utils.Types.CardType;
 import utils.Types.ResourceCubeType;
 import utils.Types.ResourceTileType;
 import utils.Types.ResourceType;
@@ -24,14 +25,13 @@ public class GatherControl {
 		bank = newBank;
 	}
 
-	public void play(final Player player0, final Player player1,
-			final Player player2) {
-		gather(player0);
-		gather(player1);
-		gather(player2);
+	public void play(final Player player0, final Player player1, final Player player2, final CardType type) {
+		gather(player0, type);
+		gather(player1, null);
+		gather(player2, null);
 	}
 
-	private void gather(final Player curPlayer) {
+	private void gather(final Player curPlayer, final CardType type) {
 		String resourceType;
 		int[] requestedResources;
 
@@ -39,7 +39,7 @@ public class GatherControl {
 		resourceType = humanTypeChoice();
 
 		if (resourceType == TYPE_TERRAIN) {
-			requestedResources = gatherByTerrain(curPlayer);
+			requestedResources = gatherByTerrain(curPlayer, type);
 		} else {
 			requestedResources = gatherByResource(curPlayer);
 		}
@@ -56,12 +56,11 @@ public class GatherControl {
 
 		final JFrame frame = new JFrame();
 		return (String) JOptionPane.showInputDialog(frame,
-				"Please select which type of terrain to gather from.",
-				"Select Gather Type", JOptionPane.QUESTION_MESSAGE, null,
-				playerOptions, playerOptions[0]);
+				"Please select which type of terrain to gather from.", "Select Gather Type",
+				JOptionPane.QUESTION_MESSAGE, null, playerOptions, playerOptions[0]);
 	}
 
-	private int[] gatherByTerrain(final Player curPlayer) {
+	private int[] gatherByTerrain(final Player curPlayer, final CardType type) {
 		ResourceTileType playerChoice;
 		ResourceTile[] resourceTile;
 		final int[] requested = new int[4];
@@ -89,6 +88,9 @@ public class GatherControl {
 						break;
 					case ONE_FOOD:
 						requested[ResourceCubeType.FOOD.getValue()] += 1;
+						if (type == CardType.GATHER_EGYPTIAN) {
+							requested[ResourceCubeType.FOOD.getValue()] += 1;
+						}
 						break;
 					case ONE_GOLD:
 						requested[ResourceCubeType.GOLD.getValue()] += 1;
@@ -168,14 +170,12 @@ public class GatherControl {
 		return requested;
 	}
 
-	private void getResourcesFromBank(final int[] requested,
-			final Player curPlayer) {
+	private void getResourcesFromBank(final int[] requested, final Player curPlayer) {
 		ResourceCubeType curType;
 		int i;
 		for (i = 0; i < 4; i++) {
 			curType = ResourceCubeType.getType(i);
-			curPlayer.incrementResource(curType,
-					bank.getRequestedResource(curType, requested[i]));
+			curPlayer.incrementResource(curType, bank.getRequestedResource(curType, requested[i]));
 		}
 	}
 
@@ -191,9 +191,8 @@ public class GatherControl {
 
 		final JFrame frame = new JFrame();
 		humanResponse = (String) JOptionPane.showInputDialog(frame,
-				"Please select which type of terrain to gather from.",
-				"Select Gather Type", JOptionPane.QUESTION_MESSAGE, null,
-				playerOptions, playerOptions[0]);
+				"Please select which type of terrain to gather from.", "Select Gather Type",
+				JOptionPane.QUESTION_MESSAGE, null, playerOptions, playerOptions[0]);
 
 		return ResourceTileType.getTypeForString(humanResponse);
 	}
@@ -202,28 +201,22 @@ public class GatherControl {
 		final String[] playerOptions = new String[4];
 		String humanResponse;
 
-		playerOptions[ResourceCubeType.FAVOR.getValue()] = ResourceCubeType.FAVOR
-				.getName();
-		playerOptions[ResourceCubeType.FOOD.getValue()] = ResourceCubeType.FOOD
-				.getName();
-		playerOptions[ResourceCubeType.GOLD.getValue()] = ResourceCubeType.GOLD
-				.getName();
-		playerOptions[ResourceCubeType.WOOD.getValue()] = ResourceCubeType.WOOD
-				.getName();
+		playerOptions[ResourceCubeType.FAVOR.getValue()] = ResourceCubeType.FAVOR.getName();
+		playerOptions[ResourceCubeType.FOOD.getValue()] = ResourceCubeType.FOOD.getName();
+		playerOptions[ResourceCubeType.GOLD.getValue()] = ResourceCubeType.GOLD.getName();
+		playerOptions[ResourceCubeType.WOOD.getValue()] = ResourceCubeType.WOOD.getName();
 
 		final JFrame frame = new JFrame();
 		humanResponse = (String) JOptionPane.showInputDialog(frame,
-				"Please select which type of terrain to gather from.",
-				"Select Gather Type", JOptionPane.QUESTION_MESSAGE, null,
-				playerOptions, playerOptions[0]);
+				"Please select which type of terrain to gather from.", "Select Gather Type",
+				JOptionPane.QUESTION_MESSAGE, null, playerOptions, playerOptions[0]);
 
 		return ResourceCubeType.getTypeForString(humanResponse);
 	}
 
 	private ResourceTile[] getTileArray(final Player curPlayer) {
 		final Board tempBoard = curPlayer.getBoard();
-		final ArrayList<TilePlaceHolder> tempProd = tempBoard
-				.getProductionArea();
+		final ArrayList<TilePlaceHolder> tempProd = tempBoard.getProductionArea();
 
 		TilePlaceHolder[] tempPH = new TilePlaceHolder[tempProd.size()];
 		tempPH = tempProd.toArray(tempPH);

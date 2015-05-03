@@ -17,6 +17,7 @@ import models.ResourceTile;
 import models.ResourcesBank;
 import utils.Constants;
 import utils.Coordinates;
+import utils.Types.CardType;
 import views.ButtonDialog;
 import views.MainFrameView;
 
@@ -40,30 +41,50 @@ public class TerrainPickerController {
 
 	public Player[] players = new Player[Constants.MAX_PLAYERS];
 
-	public void exploreCardRoutine(final Player[] players,
-			final int startingPlayer) {
+	public void exploreCardRoutine(final Player[] players, final int startingPlayer, final CardType type) {
+
+		final int qtyTiles = players.length + 1;
+		int tilesToPick = qtyTiles;
+
+		// If it's the "Ptah" god power add two more tiles
+		if (type == CardType.EXPLORE_EGYPTIAN || type == CardType.EXPLORE_GREEK) {
+			tilesToPick++;
+		}
 
 		// Picks Random Tiles from the Tile Pool based on # of players
-		randomTiles = resBank.getRandomTiles(players.length + 1);
+		randomTiles = resBank.getRandomTiles(tilesToPick);
 
 		// Count the Types on the Random Tiles
 		countResourceTypes();
 
-		// TODO: HARDCODED!!
-		if (startingPlayer == 0) {
-			userPick();
-			aiPick(1);
-			aiPick(2);
-		} else if (startingPlayer == 1) {
-			aiPick(1);
-			aiPick(2);
-			userPick();
-		} else {
-			aiPick(2);
-			userPick();
-			aiPick(1);
-		}
+		if (type == CardType.EXPLORE_NORSE) {
+			if (startingPlayer == 0) {
+				userPick();
+			} else {
+				aiPick(startingPlayer);
+			}
+		} else // The for loops assure that the god power works
+			if (startingPlayer == 0) {
+				for (int i = qtyTiles; i < tilesToPick + 1; i++) {
+					userPick();
+				}
+				aiPick(1);
+				aiPick(2);
+			} else if (startingPlayer == 1) {
+				for (int i = qtyTiles; i < tilesToPick + 1; i++) {
+					aiPick(1);
+				}
+				aiPick(2);
+				userPick();
+			} else {
+				for (int i = qtyTiles; i < tilesToPick + 1; i++) {
+					aiPick(2);
+				}
+				userPick();
+				aiPick(1);
+			}
 
+		// Return any tiles that weren't selected to the Tile Pool
 		returnTilesToPool();
 	}
 
@@ -114,8 +135,7 @@ public class TerrainPickerController {
 	 * pass the turn.
 	 */
 	private void userPick() {
-		final int[] boardFreeTerrains = players[0].getBoard()
-				.getFreeTerrainCounter();
+		final int[] boardFreeTerrains = players[0].getBoard().getFreeTerrainCounter();
 		boolean canPick = false;
 		int i = 0;
 
@@ -134,22 +154,20 @@ public class TerrainPickerController {
 		if (canPick) {
 
 			// Pops the ButtonDialog for the Tile Selection
-			final ButtonDialog bDialog = new ButtonDialog(mainFrame,
-					randomTiles, players[0].getBoard().getFreeTerrainCounter());
+			final ButtonDialog bDialog = new ButtonDialog(mainFrame, randomTiles, players[0].getBoard()
+					.getFreeTerrainCounter());
 			bDialog.setVisible(true);
 
 			// Checks if the user has passed his turn or picked a tile
 			if (bDialog.getIndexSelected() != -1) {
 				// Get the ResourceTile selected
-				final ResourceTile selectedTile = randomTiles.get(bDialog
-						.getIndexSelected());
+				final ResourceTile selectedTile = randomTiles.get(bDialog.getIndexSelected());
 
 				/*
 				 * Add tile to player's board and get the coordinates where it
 				 * was added
 				 */
-				final Coordinates c = players[0].getBoard().addResourceTile(
-						selectedTile);
+				final Coordinates c = players[0].getBoard().addResourceTile(selectedTile);
 
 				// Removes the tile picked from the RandomTiles Array
 				randomTiles.remove(selectedTile);
@@ -159,11 +177,9 @@ public class TerrainPickerController {
 				 * the BoardView
 				 */
 				if (c != null) {
-					mainFrame.addResourceTileToBoard(selectedTile, c.getX(),
-							c.getY());
+					mainFrame.addResourceTileToBoard(selectedTile, c.getX(), c.getY());
 				} else {
-					System.err
-					.println("There was a problem adding the tile to the board.");
+					System.err.println("There was a problem adding the tile to the board.");
 				}
 
 				// Decrease the TerrainCounter for RandomTiles Array
@@ -187,8 +203,7 @@ public class TerrainPickerController {
 	 */
 	private void aiPick(final int aiNum) {
 		// Get the FreeTerrains Type counter
-		final int[] boardFreeTerrains = players[aiNum].getBoard()
-				.getFreeTerrainCounter();
+		final int[] boardFreeTerrains = players[aiNum].getBoard().getFreeTerrainCounter();
 		boolean canPick = false;
 		int i = 0;
 
@@ -218,8 +233,7 @@ public class TerrainPickerController {
 			// Keeps picking tile until find one that fits in the board
 			while (!tileCanFit) {
 				pickedTileIndex = r.nextInt(randomTiles.size());
-				if (boardFreeTerrains[randomTiles.get(pickedTileIndex)
-				                      .getType().getValue()] != 0) {
+				if (boardFreeTerrains[randomTiles.get(pickedTileIndex).getType().getValue()] != 0) {
 					tileCanFit = true;
 				}
 			}
@@ -229,8 +243,7 @@ public class TerrainPickerController {
 
 			// TODO: Not needed. Test
 			// Add the Tile to AI's board
-			final Coordinates c = players[aiNum].getBoard().addResourceTile(
-					selectedTile);
+			final Coordinates c = players[aiNum].getBoard().addResourceTile(selectedTile);
 
 			// Removes the tile picked from the RandomTiles Array
 			randomTiles.remove(pickedTileIndex);

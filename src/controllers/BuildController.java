@@ -8,6 +8,7 @@ import models.BuildModel;
 import models.BuildingTile;
 import models.Player;
 import utils.Types.BuildingTileType;
+import utils.Types.CardType;
 import views.BuildView;
 
 public class BuildController {
@@ -16,9 +17,9 @@ public class BuildController {
 	private final BuildModel curBuildModel = new BuildModel();
 	private Player curPlayer;
 
-	public BuildController() {
+	public BuildController(final CardType type) {
 		final JFrame parentFrame = new JFrame();
-		curBuildView = new BuildView(parentFrame, this);
+		curBuildView = new BuildView(parentFrame, this, type);
 		curBuildView.setVisible(false);
 	}
 
@@ -60,23 +61,21 @@ public class BuildController {
 			Board curBoard;
 			BuildingTile curBuildingTile;
 			curBoard = curPlayer.getBoard();
-			curBuildingTile = new BuildingTile(
-					BuildingTileType.getTypeForInt(playerChoice));
+			curBuildingTile = new BuildingTile(BuildingTileType.getTypeForInt(playerChoice));
 			curBoard.addBuildingTile(curBuildingTile);
 
 			// Close dialog
 			curBuildView.setVisible(false);
 
 		} catch (final ArrayStoreException e) {
-			JOptionPane.showMessageDialog(null,
-					"May only own 1 of selected building type.", "No Space",
+			JOptionPane.showMessageDialog(null, "May only own 1 of selected building type.", "No Space",
 					JOptionPane.PLAIN_MESSAGE);
 		} catch (final IllegalArgumentException e) {
-			JOptionPane.showMessageDialog(null, "May only own 10 houses.",
-					"No Space", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(null, "May only own 10 houses.", "No Space",
+					JOptionPane.PLAIN_MESSAGE);
 		} catch (final IndexOutOfBoundsException e) {
-			JOptionPane.showMessageDialog(null, "Not enough resources.",
-					"No Space", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Not enough resources.", "No Space",
+					JOptionPane.PLAIN_MESSAGE);
 		}
 	}
 }

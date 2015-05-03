@@ -104,6 +104,7 @@ public class TurnController {
 			}
 
 			// AI Players turn
+			// TODO: Make AI Pick Random Action Card
 			for (int ii = 1; ii < 3; ii++) {
 				final Card card = players[ii].getRandomCardFromHand();
 				for (final Card c : players[ii].getHand()) {
