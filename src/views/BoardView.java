@@ -18,7 +18,7 @@ import models.Tile;
 import models.TilePlaceHolder;
 import models.Unit;
 import utils.Constants;
-import utils.Types.BoardType;
+import utils.Types.CultureType;
 import utils.Types.GridType;
 
 /**
@@ -27,7 +27,7 @@ import utils.Types.GridType;
  */
 public class BoardView extends JPanel {
 
-	private BoardType boardType;
+	private CultureType boardType;
 	private final ResourceStatusView mBoardResStats = new ResourceStatusView(
 			this);
 	private TileGridView mProductionAreaGrid;
@@ -122,7 +122,7 @@ public class BoardView extends JPanel {
 	 * 
 	 * @return
 	 */
-	public BoardType getBoardType() {
+	public CultureType getBoardType() {
 		return this.boardType;
 	}
 

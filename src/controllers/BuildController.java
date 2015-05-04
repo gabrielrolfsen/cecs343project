@@ -8,7 +8,6 @@ import models.BuildModel;
 import models.BuildingTile;
 import models.Player;
 import utils.Types.BuildingTileType;
-import utils.Types.CardType;
 import views.BuildView;
 
 public class BuildController {
@@ -17,9 +16,9 @@ public class BuildController {
 	private final BuildModel curBuildModel = new BuildModel();
 	private Player curPlayer;
 
-	public BuildController(final CardType type) {
+	public BuildController() {
 		final JFrame parentFrame = new JFrame();
-		curBuildView = new BuildView(parentFrame, this, type);
+		curBuildView = new BuildView(parentFrame, this);
 		curBuildView.setVisible(false);
 	}
 

@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import utils.Types.BuildingTileType;
-import utils.Types.CardType;
 import controllers.BuildController;
 
 public class BuildView extends JDialog implements ActionListener {
@@ -22,7 +21,7 @@ public class BuildView extends JDialog implements ActionListener {
 	private final ButtonGroup bgBuilding;
 	private final JButton btnPurchase;
 
-	public BuildView(final JFrame parentFrame, final BuildController newBuildControl, final CardType type) {
+	public BuildView(final JFrame parentFrame, final BuildController newBuildControl) {
 		super(parentFrame, "Select Building", true);
 
 		final JPanel panel = new JPanel();
@@ -31,10 +30,6 @@ public class BuildView extends JDialog implements ActionListener {
 
 		btnBuilding = new JRadioButton[MAX_BUTTONS];
 		bgBuilding = new ButtonGroup();
-
-		if (type == CardType.BUILD_GREEK) {
-			// TODO: add a house
-		}
 
 		for (int i = 0; i < MAX_BUTTONS; i++) {
 			btnBuilding[i] = new JRadioButton(BuildingTileType.getStringForInt(i));

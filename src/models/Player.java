@@ -14,8 +14,8 @@ import java.util.Stack;
 
 import utils.Constants;
 import utils.Types.AgeType;
-import utils.Types.BoardType;
 import utils.Types.CardType;
+import utils.Types.CultureType;
 import utils.Types.ResourceCubeType;
 
 /**
@@ -110,7 +110,7 @@ public class Player {
 		return this.mResources;
 	}
 
-	public void setBoard(final BoardType boardType) {
+	public void setBoard(final CultureType boardType) {
 		this.mBoard = new Board(boardType);
 
 		// Initialize Deck of Random Action Cards

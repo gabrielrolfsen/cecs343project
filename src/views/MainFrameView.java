@@ -24,8 +24,9 @@ import models.Player;
 import models.Tile;
 import models.Unit;
 import utils.Constants;
-import utils.Types.BoardType;
 import utils.Types.CardType;
+import utils.Types.CultureType;
+import utils.Types.UnitType;
 
 /**
  * @author grolfsen
@@ -98,7 +99,7 @@ public class MainFrameView extends JFrame {
 	 * 
 	 * @return
 	 */
-	public BoardType getDisplayedBoardType() {
+	public CultureType getDisplayedBoardType() {
 		return this.currentBoard.getBoardType();
 	}
 
@@ -253,12 +254,39 @@ public class MainFrameView extends JFrame {
 	}
 
 	/**
+	 * Show the dialog for the Norse Special Recruit Card
+	 * 
+	 * @param units
+	 */
+	public ArrayList<Unit> showNorseRecruitSpecialDialog(final ArrayList<Unit> units) {
+		final String[] unitsNames = new String[units.size()];
+
+		for (int i = 0; i < units.size(); i++) {
+			unitsNames[i] = units.get(i).getType().getName();
+		}
+
+		final String[] selected = new String[2];
+		final JFrame frame = new JFrame();
+		selected[0] = (String) JOptionPane
+				.showInputDialog(frame, "Norse God Power - Hel", "Select The First Mortal Unit",
+						JOptionPane.QUESTION_MESSAGE, null, unitsNames, unitsNames[0]);
+
+		selected[1] = (String) JOptionPane.showInputDialog(frame, "Norse God Power - Hel",
+				"Select The Second Mortal Unit", JOptionPane.QUESTION_MESSAGE, null, unitsNames,
+				unitsNames[0]);
+		final ArrayList<Unit> result = new ArrayList<Unit>();
+		result.add(UnitType.getUnit(selected[0]));
+		result.add(UnitType.getUnit(selected[1]));
+		return result;
+	}
+
+	/**
 	 * 
 	 * @return
 	 */
-	public int showCardDialog(final ArrayList<Card> hand, final int qty) {
+	public int showCardDialog(final CultureType culture, final ArrayList<Card> hand, final int qty) {
 		final JFrame frame = new JFrame();
-		final CardDialog dialog = new CardDialog(frame, hand, qty);
+		final CardDialog dialog = new CardDialog(frame, culture, hand, qty);
 		// Display the Dialog
 		dialog.setVisible(true);
 

@@ -7,7 +7,7 @@
  */
 package models;
 
-import utils.Types.BoardType;
+import utils.Types.CultureType;
 import utils.Types.CardType;
 
 /**
@@ -16,7 +16,7 @@ import utils.Types.CardType;
  */
 public class Card {
 
-	private final BoardType mCulture;
+	private final CultureType mCulture;
 	private final CardType mType;
 	private final int mNum;
 	private final int mCost;
@@ -27,12 +27,12 @@ public class Card {
 	public Card(final CardType type) {
 		this.mType = type;
 		this.mNum = type.getNum();
-		this.mCost = type.getPrice();
+		this.mCost = type.getCost();
 		this.mCulture = type.getCulture();
 		// TODO Auto-generated constructor stub
 	}
 
-	public BoardType getCulture() {
+	public CultureType getCulture() {
 		return this.mCulture;
 	}
 

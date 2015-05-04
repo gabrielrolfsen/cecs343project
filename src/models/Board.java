@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 import utils.Coordinates;
-import utils.Types.BoardType;
+import utils.Types.CultureType;
 import utils.Types.BuildingTileType;
 import utils.Types.ResourceTileType;
 
@@ -15,7 +15,7 @@ import utils.Types.ResourceTileType;
  */
 public class Board {
 
-	private final BoardType type;
+	private final CultureType type;
 	private int buildingsCounter = 0;
 	int freeTerrainCounter[] = new int[6];
 	// TODO: put icon on view only
@@ -28,7 +28,7 @@ public class Board {
 	private final ArrayList<TilePlaceHolder> productionArea = new ArrayList<TilePlaceHolder>();
 	private final ArrayList<TilePlaceHolder> cityArea = new ArrayList<TilePlaceHolder>();
 
-	public Board(final BoardType type) {
+	public Board(final CultureType type) {
 		this.type = type;
 
 		switch (type) {
@@ -208,7 +208,7 @@ public class Board {
 		this.freeTerrainCounter = counter;
 	}
 
-	public BoardType getType() {
+	public CultureType getType() {
 		return this.type;
 	}
 

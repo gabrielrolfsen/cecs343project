@@ -36,8 +36,7 @@ public class VictoryCardsDialog extends JDialog {
 	private int[] cubesCounter = new int[4];
 	private final int[] mPlayerResources;
 
-	public VictoryCardsDialog(final JFrame parentFrame,
-			final int[] playerResources, final int[] cubesCounter) {
+	public VictoryCardsDialog(final JFrame parentFrame, final int[] playerResources, final int[] cubesCounter) {
 		super(parentFrame, "Place Victory Cubes", true);
 		this.mPlayerResources = playerResources;
 		this.cubesCounter = cubesCounter;
@@ -51,14 +50,13 @@ public class VictoryCardsDialog extends JDialog {
 		// Add the Buttons
 		for (final VictoryCardType v : VictoryCardType.values()) {
 			final int i = v.getValue();
-			final ImageIcon ii = new ImageIcon("res/victory_cards/"
-					+ v.toString().toLowerCase() + ".png");
+			final ImageIcon ii = new ImageIcon("res/victory_cards/" + v.toString().toLowerCase() + ".png");
 			final int scale = 3; // 3 times smaller
 			final int width = ii.getIconWidth();
 			final int newWidth = width / scale;
-			final ImageIcon ic = new ImageIcon(ii.getImage().getScaledInstance(
-					newWidth, -1, java.awt.Image.SCALE_SMOOTH));
-
+			final ImageIcon ic = new ImageIcon(ii.getImage().getScaledInstance(newWidth, -1,
+					java.awt.Image.SCALE_SMOOTH));
+			System.out.println("NEW WIDH: " + newWidth);
 			final JButton btn = new JButton("", ic);
 
 			// btn.setPreferredSize(new Dimension(150, 400));
@@ -116,8 +114,7 @@ public class VictoryCardsDialog extends JDialog {
 			if (mPlayerResources[ResourceCubeType.VICTORY.getValue()] > 0) {
 				final int i = Integer.parseInt(e.getActionCommand());
 				// Get the current number on the label
-				int value = Integer.parseInt(lblCubesCounter[i].getText()
-						.substring(2, 3));
+				int value = Integer.parseInt(lblCubesCounter[i].getText().substring(2, 3));
 				value++; // Increment it
 				lblCubesCounter[i].setText("x " + value); // Set new value
 				cubesCounter[i]++; // Increase the cubeCounter to the card

@@ -40,9 +40,9 @@ public class PaymentDialog extends JDialog {
 	int mQty;
 	int[] mPlayerResources = new int[5];
 
-	public PaymentDialog(final JFrame parentFrame, final int[] bankResources,
-			final int[] playerResources, final int qty) {
-		super(parentFrame, "Select Resources to Pay", true);
+	public PaymentDialog(final JFrame parentFrame, final int[] bankResources, final int[] playerResources,
+			final int qty) {
+		super(parentFrame, "Select " + qty + " Resource" + (qty > 1 ? "s" : "") + " to use as payment", true);
 		this.mPlayerResources = playerResources;
 		this.mQty = qty;
 		System.out.println("mQty: " + mQty);
@@ -64,11 +64,9 @@ public class PaymentDialog extends JDialog {
 		panel.add(lblPlayer, c);
 
 		for (final ResourceCubeType type : ResourceCubeType.values()) {
-			final SpinnerModel model = new SpinnerNumberModel(0, 0,
-					playerResources[type.getValue()], 1);
+			final SpinnerModel model = new SpinnerNumberModel(0, 0, playerResources[type.getValue()], 1);
 			final int index = type.getValue();
-			spinners[index] = addSpinner(panel, type.getName(), model, index,
-					true);
+			spinners[index] = addSpinner(panel, type.getName(), model, index, true);
 		}
 
 		final JButton btnConfirm = new JButton("Confirm");
@@ -88,8 +86,8 @@ public class PaymentDialog extends JDialog {
 
 	}
 
-	private JSpinner addSpinner(final JPanel panel, final String label,
-			final SpinnerModel model, final int index, final boolean isLabeled) {
+	private JSpinner addSpinner(final JPanel panel, final String label, final SpinnerModel model,
+			final int index, final boolean isLabeled) {
 		final JSpinner spinner = new JSpinner(model);
 		final GridBagConstraints c = new GridBagConstraints();
 		c.weightx = 0.5;
@@ -103,8 +101,7 @@ public class PaymentDialog extends JDialog {
 		}
 
 		// Settings to the spinner textfield
-		final JFormattedTextField tf = ((JSpinner.DefaultEditor) spinner
-				.getEditor()).getTextField();
+		final JFormattedTextField tf = ((JSpinner.DefaultEditor) spinner.getEditor()).getTextField();
 		final JComponent field = (spinner.getEditor());
 		Dimension prefSize = field.getPreferredSize();
 		prefSize = new Dimension(50, prefSize.height);

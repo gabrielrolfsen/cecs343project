@@ -34,8 +34,8 @@ public class TurnController {
 		final int victoryCubesOnCards[] = resourceBank.getVictoryCubesOnCards();
 
 		// Human Player Turn to Place Victory Cubes
-		final VictoryCardsDialog victoryDialog = new VictoryCardsDialog(
-				mainFrame, players[0].getResourceCounter(), victoryCubesOnCards);
+		final VictoryCardsDialog victoryDialog = new VictoryCardsDialog(mainFrame,
+				players[0].getResourceCounter(), victoryCubesOnCards);
 		victoryDialog.setVisible(true);
 
 		// Update the Main Frame to show player's Resources
@@ -50,9 +50,11 @@ public class TurnController {
 			players[i].decrementResource(ResourceCubeType.VICTORY, 1);
 		}
 
+		// Gets PlayerHand Pointer
 		final ArrayList<Card> humanPlayerHand = players[0].getHand();
 
-		final int qtyRandomCards = mainFrame.showCardDialog(humanPlayerHand,
+		// Shows Dialog to playe choose the cards he wants
+		final int qtyRandomCards = mainFrame.showCardDialog(players[0].getBoard().getType(), humanPlayerHand,
 				players[0].getAge().getValue() + 4);
 
 		/*
@@ -75,15 +77,25 @@ public class TurnController {
 			// Shuffle it
 			Collections.shuffle(nums);
 
-			// Select the max amount of Perm Action Card the player's age allows
-			for (int ii = 0; ii < players[i].getAge().getValue() + 4; ii++) {
+			final int maxCardsAllowed = (players[i].getAge().getValue() + 4);
+			final int maxPermActionCards = r.nextInt(maxCardsAllowed - 1) + 2;
+			System.out.println("# Of Perm. Actions Card that will be picked: " + maxPermActionCards);
+
+			// Select the max amount of Perm. Action Card the player's age
+			// allows
+			for (int ii = 0; ii < maxPermActionCards; ii++) {
 				// Get Random Type
 				final CardType type = CardType.getType(nums.get(ii));
 				System.out.println(nums.get(ii));
 				// Add to temporary hand
 				hand.add(new Card(type));
 			}
-			System.out.println("lol" + hand.size());
+			// Fill the rest of the hand with Random Action Cards.
+			for (int z = maxPermActionCards; z < maxCardsAllowed; z++) {
+				// Add a Random Action to Player's hand
+				hand.add(players[i].getRandomActionCard());
+			}
+			System.out.println("# Of cards in player's " + i + " hand: " + hand.size());
 			// Add the Hand to player's hand
 			players[i].addHand(hand);
 		}
@@ -92,8 +104,7 @@ public class TurnController {
 		for (int i = 0; i < 3; i++) {
 			// If Human has at least one card in his hand
 			if (!humanPlayerHand.isEmpty()) {
-				final Card selectedCard = mainFrame
-						.showHandDialog(humanPlayerHand);
+				final Card selectedCard = mainFrame.showHandDialog(humanPlayerHand);
 				// If player didn't pass the turn and still has cards to play
 				if (selectedCard != null) {
 					// Play the selected Card
@@ -104,18 +115,19 @@ public class TurnController {
 			}
 
 			// AI Players turn
-			// TODO: Make AI Pick Random Action Card
-			for (int ii = 1; ii < 3; ii++) {
-				final Card card = players[ii].getRandomCardFromHand();
-				for (final Card c : players[ii].getHand()) {
-					System.out.println("Player " + ii + "card: "
-							+ c.getType().toString());
-				}
-				cardController.play(card, ii);
-				System.out.println("Player " + ii + " played card: "
-						+ card.getType().toString());
-				players[ii].removeCardFromHand(card);
-			}
+			// for (int ii = 1; ii < 3; ii++) {
+			// final Card card = players[ii].getRandomCardFromHand();
+			// for (final Card c : players[ii].getHand()) {
+			// System.out.println("Player " + ii + " picked card: " +
+			// c.getType().toString());
+			// }
+			// cardController.play(card, ii);
+			// System.out.println("===============");
+			// System.out.println("Player " + ii + " played card: " +
+			// card.getType().toString());
+			// System.out.println("===============");
+			// players[ii].removeCardFromHand(card);
+			// }
 		}
 		// Clear player's cards if there's any
 		humanPlayerHand.clear();
@@ -132,8 +144,7 @@ public class TurnController {
 			for (int ii = 0; ii < res.length; ii++) {
 				if (res[ii] > maxQty) {
 					// Put the Extra Resources on Bank
-					resourceBank.replenishResource(
-							ResourceCubeType.getType(ii), res[ii] - maxQty);
+					resourceBank.replenishResource(ResourceCubeType.getType(ii), res[ii] - maxQty);
 					// Remove Extra Resources from Player
 					res[ii] = maxQty;
 				}

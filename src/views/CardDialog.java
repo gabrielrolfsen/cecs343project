@@ -31,6 +31,7 @@ import javax.swing.event.ChangeListener;
 
 import models.Card;
 import utils.Types.CardType;
+import utils.Types.CultureType;
 
 /**
  * @author grolfsen
@@ -49,13 +50,16 @@ public class CardDialog extends JDialog {
 	private final JSpinner mSpinnerRandomCard = new JSpinner();
 	private int lastSpinnerValue = 0;
 
-	public CardDialog(final JFrame parentFrame, final ArrayList<Card> hand,
+	public CardDialog(final JFrame parentFrame, final CultureType culture, final ArrayList<Card> hand,
 			final int qty) {
 		super(parentFrame, "Select Cards to your hand", true);
 		this.mMaxQtyToSelect = qty;
 		this.selectedCards = hand;
-		// Add a Layered Pane for Cards
-		layeredPane.setPreferredSize(new Dimension(1265, 340));
+		// Add a Layered Pane for Cards and set It's dimensions
+		final Dimension dim = new Dimension(1295, 340);
+		layeredPane.setPreferredSize(dim);
+		panel.setPreferredSize(dim);
+		setResizable(false);
 
 		// Set the Random Card Spinner with a maximum of "qty"
 		final SpinnerModel spinnerModel = new SpinnerNumberModel(0, 0, qty, 1);
@@ -65,14 +69,11 @@ public class CardDialog extends JDialog {
 
 			@Override
 			public void stateChanged(final ChangeEvent arg0) {
-				final int value = ((Integer) ((JSpinner) arg0.getSource())
-						.getValue());
-				System.out.println("here.");
+				final int value = ((Integer) ((JSpinner) arg0.getSource()).getValue());
+				// If Spinner value increased, increase the counter
 				if (value > lastSpinnerValue) {
-					System.out.println("--");
 					mMaxQtyToSelect--;
 				} else if (value < lastSpinnerValue) {
-					System.out.println("++");
 					mMaxQtyToSelect++;
 				}
 
@@ -95,31 +96,19 @@ public class CardDialog extends JDialog {
 				}
 			}
 		});
-
-		panel.setPreferredSize(new Dimension(1265, 340));
-		setResizable(false);
-
 		// Add the Buttons
 		for (final CardType v : CardType.values()) {
 			if (v.getType() == CardType.PERMANENT) {
 				final int i = v.getId();
-				// final ImageIcon ii = new ImageIcon("res/action_cards/"
-				// + v.toString().toLowerCase() + ".png");
-				final ImageIcon ii = new ImageIcon(
-						"res/victory_cards/the_wonder.png");
-				final int scale = 3; // 3 times smaller
-				final int width = ii.getIconWidth();
-				final int newWidth = width / scale;
-				final ImageIcon ic = new ImageIcon(ii.getImage()
-						.getScaledInstance(newWidth, -1,
-								java.awt.Image.SCALE_SMOOTH));
+				final ImageIcon ii = new ImageIcon("res/action_cards/" + culture.toString().toLowerCase()
+						+ "/" + v.toString().toLowerCase() + ".png");
 
 				// Change that to imageIcon
-				final JButton btn = new JButton(v.toString());
+				final JButton btn = new JButton("", ii);
 
 				// Set the button properties
-				btn.setBounds(i * ic.getIconWidth(), 0, ic.getIconWidth(),
-						ic.getIconHeight());
+				btn.setBounds(i * (ii.getIconWidth() + 5), 0, ii.getIconWidth() + 5, ii.getIconHeight() + 5);
+
 				btn.setActionCommand(String.valueOf(i));
 				btn.addActionListener(addSelectListener);
 				// Add button to array of buttons
@@ -136,9 +125,13 @@ public class CardDialog extends JDialog {
 				dispose();
 			}
 		});
-		confirmBtn.setBounds(0, 257, 1260, 20);
+		confirmBtn.setBounds(0, 257, 1290, 20);
 		layeredPane.add(confirmBtn, new Integer(0));
-		mSpinnerRandomCard.setBounds(0, 300, 40, 40);
+		final JLabel randomCardLabel = new JLabel(
+				"Select the amount of Random Action Cards you want in your hand:");
+		randomCardLabel.setBounds(375, 280, 450, 20);
+		layeredPane.add(randomCardLabel, new Integer(0));
+		mSpinnerRandomCard.setBounds(600, 300, 40, 40);
 		layeredPane.add(mSpinnerRandomCard, new Integer(0));
 
 		panel.add(layeredPane);
@@ -166,7 +159,7 @@ public class CardDialog extends JDialog {
 
 				// Add card to Selected Cards Array
 				selectedCards.add(new Card(CardType.getType(pos)));
-				xLabel.setBounds((pos * 180) + 40, 85, 110, 110);
+				xLabel.setBounds((pos * 185) + 40, 85, 110, 110);
 				layeredPane.add(xLabel, new Integer(100));
 
 				// Decrease Quantity of cards that player can select
@@ -218,8 +211,7 @@ public class CardDialog extends JDialog {
 			System.out.println("MAX QTY: " + mMaxQtyToSelect);
 
 			// Change Maximum Value allowed on JSpinner
-			final SpinnerNumberModel s = (SpinnerNumberModel) mSpinnerRandomCard
-					.getModel();
+			final SpinnerNumberModel s = (SpinnerNumberModel) mSpinnerRandomCard.getModel();
 			// Maximum is current value + Quantity still allowed to select
 			s.setMaximum(lastSpinnerValue + mMaxQtyToSelect);
 

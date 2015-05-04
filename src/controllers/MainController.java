@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
 import models.Player;
 import models.ResourcesBank;
 import utils.Constants;
-import utils.Types.BoardType;
+import utils.Types.CultureType;
 import views.MainFrameView;
 import views.VictoryCardsDialog;
 
@@ -49,7 +49,6 @@ public class MainController {
 		for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
 			players[i] = new Player();
 		}
-		players[0].human = true;
 
 		cardController.setPlayers(players);
 
@@ -59,11 +58,8 @@ public class MainController {
 		// Show the player board in the main frame
 		mainFrame.setDisplayedBoard(players[0]);
 
-		final TerrainPickerController terrainController = TerrainPickerController
-				.getInstance();
-
 		// Do the terrain picking routine
-		terrainController.terrainPickRoutine(players);
+		TerrainPickerController.getInstance().terrainPickRoutine(players);
 
 		// TODO: Improve this dialog
 		mainFrame.showGameReadyDialog();
@@ -80,11 +76,10 @@ public class MainController {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 
-				final int victoryCubesOnCards[] = resourceBank
-						.getVictoryCubesOnCards();
+				final int victoryCubesOnCards[] = resourceBank.getVictoryCubesOnCards();
 
-				final VictoryCardsDialog b = new VictoryCardsDialog(mainFrame,
-						players[0].getResourceCounter(), victoryCubesOnCards);
+				final VictoryCardsDialog b = new VictoryCardsDialog(mainFrame, players[0]
+						.getResourceCounter(), victoryCubesOnCards);
 				b.setVisible(true);
 			}
 		});
@@ -95,33 +90,26 @@ public class MainController {
 			public void actionPerformed(final ActionEvent e) {
 				Player playerToDisplay = null;
 
-				final String[] boardNames = new String[] {
-						players[0].getBoard().getTypeName(),
-						players[1].getBoard().getTypeName(),
-						players[2].getBoard().getTypeName() };
+				final String[] boardNames = new String[] { players[0].getBoard().getTypeName(),
+						players[1].getBoard().getTypeName(), players[2].getBoard().getTypeName() };
 
 				final JFrame frame = new JFrame("Board Selection");
-				final String boardType = (String) JOptionPane.showInputDialog(
-						frame, "Please choose a board:", "Board Selection",
-						JOptionPane.QUESTION_MESSAGE, null, boardNames,
-						boardNames[0]);
+				final String boardType = (String) JOptionPane.showInputDialog(frame,
+						"Please choose a board:", "Board Selection", JOptionPane.QUESTION_MESSAGE, null,
+						boardNames, boardNames[0]);
 
 				if (boardType != null) {
-					if (boardType.equalsIgnoreCase(players[0].getBoard()
-							.getTypeName())) {
+					if (boardType.equalsIgnoreCase(players[0].getBoard().getTypeName())) {
 						playerToDisplay = players[0];
-					} else if (boardType.equalsIgnoreCase(players[1].getBoard()
-							.getTypeName())) {
+					} else if (boardType.equalsIgnoreCase(players[1].getBoard().getTypeName())) {
 						playerToDisplay = players[1];
-					} else if (boardType.equalsIgnoreCase(players[2].getBoard()
-							.getTypeName())) {
+					} else if (boardType.equalsIgnoreCase(players[2].getBoard().getTypeName())) {
 						playerToDisplay = players[2];
 					}
 
 					// If the option was one different from the already
 					// displayed, change it
-					if (playerToDisplay.getBoard().getType() != mainFrame
-							.getDisplayedBoardType()) {
+					if (playerToDisplay.getBoard().getType() != mainFrame.getDisplayedBoardType()) {
 						mainFrame.setDisplayedBoard(playerToDisplay);
 					}
 				}
@@ -139,11 +127,11 @@ public class MainController {
 		System.out.println(input);
 		// Gets the input and initialize the specific board for user + AI's
 		if (input.equalsIgnoreCase("Greek")) {
-			initBoard(BoardType.GREEK);
+			initBoard(CultureType.GREEK);
 		} else if (input.equalsIgnoreCase("Norse")) {
-			initBoard(BoardType.NORSE);
+			initBoard(CultureType.NORSE);
 		} else if (input.equalsIgnoreCase("Egyptian")) {
-			initBoard(BoardType.EGYPTIAN);
+			initBoard(CultureType.EGYPTIAN);
 		}
 
 	}
@@ -157,19 +145,17 @@ public class MainController {
 	 * @param title
 	 *            String, the title to be used in the JFrame
 	 */
-	private void initBoard(final BoardType type) {
+	private void initBoard(final CultureType type) {
 		/*
 		 * ------------- If Player = Greek, Ai0 = Egyptian, Ai1 = Norse.
 		 * ------------- If Player = Egyptian, Ai0 = Norse, Ai1 = Greek.
 		 * ------------- If Player = Norse, Ai0 = Greek, Ai1 = Egyptian.
 		 */
 		players[0].setBoard(type);
-		players[1].setBoard(type == BoardType.GREEK ? BoardType.EGYPTIAN
-				: (type == BoardType.EGYPTIAN ? BoardType.NORSE
-						: BoardType.GREEK));
-		players[2].setBoard(type == BoardType.GREEK ? BoardType.NORSE
-				: (type == BoardType.EGYPTIAN ? BoardType.GREEK
-						: BoardType.EGYPTIAN));
+		players[1].setBoard(type == CultureType.GREEK ? CultureType.EGYPTIAN
+				: (type == CultureType.EGYPTIAN ? CultureType.NORSE : CultureType.GREEK));
+		players[2].setBoard(type == CultureType.GREEK ? CultureType.NORSE
+				: (type == CultureType.EGYPTIAN ? CultureType.GREEK : CultureType.EGYPTIAN));
 	}
 
 	public Player[] getPlayers() {
