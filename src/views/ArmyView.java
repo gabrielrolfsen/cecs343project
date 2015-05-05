@@ -6,33 +6,33 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import utils.Types.ResourceCubeType;
-
-public class ResourceStatusView {
+public class ArmyView {
 	private final JLabel[] lblGraphic = new JLabel[5];
 	private final JLabel[] lblValue = new JLabel[5];
-	private int[] intValue = new int[5];
+	private String[] intValue = new String[5];
 	private int myLeft, myTop = 0;
 
-	public ResourceStatusView(final JPanel parentPanel) {
+	public ArmyView(final JPanel parentPanel) {
 
 		// Create a label for each Resource Cube Type
-		for (final ResourceCubeType type : ResourceCubeType.values()) {
-			lblGraphic[type.getValue()] = new JLabel(new ResourceCubeView(type));
+		for (int i = 0; i < lblValue.length; i++) {
+			final JLabel lbl = new JLabel(new UnitView());
+			lblGraphic[i] = lbl;
 		}
 
 		for (int i = 0; i < 5; i++) {
 			parentPanel.add(lblGraphic[i]);
-			lblGraphic[i].setSize(30, 30);
-			lblGraphic[i].setVisible(true);
-
-			lblValue[i] = new JLabel("X ");
+			lblGraphic[i].setSize(70, 70);
+			lblGraphic[i].setVisible(false);
+			lblValue[i] = new JLabel("NO UNITS");
 			parentPanel.add(lblValue[i]);
 			lblValue[i].setSize(50, 30);
-			lblValue[i].setHorizontalTextPosition(SwingConstants.LEFT);
+			// TODO: Center the view
+			lblValue[i].setHorizontalTextPosition(SwingConstants.CENTER);
 			lblValue[i].setVisible(true);
 			lblValue[i].setForeground(Color.WHITE);
-			intValue[i] = 0;
+			intValue[i] = "";
+			System.out.println("INT VAL:" + intValue[i]);
 		}
 
 		moveObjects();
@@ -40,7 +40,13 @@ public class ResourceStatusView {
 
 	private void refreshValues() {
 		for (int i = 0; i < 5; i++) {
-			lblValue[i].setText("X " + intValue[i]);
+			lblValue[i].setText(intValue[i]);
+			System.out.println("BLa: " + intValue[i]);
+			if (intValue[i].length() > 0) {
+				lblGraphic[i].setVisible(true);
+			} else {
+				lblGraphic[i].setVisible(false);
+			}
 		}
 	}
 
@@ -49,8 +55,8 @@ public class ResourceStatusView {
 
 		for (int i = 0; i < 5; i++) {
 			lblGraphic[i].setLocation(myLeft, tempTop);
-			lblValue[i].setLocation(myLeft + 40, tempTop);
-			tempTop += 50;
+			lblValue[i].setLocation(myLeft, tempTop + 70);
+			tempTop += 80;
 		}
 	}
 
@@ -64,13 +70,9 @@ public class ResourceStatusView {
 		moveObjects();
 	}
 
-	public void updateResources(final int[] resources) {
+	public void updateResources(final String[] resources) {
 		this.intValue = resources;
 		refreshValues();
 	}
 
-	public void setValue(final ResourceCubeType resType, final int newValue) {
-		intValue[resType.getValue()] = newValue;
-		refreshValues();
-	}
 }

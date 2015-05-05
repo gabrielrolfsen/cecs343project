@@ -32,4 +32,7 @@ public final class Constants {
 	public static final int CUBES_BAR_X_LOCATION = Constants.BOARD_WIDTH - 100;
 	public static final int CUBES_BAR_Y_LOCATION = 10;
 
+	public static final int UNITS_X_LOCATION = Constants.BOARD_WIDTH - 250;
+	public static final int UNITS_Y_LOCATION = 10;
+
 }

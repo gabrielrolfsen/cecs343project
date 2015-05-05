@@ -91,36 +91,38 @@ public class CardController {
 				availableUnits.add(card);
 			}
 		}
-
+		System.out.println("# of units to recruit: " + qty);
 		// Pops up the Dialog and get selected units
 		final ArrayList<Unit> selectedUnits = mainFrame.openRecruitDialog(mPlayers[i].getResourceCounter(),
 				qty, availableUnits);
 
 		// If player hasn't given up playing the card
 		if (selectedUnits != null) {
-			// If the card has a special power
-			if (type == CardType.BAST) {
-				switch (mPlayers[i].getAge()) {
-				case CLASSICAL:
-					selectedUnits.add(new Unit(UnitType.PRIEST));
-					break;
-				case HEROIC:
-					selectedUnits.add(new Unit(UnitType.PHARAOH));
-					break;
-				case MYTHIC:
-					selectedUnits.add(new Unit(UnitType.SON_OF_OSIRIS));
-					break;
-				default:
-					break;
+			// If the card has a special power and it is activated
+			if (allowGodPower == true) {
+				if (type == CardType.BAST) {
+					switch (mPlayers[i].getAge()) {
+					case CLASSICAL:
+						selectedUnits.add(new Unit(UnitType.PRIEST));
+						break;
+					case HEROIC:
+						selectedUnits.add(new Unit(UnitType.PHARAOH));
+						break;
+					case MYTHIC:
+						selectedUnits.add(new Unit(UnitType.SON_OF_OSIRIS));
+						break;
+					default:
+						break;
+					}
+				} else if (type == CardType.APOLLO) {
+					selectedUnits.add(new Unit(UnitType.TOXOTES));
+					selectedUnits.add(new Unit(UnitType.TOXOTES));
+				} else if (type == CardType.HEL) {
+					final ArrayList<Unit> mortalNorseUnits = UnitType.getUnits(CultureType.NORSE,
+							UnitType.MORTAL);
+					// Add the two chosen units to player's board
+					selectedUnits.addAll(mainFrame.showNorseRecruitSpecialDialog(mortalNorseUnits));
 				}
-			} else if (type == CardType.APOLLO) {
-				selectedUnits.add(new Unit(UnitType.TOXOTES));
-				selectedUnits.add(new Unit(UnitType.TOXOTES));
-			} else if (type == CardType.HEL) {
-				final ArrayList<Unit> mortalNorseUnits = UnitType
-						.getUnits(CultureType.NORSE, UnitType.MORTAL);
-				// Add the two chosen units to player's board
-				selectedUnits.addAll(mainFrame.showNorseRecruitSpecialDialog(mortalNorseUnits));
 			}
 
 			mPlayers[i].addUnits(selectedUnits);
@@ -141,7 +143,7 @@ public class CardController {
 		c.play(mPlayers[i]);
 
 		// If card is the Greek Power, adds a House to player's board.
-		if (type == CardType.HERA) {
+		if (type == CardType.HERA && allowGodPower == true) {
 			final boolean result = mPlayers[i].getBoard().addBuildingTile(
 					new BuildingTile(BuildingTileType.HOUSE));
 			System.out.println("DEBUG>> House added to board: " + result);

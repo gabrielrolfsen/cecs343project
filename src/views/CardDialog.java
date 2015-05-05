@@ -209,8 +209,6 @@ public class CardDialog extends JDialog {
 				mMaxQtyToSelect++;
 			}
 
-			System.out.println("MAX QTY: " + mMaxQtyToSelect);
-
 			// Change Maximum Value allowed on JSpinner
 			final SpinnerNumberModel s = (SpinnerNumberModel) mSpinnerRandomCard.getModel();
 			// Maximum is current value + Quantity still allowed to select

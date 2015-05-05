@@ -42,8 +42,8 @@ import utils.EnabledJComboBoxRenderer;
 public class RecruitDialog extends JDialog implements ListSelectionListener {
 
 	ArrayList<BattleCard> availableUnits = new ArrayList<BattleCard>();
-	int maxSelection = 0;
-	int boxesSelected = 0;
+	private int unitsSelected = 0;
+	private final int maxUnitsSelection;
 	int[] mPlayerResources;
 
 	private final DefaultListModel listModel;
@@ -52,15 +52,16 @@ public class RecruitDialog extends JDialog implements ListSelectionListener {
 	private final JButton removeButton = new JButton("Remove");
 	private final JButton confirmButton = new JButton("Recruit Units");
 	private final JButton cancelButton = new JButton("Cancel");
+	private final JButton addButton = new JButton("Add");
 
 	final DefaultListSelectionModel comboModel = new DefaultListSelectionModel();
 
-	public RecruitDialog(final JFrame parentFrame, final int[] playerResources,
-			final int qty, final ArrayList<BattleCard> availableUnits) {
-		super(parentFrame, "Add up to " + qty + " unit" + (qty > 1 ? "s" : "")
-				+ " to recruit.", true);
+	public RecruitDialog(final JFrame parentFrame, final int[] playerResources, final int qty,
+			final ArrayList<BattleCard> availableUnits) {
+		super(parentFrame, "Add up to " + qty + " unit" + (qty > 1 ? "s" : "") + " to recruit.", true);
 		this.availableUnits = availableUnits;
 		this.mPlayerResources = playerResources;
+		this.maxUnitsSelection = qty;
 
 		setResizable(false);
 
@@ -71,8 +72,6 @@ public class RecruitDialog extends JDialog implements ListSelectionListener {
 		list.addListSelectionListener(this);
 		list.setVisibleRowCount(5);
 		final JScrollPane listScrollPane = new JScrollPane(list);
-
-		final JButton addButton = new JButton("Add");
 
 		addButton.setActionCommand("Add");
 		addButton.addActionListener(new AddListener());
@@ -102,6 +101,7 @@ public class RecruitDialog extends JDialog implements ListSelectionListener {
 		controlButtonsPane.add(cancelButton);
 
 		buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
+		removeButton.setEnabled(false);
 		buttonPane.add(removeButton);
 		buttonPane.add(Box.createHorizontalStrut(5));
 		buttonPane.add(new JSeparator(SwingConstants.VERTICAL));
@@ -164,8 +164,8 @@ public class RecruitDialog extends JDialog implements ListSelectionListener {
 			// so go ahead and remove whatever's selected.
 			int index = list.getSelectedIndex();
 
-			final int[] unitCost = getUnitCost(list.getSelectedValue()
-					.toString());
+			// Get Unit Cost
+			final int[] unitCost = getUnitCost(list.getSelectedValue().toString());
 
 			// Increase Player Resources
 			for (int i = 0; i < 4; i++) {
@@ -173,6 +173,14 @@ public class RecruitDialog extends JDialog implements ListSelectionListener {
 			}
 
 			listModel.remove(index);
+
+			// If it was on maximum selection, enable the add button again
+			if (unitsSelected == maxUnitsSelection) {
+				addButton.setEnabled(true);
+			}
+
+			// Decrease qty of Units Selected
+			unitsSelected--;
 
 			final int size = listModel.getSize();
 
@@ -201,7 +209,8 @@ public class RecruitDialog extends JDialog implements ListSelectionListener {
 			// Verify if player can afford the Unit
 			final int[] unitCost = getUnitCost(unitName);
 			for (int i = 0; i < 4; i++) {
-				System.out.println(unitCost[i] + " - " + mPlayerResources[i]);
+				System.out
+						.println("Unit Cost: " + unitCost[i] + " - Player Resource: " + mPlayerResources[i]);
 				if (unitCost[i] > mPlayerResources[i]) {
 
 					// Player cannot afford it
@@ -211,6 +220,13 @@ public class RecruitDialog extends JDialog implements ListSelectionListener {
 			// Decrease Player Resources
 			for (int i = 0; i < 4; i++) {
 				mPlayerResources[i] -= unitCost[i];
+			}
+			// Increase Units Selected counter
+			unitsSelected++;
+
+			// If reached maximum, disable add button
+			if (unitsSelected == maxUnitsSelection) {
+				addButton.setEnabled(false);
 			}
 
 			int index = list.getSelectedIndex(); // get selected index
@@ -227,7 +243,6 @@ public class RecruitDialog extends JDialog implements ListSelectionListener {
 			list.setSelectedIndex(index);
 			list.ensureIndexIsVisible(index);
 		}
-
 	}
 
 	private int[] getUnitCost(final String s) {

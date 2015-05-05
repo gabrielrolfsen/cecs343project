@@ -45,7 +45,6 @@ public class PaymentDialog extends JDialog {
 		super(parentFrame, "Select " + qty + " Resource" + (qty > 1 ? "s" : "") + " to use as payment", true);
 		this.mPlayerResources = playerResources;
 		this.mQty = qty;
-		System.out.println("mQty: " + mQty);
 
 		final GridBagLayout b = new GridBagLayout();
 		setResizable(false);
@@ -148,7 +147,7 @@ public class PaymentDialog extends JDialog {
 
 			if (qty1 != mQty) {
 				// TODO: Error message.
-				System.out.println("ERROR!");
+				System.out.println("ERROR! PAYING " + qty1 + " resources instead of " + mQty + " resources.");
 			} else {
 				for (int i = 0; i < 5; i++) {
 					mPlayerResources[i] -= qtySelected[i];

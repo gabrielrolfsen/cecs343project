@@ -124,7 +124,6 @@ public class MainController {
 	private void userCulturePick() {
 		// Pops the DialogView on the mainFrame so user can pick a culture
 		final String input = mainFrame.culturePickDialog();
-		System.out.println(input);
 		// Gets the input and initialize the specific board for user + AI's
 		if (input.equalsIgnoreCase("Greek")) {
 			initBoard(CultureType.GREEK);

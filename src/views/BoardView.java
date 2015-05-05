@@ -28,8 +28,8 @@ import utils.Types.GridType;
 public class BoardView extends JPanel {
 
 	private CultureType boardType;
-	private final ResourceStatusView mBoardResStats = new ResourceStatusView(
-			this);
+	private final ResourceStatusView mBoardResStats = new ResourceStatusView(this);
+	private final ArmyView armyGrid = new ArmyView(this);
 	private TileGridView mProductionAreaGrid;
 	private TileGridView mCityAreaGrid;
 	private final ArrayList<UnitView> mArmy = new ArrayList<UnitView>();
@@ -48,17 +48,13 @@ public class BoardView extends JPanel {
 	 *            Army to be displayed on the board
 	 */
 	public void updateArmy(final ArrayList<Unit> army) {
+		final String[] armyNames = { "", "", "", "", "", "" };
 		int i = 0;
-
-		mArmy.clear();
 		for (final Unit u : army) {
-			final UnitView uView = new UnitView(this, u.getType(), i);
-			mArmy.add(uView);
-			revalidate();
-			repaint();
+			armyNames[i] = u.getType().toString();
 			i++;
 		}
-
+		armyGrid.updateResources(armyNames);
 	}
 
 	/**
@@ -81,10 +77,8 @@ public class BoardView extends JPanel {
 	 * 
 	 * @param productionArea
 	 */
-	private void setProductionAreaGrid(
-			final ArrayList<TilePlaceHolder> productionArea) {
-		mProductionAreaGrid = new TileGridView(this, GridType.RESOURCE,
-				productionArea);
+	private void setProductionAreaGrid(final ArrayList<TilePlaceHolder> productionArea) {
+		mProductionAreaGrid = new TileGridView(this, GridType.RESOURCE, productionArea);
 	}
 
 	/**
@@ -143,6 +137,10 @@ public class BoardView extends JPanel {
 		// Set Resource Bar location
 		mBoardResStats.setTop(Constants.CUBES_BAR_Y_LOCATION);
 		mBoardResStats.setLeft(Constants.CUBES_BAR_X_LOCATION);
+
+		// Set Army View location
+		armyGrid.setTop(Constants.UNITS_Y_LOCATION);
+		armyGrid.setLeft(Constants.UNITS_X_LOCATION);
 
 		// TODO: Why is it necessary?
 		this.refreshBoard();

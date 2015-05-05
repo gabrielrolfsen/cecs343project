@@ -41,6 +41,8 @@ public class TurnController {
 		// Update the Main Frame to show player's Resources
 		mainFrame.updatePlayerResources(players[0].getResourceCounter());
 
+		mainFrame.updatePlayerArmy(players[0].getArmy());
+
 		// AIs Players Turn to Place Victory Cubes
 		final Random r = new Random();
 		for (int i = 1; i < 3; i++) {
@@ -79,6 +81,7 @@ public class TurnController {
 
 			final int maxCardsAllowed = (players[i].getAge().getValue() + 4);
 			final int maxPermActionCards = r.nextInt(maxCardsAllowed - 1) + 2;
+			System.out.println("Player " + i + ":");
 			System.out.println("# Of Perm. Actions Card that will be picked: " + maxPermActionCards);
 
 			// Select the max amount of Perm. Action Card the player's age
@@ -95,7 +98,7 @@ public class TurnController {
 				// Add a Random Action to Player's hand
 				hand.add(players[i].getRandomActionCard());
 			}
-			System.out.println("# Of cards in player's " + i + " hand: " + hand.size());
+			System.out.println("# Of cards in player's " + i + " hand: " + hand.size() + "\n");
 			// Add the Hand to player's hand
 			players[i].addHand(hand);
 		}

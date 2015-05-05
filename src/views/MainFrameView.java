@@ -69,7 +69,6 @@ public class MainFrameView extends JFrame {
 		final JFrame frame = new JFrame("Board Selection");
 		final CulturePickDialog c = new CulturePickDialog(frame);
 		c.setVisible(true);
-		System.out.println(c.getCulturePicked());
 		return c.getCulturePicked();
 	}
 
@@ -120,8 +119,6 @@ public class MainFrameView extends JFrame {
 		setResizable(false);
 		setTitle(title);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		// TODO: don't know why but was changing the window's position
-		// setLocationRelativeTo(null);
 
 		// Adds the switch board button
 		add(btnSwitchBoard, switchBtnConstants);
@@ -283,6 +280,9 @@ public class MainFrameView extends JFrame {
 
 	/**
 	 * 
+	 * @param culture
+	 * @param hand
+	 * @param qty
 	 * @return
 	 */
 	public int showCardDialog(final CultureType culture, final ArrayList<Card> hand, final int qty) {
@@ -294,6 +294,13 @@ public class MainFrameView extends JFrame {
 		return dialog.getQtyRandomCardsSelected();
 	}
 
+	/**
+	 * 
+	 * @param godName
+	 * @param cost
+	 * @param playerResources
+	 * @return
+	 */
 	public boolean showPaymentGodPowerDialog(final String godName, final int cost, final int[] playerResources) {
 		final int result = JOptionPane.showConfirmDialog(null, "Would you like to pay " + cost
 				+ " Favor Cube" + (cost > 1 ? "s" : "") + " to use this cards god Power?", godName
