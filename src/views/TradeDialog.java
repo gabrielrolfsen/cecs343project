@@ -201,7 +201,7 @@ public class TradeDialog extends JDialog {
 			System.out.println("# Bank Resources Selected: " + qty2);
 
 			// If it's trade Norse/Greek card it has a 4 resource surplus
-			if ((cardType == CardType.TRADE_NORSE || cardType == CardType.TRADE_GREEK) && (qty1 > qty2 + 4)) {
+			if ((cardType == CardType.FORSETI || cardType == CardType.HERMES) && (qty1 > qty2 + 4)) {
 			} else if (cardType == CardType.TRADE && qty1 != qty2) {
 				// TODO: Display error message.
 				System.out.println("ERROR! ");

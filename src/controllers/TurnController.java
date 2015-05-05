@@ -104,7 +104,8 @@ public class TurnController {
 		for (int i = 0; i < 3; i++) {
 			// If Human has at least one card in his hand
 			if (!humanPlayerHand.isEmpty()) {
-				final Card selectedCard = mainFrame.showHandDialog(humanPlayerHand);
+				final Card selectedCard = mainFrame.showHandDialog(players[0].getBoard().getType(),
+						humanPlayerHand);
 				// If player didn't pass the turn and still has cards to play
 				if (selectedCard != null) {
 					// Play the selected Card

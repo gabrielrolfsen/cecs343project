@@ -22,6 +22,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import models.Card;
+import utils.Types.CultureType;
 
 /**
  * @author grolfsen
@@ -37,7 +38,7 @@ public class HandDialog extends JDialog {
 
 	private ArrayList<Card> mPlayerHand = new ArrayList<Card>();
 
-	public HandDialog(final JFrame parentFrame, final ArrayList<Card> playerHand) {
+	public HandDialog(final JFrame parentFrame, final CultureType culture, final ArrayList<Card> playerHand) {
 		super(parentFrame, "Select a Card to Play", true);
 		this.mPlayerHand = playerHand;
 
@@ -53,19 +54,13 @@ public class HandDialog extends JDialog {
 
 		int i = 0;
 		for (final Card card : playerHand) {
-			// final ImageIcon ii = new ImageIcon("res/action_cards/"
-			// + c.getType().toString().toLowerCase() + ".png");
-			final ImageIcon ii = new ImageIcon(
-					"res/victory_cards/the_wonder.png");
-			final int scale = 3; // 3 times smaller
-			final int width = ii.getIconWidth();
-			final int newWidth = width / scale;
-			final ImageIcon ic = new ImageIcon(ii.getImage().getScaledInstance(
-					newWidth, -1, java.awt.Image.SCALE_SMOOTH));
-			final JButton btn = new JButton(card.getType().toString());
+			final ImageIcon ii = new ImageIcon("res/action_cards/" + culture.toString().toLowerCase() + "/"
+					+ card.getType().toString().toLowerCase() + ".png");
+
+			// Add the button with the image on it
+			final JButton btn = new JButton("", ii);
 			// Set the button properties
-			btn.setBounds(i * ic.getIconWidth(), 0, ic.getIconWidth(),
-					ic.getIconHeight());
+			btn.setBounds(i * ii.getIconWidth(), 0, ii.getIconWidth(), ii.getIconHeight());
 			btn.setActionCommand(String.valueOf(i));
 			btn.addActionListener(selectListener);
 			c.gridx = i;

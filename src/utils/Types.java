@@ -204,24 +204,42 @@ public class Types {
 		RECRUIT(PERMANENT, 5, 0),
 		TRADE(PERMANENT, 6, 2),
 		RANDOM(),
-		BUILD_EGYPTIAN(RANDOM, CultureType.EGYPTIAN, 3, "Nephthys", 2),
-		EXPLORE_EGYPTIAN(RANDOM, CultureType.EGYPTIAN, 0, "Ptah", 1),
-		GATHER_EGYPTIAN(RANDOM, CultureType.EGYPTIAN, 0, "Ra", 3),
-		NEXT_AGE_EGYPTIAN(RANDOM, CultureType.EGYPTIAN, 0, "Hathor", 1),
-		RECRUIT_EGYPTIAN(RANDOM, CultureType.EGYPTIAN, 6, "Bast", 1),
-		TRADE_EGYPTIAN(RANDOM, CultureType.EGYPTIAN, 0, "N/A", 1),
-		BUILD_GREEK(RANDOM, CultureType.GREEK, 3, "Hera", 1),
-		EXPLORE_GREEK(RANDOM, CultureType.GREEK, 0, "Arthmis", 1),
-		GATHER_GREEK(RANDOM, CultureType.GREEK, 0, "Poseidon", 1),
-		NEXT_AGE_GREEK(RANDOM, CultureType.GREEK, 0, "Hephaestus", 2),
-		RECRUIT_GREEK(RANDOM, CultureType.GREEK, 4, "Apollo", 1),
-		TRADE_GREEK(RANDOM, CultureType.GREEK, 0, "Hermes", 1),
-		BUILD_NORSE(RANDOM, CultureType.NORSE, 4, "Njord", 1),
-		EXPLORE_NORSE(RANDOM, CultureType.NORSE, 0, "Baldr", 1),
-		GATHER_NORSE(RANDOM, CultureType.NORSE, 0, "Freyja", 1),
-		NEXT_AGE_NORSE(RANDOM, CultureType.NORSE, 0, "Odin", 1),
-		RECRUIT_NORSE(RANDOM, CultureType.NORSE, 3, "Hel", 1),
-		TRADE_NORSE(RANDOM, CultureType.NORSE, 0, "Forseti", 1);
+		ATTACK_EGYPTIAN(RANDOM, CultureType.EGYPTIAN, 4),
+		BUILD_EGYPTIAN(RANDOM, CultureType.EGYPTIAN, 4),
+		EXPLORE_EGYPTIAN(RANDOM, CultureType.EGYPTIAN, 4),
+		GATHER_EGYPTIAN(RANDOM, CultureType.EGYPTIAN, 4),
+		RECRUIT_EGYPTIAN(RANDOM, CultureType.EGYPTIAN, 5),
+		TRADE_EGYPTIAN(RANDOM, CultureType.EGYPTIAN, 1),
+		ATTACK_GREEK(RANDOM, CultureType.GREEK, 4),
+		BUILD_GREEK(RANDOM, CultureType.GREEK, 4),
+		EXPLORE_GREEK(RANDOM, CultureType.GREEK, 4),
+		GATHER_GREEK(RANDOM, CultureType.GREEK, 4),
+		RECRUIT_GREEK(RANDOM, CultureType.GREEK, 4),
+		TRADE_GREEK(RANDOM, CultureType.GREEK, 1),
+		ATTACK_NORSE(RANDOM, CultureType.NORSE, 4),
+		BUILD_NORSE(RANDOM, CultureType.NORSE, 4),
+		EXPLORE_NORSE(RANDOM, CultureType.NORSE, 4),
+		GATHER_NORSE(RANDOM, CultureType.NORSE, 4),
+		RECRUIT_NORSE(RANDOM, CultureType.NORSE, 4),
+		TRADE_NORSE(RANDOM, CultureType.NORSE, 1),
+		NENPHTHYS(RANDOM, CultureType.EGYPTIAN, 3, "Nephthys", 2),
+		PTAH(RANDOM, CultureType.EGYPTIAN, 0, "Ptah", 1),
+		RA(RANDOM, CultureType.EGYPTIAN, 0, "Ra", 3),
+		HATHOR(RANDOM, CultureType.EGYPTIAN, 0, "Hathor", 1),
+		BAST(RANDOM, CultureType.EGYPTIAN, 6, "Bast", 1),
+		UNKNOWN(RANDOM, CultureType.EGYPTIAN, 0, "N/A", 1),
+		HERA(RANDOM, CultureType.GREEK, 3, "Hera", 1),
+		ARTHEMIS(RANDOM, CultureType.GREEK, 0, "Arthmis", 1),
+		POSEIDON(RANDOM, CultureType.GREEK, 0, "Poseidon", 1),
+		HEPHAESTUS(RANDOM, CultureType.GREEK, 0, "Hephaestus", 2),
+		APOLLO(RANDOM, CultureType.GREEK, 4, "Apollo", 1),
+		HERMES(RANDOM, CultureType.GREEK, 0, "Hermes", 1),
+		NJORD(RANDOM, CultureType.NORSE, 4, "Njord", 1),
+		BALDR(RANDOM, CultureType.NORSE, 0, "Baldr", 1),
+		FREYJA(RANDOM, CultureType.NORSE, 0, "Freyja", 1),
+		ODIN(RANDOM, CultureType.NORSE, 0, "Odin", 1),
+		HEL(RANDOM, CultureType.NORSE, 3, "Hel", 1),
+		FORSETI(RANDOM, CultureType.NORSE, 0, "Forseti", 1);
 
 		private int id = 0;
 		private CardType type = null;
@@ -233,15 +251,20 @@ public class Types {
 		CardType() {
 		}
 
-		CardType(final CardType type, final int id, final int cost) {
+		CardType(final CardType type, final int id, final int num) {
 			this.id = id;
 			this.type = type;
-			this.cost = cost;
+			this.num = num;
+		}
+
+		CardType(final CardType type, final CultureType culture, final int num) {
+			this.type = type;
+			this.culture = culture;
+			this.num = num;
 		}
 
 		CardType(final CardType type, final CultureType culture, final int num, final String godName,
 				final int price) {
-			this.id = 0;
 			this.type = type;
 			this.culture = culture;
 			this.num = num;

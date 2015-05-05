@@ -47,7 +47,7 @@ public class TerrainPickerController {
 		int tilesToPick = qtyTiles;
 
 		// If it's the "Ptah" god power add two more tiles
-		if (type == CardType.EXPLORE_EGYPTIAN || type == CardType.EXPLORE_GREEK) {
+		if (type == CardType.PTAH || type == CardType.ARTHEMIS) {
 			tilesToPick++;
 		}
 
@@ -57,7 +57,7 @@ public class TerrainPickerController {
 		// Count the Types on the Random Tiles
 		countResourceTypes();
 
-		if (type == CardType.EXPLORE_NORSE) {
+		if (type == CardType.BALDR) {
 			if (startingPlayer == 0) {
 				userPick();
 			} else {

@@ -65,6 +65,7 @@ public class CardDialog extends JDialog {
 		final SpinnerModel spinnerModel = new SpinnerNumberModel(0, 0, qty, 1);
 		mSpinnerRandomCard.setModel(spinnerModel);
 
+		// Listener for Random Card Spinner
 		mSpinnerRandomCard.addChangeListener(new ChangeListener() {
 
 			@Override
@@ -76,7 +77,7 @@ public class CardDialog extends JDialog {
 				} else if (value < lastSpinnerValue) {
 					mMaxQtyToSelect++;
 				}
-
+				// Assign current value to a variable
 				lastSpinnerValue = value;
 
 				// Enable/disable buttons
@@ -103,7 +104,7 @@ public class CardDialog extends JDialog {
 				final ImageIcon ii = new ImageIcon("res/action_cards/" + culture.toString().toLowerCase()
 						+ "/" + v.toString().toLowerCase() + ".png");
 
-				// Change that to imageIcon
+				// Add the button with the image on it
 				final JButton btn = new JButton("", ii);
 
 				// Set the button properties

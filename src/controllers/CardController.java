@@ -15,9 +15,9 @@ import models.Card;
 import models.Player;
 import models.ResourcesBank;
 import models.Unit;
-import utils.Types.CultureType;
 import utils.Types.BuildingTileType;
 import utils.Types.CardType;
+import utils.Types.CultureType;
 import utils.Types.ResourceCubeType;
 import utils.Types.UnitType;
 import views.MainFrameView;
@@ -40,10 +40,10 @@ public class CardController {
 	 * @param price
 	 * @param i
 	 */
-	private void playTradeCard(final int price, final int i, final CardType type) {
+	private void playTradeCard(final int price, final int i, final CardType type, final boolean allowGodPower) {
 
 		// If player has a market, he doesn't have to pay resources
-		if (!mPlayers[i].hasMarket() || type == CardType.TRADE_NORSE) {
+		if (!mPlayers[i].hasMarket() || (type == CardType.FORSETI && allowGodPower == true)) {
 			mainFrame.showPaymentDialog(resourceBank.getResourceCounter(), mPlayers[i].getResourceCounter(),
 					price);
 			mainFrame.updatePlayerResources(mPlayers[i].getResourceCounter());
@@ -69,7 +69,7 @@ public class CardController {
 	 * @param qty
 	 * @param i
 	 */
-	private void playExploreCard(final int qty, final int i, final CardType type) {
+	private void playExploreCard(final int qty, final int i, final CardType type, final boolean allowGodPower) {
 		final TerrainPickerController terrainController = TerrainPickerController.getInstance();
 		terrainController.exploreCardRoutine(mPlayers, i, type);
 	}
@@ -80,7 +80,7 @@ public class CardController {
 	 * @param qty
 	 * @param i
 	 */
-	private void playRecruitCard(final int qty, final int i, final CardType type) {
+	private void playRecruitCard(final int qty, final int i, final CardType type, final boolean allowGodPower) {
 		final ArrayList<BattleCard> availableUnits = new ArrayList<BattleCard>();
 
 		// Select the units that are from the player's culture
@@ -99,7 +99,7 @@ public class CardController {
 		// If player hasn't given up playing the card
 		if (selectedUnits != null) {
 			// If the card has a special power
-			if (type == CardType.RECRUIT_EGYPTIAN) {
+			if (type == CardType.BAST) {
 				switch (mPlayers[i].getAge()) {
 				case CLASSICAL:
 					selectedUnits.add(new Unit(UnitType.PRIEST));
@@ -113,11 +113,12 @@ public class CardController {
 				default:
 					break;
 				}
-			} else if (type == CardType.RECRUIT_GREEK) {
+			} else if (type == CardType.APOLLO) {
 				selectedUnits.add(new Unit(UnitType.TOXOTES));
 				selectedUnits.add(new Unit(UnitType.TOXOTES));
-			} else if (type == CardType.RECRUIT_NORSE) {
-				final ArrayList<Unit> mortalNorseUnits = UnitType.getUnits(CultureType.NORSE, UnitType.MORTAL);
+			} else if (type == CardType.HEL) {
+				final ArrayList<Unit> mortalNorseUnits = UnitType
+						.getUnits(CultureType.NORSE, UnitType.MORTAL);
 				// Add the two chosen units to player's board
 				selectedUnits.addAll(mainFrame.showNorseRecruitSpecialDialog(mortalNorseUnits));
 			}
@@ -135,12 +136,12 @@ public class CardController {
 	 * @param i
 	 * @param type
 	 */
-	private void playBuildCard(final int i, final CardType type) {
+	private void playBuildCard(final int i, final CardType type, final boolean allowGodPower) {
 		final BuildController c = new BuildController();
 		c.play(mPlayers[i]);
 
 		// If card is the Greek Power, adds a House to player's board.
-		if (type == CardType.BUILD_GREEK) {
+		if (type == CardType.HERA) {
 			final boolean result = mPlayers[i].getBoard().addBuildingTile(
 					new BuildingTile(BuildingTileType.HOUSE));
 			System.out.println("DEBUG>> House added to board: " + result);
@@ -154,13 +155,13 @@ public class CardController {
 	 * @param i
 	 * @param type
 	 */
-	private void playGatherCard(final int i, final CardType type) {
+	private void playGatherCard(final int i, final CardType type, final boolean allowGodPower) {
 		final GatherControl c = new GatherControl(resourceBank);
 		c.play(mPlayers[0], mPlayers[1], mPlayers[2], type);
 		// Norse God Power increments 5 gold when the card is played
-		if (type == CardType.GATHER_NORSE) {
+		if (type == CardType.FREYJA) {
 			mPlayers[i].incrementResource(ResourceCubeType.GOLD, 5);
-		} else if (type == CardType.GATHER_GREEK) {
+		} else if (type == CardType.POSEIDON) {
 			mPlayers[i].incrementResource(ResourceCubeType.FOOD, 5);
 		}
 	}
@@ -172,7 +173,7 @@ public class CardController {
 	 * @param i
 	 * @param type
 	 */
-	private void playNextAgeCard(final int i, final CardType type) {
+	private void playNextAgeCard(final int i, final CardType type, final boolean allowGodPower) {
 		final NextAgeController c = new NextAgeController(resourceBank);
 		c.play(mPlayers[i], type);
 	}
@@ -198,45 +199,53 @@ public class CardController {
 	 *            Number of the player that played the card.
 	 */
 	public void play(final Card card, final int playNum) {
+		boolean allowGodPower = false;
+
+		// If the card has a godPower, ask the player if he wants to use it
+		if (card.getGodName().length() > 1) {
+			allowGodPower = mainFrame.showPaymentGodPowerDialog(card.getGodName(), card.getCost(),
+					mPlayers[playNum].getResourceCounter());
+			mainFrame.updatePlayerResources(mPlayers[0].getResourceCounter());
+		}
 
 		switch (card.getType()) {
 		case ATTACK:
 			break;
-		case BUILD_NORSE:
-		case BUILD_GREEK:
-		case BUILD_EGYPTIAN:
+		case NJORD:
+		case HERA:
+		case NENPHTHYS:
 		case BUILD:
-			playBuildCard(playNum, card.getType());
+			playBuildCard(playNum, card.getType(), allowGodPower);
 			break;
-		case EXPLORE_NORSE:
-		case EXPLORE_GREEK:
-		case EXPLORE_EGYPTIAN:
+		case BALDR:
+		case ARTHEMIS:
+		case PTAH:
 		case EXPLORE:
-			playExploreCard(card.getNum(), playNum, card.getType());
+			playExploreCard(card.getNum(), playNum, card.getType(), allowGodPower);
 			break;
-		case GATHER_NORSE:
-		case GATHER_GREEK:
-		case GATHER_EGYPTIAN:
+		case FREYJA:
+		case POSEIDON:
+		case RA:
 		case GATHER:
-			playGatherCard(playNum, card.getType());
+			playGatherCard(playNum, card.getType(), allowGodPower);
 			break;
-		case NEXT_AGE_NORSE:
-		case NEXT_AGE_GREEK:
-		case NEXT_AGE_EGYPTIAN:
+		case ODIN:
+		case HEPHAESTUS:
+		case HATHOR:
 		case NEXTAGE:
-			playNextAgeCard(playNum, card.getType());
+			playNextAgeCard(playNum, card.getType(), allowGodPower);
 			break;
-		case RECRUIT_NORSE:
-		case RECRUIT_GREEK:
-		case RECRUIT_EGYPTIAN:
+		case HEL:
+		case APOLLO:
+		case BAST:
 		case RECRUIT:
-			playRecruitCard(card.getNum(), playNum, card.getType());
+			playRecruitCard(card.getNum(), playNum, card.getType(), allowGodPower);
 			break;
-		case TRADE_NORSE:
-		case TRADE_GREEK:
-		case TRADE_EGYPTIAN:
+		case FORSETI:
+		case HERMES:
+		case UNKNOWN:
 		case TRADE:
-			playTradeCard(card.getCost(), playNum, card.getType());
+			playTradeCard(card.getNum(), playNum, card.getType(), allowGodPower);
 		default:
 			break;
 		}

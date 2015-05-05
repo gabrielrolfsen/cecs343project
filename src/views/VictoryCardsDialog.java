@@ -56,7 +56,7 @@ public class VictoryCardsDialog extends JDialog {
 			final int newWidth = width / scale;
 			final ImageIcon ic = new ImageIcon(ii.getImage().getScaledInstance(newWidth, -1,
 					java.awt.Image.SCALE_SMOOTH));
-			System.out.println("NEW WIDH: " + newWidth);
+
 			final JButton btn = new JButton("", ic);
 
 			// btn.setPreferredSize(new Dimension(150, 400));

@@ -89,7 +89,7 @@ public class GatherControl {
 					case ONE_FOOD:
 						requested[ResourceCubeType.FOOD.getValue()] += 1;
 						// Egyptian Special Gather Card
-						if (type == CardType.GATHER_EGYPTIAN) {
+						if (type == CardType.RA) {
 							requested[ResourceCubeType.FOOD.getValue()] += 1;
 						}
 						break;

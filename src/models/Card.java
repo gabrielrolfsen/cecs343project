@@ -7,8 +7,8 @@
  */
 package models;
 
-import utils.Types.CultureType;
 import utils.Types.CardType;
+import utils.Types.CultureType;
 
 /**
  * @author grolfsen
@@ -20,6 +20,7 @@ public class Card {
 	private final CardType mType;
 	private final int mNum;
 	private final int mCost;
+	private final String mGodName;
 
 	/**
 	 * 
@@ -29,7 +30,11 @@ public class Card {
 		this.mNum = type.getNum();
 		this.mCost = type.getCost();
 		this.mCulture = type.getCulture();
-		// TODO Auto-generated constructor stub
+		this.mGodName = type.getGodName();
+	}
+
+	public String getGodName() {
+		return this.mGodName;
 	}
 
 	public CultureType getCulture() {

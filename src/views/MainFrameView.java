@@ -26,6 +26,7 @@ import models.Unit;
 import utils.Constants;
 import utils.Types.CardType;
 import utils.Types.CultureType;
+import utils.Types.ResourceCubeType;
 import utils.Types.UnitType;
 
 /**
@@ -244,9 +245,9 @@ public class MainFrameView extends JFrame {
 	 * @param hand
 	 * @return
 	 */
-	public Card showHandDialog(final ArrayList<Card> hand) {
+	public Card showHandDialog(final CultureType culture, final ArrayList<Card> hand) {
 		final JFrame frame = new JFrame();
-		final HandDialog dialog = new HandDialog(frame, hand);
+		final HandDialog dialog = new HandDialog(frame, culture, hand);
 		// Display the Dialog
 		dialog.setVisible(true);
 
@@ -291,6 +292,18 @@ public class MainFrameView extends JFrame {
 		dialog.setVisible(true);
 
 		return dialog.getQtyRandomCardsSelected();
+	}
+
+	public boolean showPaymentGodPowerDialog(final String godName, final int cost, final int[] playerResources) {
+		final int result = JOptionPane.showConfirmDialog(null, "Would you like to pay " + cost
+				+ " Favor Cube" + (cost > 1 ? "s" : "") + " to use this cards god Power?", godName
+				+ " God Power", JOptionPane.YES_NO_OPTION);
+		boolean r = false;
+		if (result == JOptionPane.YES_OPTION) {
+			playerResources[ResourceCubeType.FAVOR.getValue()] -= cost;
+			r = true;
+		}
+		return r;
 	}
 
 	public static synchronized MainFrameView getInstance() {
