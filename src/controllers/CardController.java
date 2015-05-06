@@ -148,6 +148,8 @@ public class CardController {
 					new BuildingTile(BuildingTileType.HOUSE));
 			System.out.println("DEBUG>> House added to board: " + result);
 		}
+		
+		MainFrameView.getInstance().setDisplayedBoard(mPlayers[i]);
 	}
 
 	/**

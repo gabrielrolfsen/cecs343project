@@ -116,6 +116,15 @@ public class Types {
 			}
 			throw new IllegalArgumentException("Invalid id");
 		}
+		
+		public static BuildingTileType getTypeForString(final String s) {
+			for (final BuildingTileType a : BuildingTileType.values()) {
+				if (a.s == s) {
+					return a;
+				}
+			}
+			throw new IllegalArgumentException("Invalid id");
+		}
 	}
 
 	public enum ResourceType {
