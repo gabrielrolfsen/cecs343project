@@ -5,7 +5,6 @@ import javax.swing.JOptionPane;
 
 import models.Player;
 import models.ResourcesBank;
-import utils.Types.AgeType;
 import utils.Types.CardType;
 
 public class NextAgeController {
@@ -25,7 +24,7 @@ public class NextAgeController {
 		int temp;
 
 		// Determine payment
-		switch (curPlayer.currentAge) {
+		switch (curPlayer.getAge()) {
 		case ARCHAIC:
 			temp = CLASSICAL_COST;
 			break;
@@ -61,25 +60,13 @@ public class NextAgeController {
 			// Transfer resource cube payment to bank
 			bank.replenishResources(payment);
 
-			// Change Player's Age
-			if (curPlayer.currentAge == AgeType.ARCHAIC) {
-
-				curPlayer.currentAge = AgeType.CLASSICAL;
-
-			} else if (curPlayer.currentAge == AgeType.CLASSICAL) {
-
-				curPlayer.currentAge = AgeType.HEROIC;
-
-			} else if (curPlayer.currentAge == AgeType.HEROIC) {
-
-				curPlayer.currentAge = AgeType.MYTHIC;
-
-			}
+			// Advance Player's Age
+			curPlayer.advanceAge();
 
 			// Display achievement dialog
 			final JFrame frame = new JFrame();
-			JOptionPane.showMessageDialog(frame,
-					"You have advanced to the " + curPlayer.currentAge.getString() + " age.");
+			JOptionPane.showMessageDialog(frame, "You have advanced to the " + curPlayer.getAge().getName()
+					+ " age.");
 
 		} catch (final IllegalStateException ex) {
 			final JFrame frame = new JFrame();

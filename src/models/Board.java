@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 import utils.Coordinates;
-import utils.Types.CultureType;
 import utils.Types.BuildingTileType;
+import utils.Types.CultureType;
 import utils.Types.ResourceTileType;
 
 /**
@@ -77,6 +77,21 @@ public class Board {
 	}
 
 	/**
+	 * Returns an Array with player's Resource Tiles
+	 * 
+	 * @return
+	 */
+	public ArrayList<ResourceTile> getResourceTiles() {
+		final ArrayList<ResourceTile> result = new ArrayList<ResourceTile>();
+		for (final TilePlaceHolder t : productionArea) {
+			if (t.isFilled()) {
+				result.add((ResourceTile) t.getTile());
+			}
+		}
+		return result;
+	}
+
+	/**
 	 * Adds a Building Tile to the city area of the Board.
 	 * 
 	 * @param tile
@@ -121,15 +136,11 @@ public class Board {
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 0, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FOREST, 1, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 2, 2));
-		productionArea
-				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 2));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 0, 3));
-		productionArea
-				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 3));
-		productionArea
-				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 2, 3));
-		productionArea
-				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 3));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 3));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 2, 3));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 3, 3));
 		icon = new ImageIcon("res/board_norse.png");
 		freeTerrainCounter[ResourceTileType.DESERT.getValue()] = 1;
 		freeTerrainCounter[ResourceTileType.FERTILE.getValue()] = 4;
@@ -183,8 +194,7 @@ public class Board {
 		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 2, 1));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 3, 1));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.HILLS, 0, 2));
-		productionArea
-				.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 2));
+		productionArea.add(new TilePlaceHolder(ResourceTileType.MOUNTAINS, 1, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 2, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FOREST, 3, 2));
 		productionArea.add(new TilePlaceHolder(ResourceTileType.FERTILE, 0, 3));
@@ -200,6 +210,10 @@ public class Board {
 		freeTerrainCounter[ResourceTileType.SWAMP.getValue()] = 1;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int[] getFreeTerrainCounter() {
 		return this.freeTerrainCounter;
 	}
@@ -208,6 +222,10 @@ public class Board {
 		this.freeTerrainCounter = counter;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public CultureType getType() {
 		return this.type;
 	}

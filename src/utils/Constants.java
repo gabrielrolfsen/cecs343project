@@ -21,6 +21,8 @@ public final class Constants {
 
 	public static final int TURNS_PLAYING_CARDS = 1;
 
+	public static final int HUMAN_PLAYER = 0;
+
 	// Graphical Dimensions Arrays
 	public static final int BOARD_HEIGHT = 825;
 	public static final int BOARD_WIDTH = 900;

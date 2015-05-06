@@ -18,8 +18,8 @@ public class BuildingTile extends Tile {
 	private void setIcon() {
 		String iconPath;
 		
-		iconPath = "res/building_tiles/" + type.getString() + ".png";
-		this.icon = new ImageIcon(iconPath, type.getString());
+		iconPath = "res/building_tiles/" + type.getName() + ".png";
+		this.icon = new ImageIcon(iconPath, type.getName());
 	}
 
 	public BuildingTileType getType() {

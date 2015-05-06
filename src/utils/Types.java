@@ -53,17 +53,20 @@ public class Types {
 			return this.value;
 		}
 
-		public String getString() {
+		public String getName() {
 			return this.s;
 		}
 
-		public static ResourceTileType getTypeForString(final String s) {
+		public static ResourceTileType getType(final String s) {
+
 			for (final ResourceTileType r : ResourceTileType.values()) {
-				if (r.getString() == s) {
+
+				if (r.getName().toLowerCase().equals(s.toLowerCase())) {
+
 					return r;
 				}
 			}
-			throw new IllegalArgumentException("Invalid id");
+			return null;
 		}
 	}
 
@@ -83,47 +86,47 @@ public class Types {
 		TEMPLE(12, "Temple"),
 		WONDER(13, "Wonder");
 
-		private final int n;
-		private final String s;
+		private final int id;
+		private final String name;
 
 		BuildingTileType(final int n, final String s) {
-			this.n = n;
-			this.s = s;
+			this.id = n;
+			this.name = s;
 		}
 
 		public int getValue() {
-			return this.n;
+			return this.id;
 		}
 
-		public String getString() {
-			return this.s;
+		public String getName() {
+			return this.name;
 		}
 
-		public static String getStringForInt(final int n) {
-			for (final BuildingTileType a : BuildingTileType.values()) {
-				if (a.n == n) {
-					return a.s;
+		public static String getName(final int n) {
+			for (final BuildingTileType tile : BuildingTileType.values()) {
+				if (tile.id == n) {
+					return tile.name;
 				}
 			}
 			throw new IllegalArgumentException("Invalid id");
 		}
 
-		public static BuildingTileType getTypeForInt(final int n) {
-			for (final BuildingTileType a : BuildingTileType.values()) {
-				if (a.n == n) {
-					return a;
+		public static BuildingTileType getType(final int n) {
+			for (final BuildingTileType tile : BuildingTileType.values()) {
+				if (tile.id == n) {
+					return tile;
 				}
 			}
 			throw new IllegalArgumentException("Invalid id");
 		}
 
-		public static BuildingTileType getTypeForString(final String s) {
-			for (final BuildingTileType a : BuildingTileType.values()) {
-				if (a.s == s) {
-					return a;
+		public static BuildingTileType getType(final String name) {
+			for (final BuildingTileType tile : BuildingTileType.values()) {
+				if (tile.name.toLowerCase().equals(name.toLowerCase())) {
+					return tile;
 				}
 			}
-			throw new IllegalArgumentException("Invalid id");
+			throw new IllegalArgumentException("Invalid Name");
 		}
 	}
 
@@ -154,12 +157,12 @@ public class Types {
 		WOOD(3, "Wood"),
 		VICTORY(4, "Victory");
 
-		private final int n;
+		private final int id;
 		private final String name;
 
 		ResourceCubeType(final int n, final String name) {
 			this.name = name;
-			this.n = n;
+			this.id = n;
 		}
 
 		public String getName() {
@@ -168,7 +171,7 @@ public class Types {
 
 		public static ResourceCubeType getType(final int n) {
 			for (final ResourceCubeType cube : ResourceCubeType.values()) {
-				if (cube.n == n) {
+				if (cube.id == n) {
 					return cube;
 				}
 			}
@@ -176,12 +179,12 @@ public class Types {
 		}
 
 		public int getValue() {
-			return this.n;
+			return this.id;
 		}
 
 		public static ResourceCubeType getTypeForString(final String s) {
 			for (final ResourceCubeType r : ResourceCubeType.values()) {
-				if (r.getName() == s) {
+				if (r.getName().toLowerCase().equals(s.toLowerCase())) {
 					return r;
 				}
 			}
@@ -192,14 +195,14 @@ public class Types {
 	public enum GridType {
 		RESOURCE(0),
 		BUILDING(1);
-		private final int n;
+		private final int id;
 
 		GridType(final int n) {
-			this.n = n;
+			this.id = n;
 		}
 
 		public int getValue() {
-			return this.n;
+			return this.id;
 		}
 	}
 
@@ -469,20 +472,29 @@ public class Types {
 		HEROIC(2, "Heroic"),
 		MYTHIC(3, "Mythic");
 
-		int n;
-		String s;
+		private final int id;
+		private final String name;
 
 		AgeType(final int n, final String s) {
-			this.n = n;
-			this.s = s;
+			this.id = n;
+			this.name = s;
 		}
 
-		public int getValue() {
-			return this.n;
+		public int getId() {
+			return this.id;
 		}
 
-		public String getString() {
-			return this.s;
+		public static AgeType getType(final int id) {
+			for (final AgeType age : AgeType.values()) {
+				if (id == age.getId()) {
+					return age;
+				}
+			}
+			return null;
+		}
+
+		public String getName() {
+			return this.name;
 		}
 
 	}

@@ -103,7 +103,7 @@ public class BuildingTileView extends TileView {
 		*/
 		
 		// Build the iconPath
-		String iconPath = "res/building_tiles/" + tile.getType().getString() + ".png";
+		String iconPath = "res/building_tiles/" + tile.getType().getName() + ".png";
 		this.icon = new ImageIcon(iconPath);
 
 		// Assign the background image the proper background

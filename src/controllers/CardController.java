@@ -211,7 +211,7 @@ public class CardController {
 	 */
 	private void playGatherCard(final int i, final CardType type, final boolean allowGodPower) {
 		final GatherControl c = new GatherControl(resourceBank);
-		c.play(mPlayers[0], mPlayers[1], mPlayers[2], type);
+		c.play(mPlayers, i, type, allowGodPower);
 		// Norse God Power increments 5 gold when the card is played
 		if (type == CardType.FREYJA) {
 			mPlayers[i].incrementResource(ResourceCubeType.GOLD, 5);

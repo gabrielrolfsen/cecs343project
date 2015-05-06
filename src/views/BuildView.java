@@ -32,7 +32,7 @@ public class BuildView extends JDialog implements ActionListener {
 		bgBuilding = new ButtonGroup();
 
 		for (int i = 0; i < MAX_BUTTONS; i++) {
-			btnBuilding[i] = new JRadioButton(BuildingTileType.getStringForInt(i));
+			btnBuilding[i] = new JRadioButton(BuildingTileType.getName(i));
 			btnBuilding[i].addActionListener(this);
 			panel.add(btnBuilding[i]);
 			bgBuilding.add(btnBuilding[i]);

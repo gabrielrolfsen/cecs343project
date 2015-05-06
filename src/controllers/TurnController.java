@@ -58,7 +58,7 @@ public class TurnController {
 
 		// Shows Dialog to playe choose the cards he wants
 		final int qtyRandomCards = mainFrame.showCardDialog(players[0].getBoard().getType(), humanPlayerHand,
-				players[0].getAge().getValue() + 4);
+				players[0].getAge().getId() + 4);
 
 		/*
 		 * Place Random Action Cards on player's hand according to the quantity
@@ -80,7 +80,7 @@ public class TurnController {
 			// Shuffle it
 			Collections.shuffle(nums);
 
-			final int maxCardsAllowed = (players[i].getAge().getValue() + 4);
+			final int maxCardsAllowed = (players[i].getAge().getId() + 4);
 			final int maxPermActionCards = r.nextInt(maxCardsAllowed - 1) + 2;
 			System.out.println("=== Player " + i + " ===");
 			System.out.println("# Of Perm. Actions Card that will be picked: " + maxPermActionCards);

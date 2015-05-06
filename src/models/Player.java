@@ -17,6 +17,7 @@ import utils.Types.AgeType;
 import utils.Types.CardType;
 import utils.Types.CultureType;
 import utils.Types.ResourceCubeType;
+import utils.Types.ResourceTileType;
 
 /**
  * @author grolfsen
@@ -25,19 +26,16 @@ import utils.Types.ResourceCubeType;
 public class Player {
 
 	private Board mBoard = null;
-	private final AgeType mAge = AgeType.ARCHAIC;
+	private AgeType mAge = AgeType.ARCHAIC;
 	private ArrayList<Card> mHand = new ArrayList<Card>();
 	private final Stack<Card> mDeckRandomCards = new Stack<Card>();
 	private final int mResources[] = { 5, 5, 5, 5, 1 };
 	private final ArrayList<Unit> army = new ArrayList<Unit>();
 
-	public boolean human;
+	// XXX: what is that?!
 	public boolean turnTaken;
-	public AgeType currentAge = AgeType.ARCHAIC;
-
-	public boolean[] buildingOwned = new boolean[Constants.MAX_BUILDINGS];
 	public int housesOwned = 0;
-	private final int MAX_BUILDINGS = 14;
+	public boolean[] buildingOwned = new boolean[Constants.MAX_BUILDINGS];
 
 	/**
 	 * Returns a Random Permanent/Random Action Card from players hand. Used for
@@ -79,8 +77,33 @@ public class Player {
 		}
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public AgeType getAge() {
 		return this.mAge;
+	}
+
+	/**
+	 * Advance player's age
+	 * 
+	 * @return true if the player isn't on the last age possible, false if he
+	 *         is.
+	 */
+	public boolean advanceAge() {
+		// Get Current Age's id
+		int id = mAge.getId();
+		// Increment it.
+		id++;
+		// Get the correspondent Age for the id
+		final AgeType nextAge = AgeType.getType(id);
+		if (nextAge != null) {
+			mAge = AgeType.getType(id);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public ArrayList<Unit> getArmy() {
@@ -127,6 +150,32 @@ public class Player {
 		// Shuffle Deck of Random Action Cards
 		Collections.shuffle(mDeckRandomCards);
 
+	}
+
+	/**
+	 * Return player's current Types of ResourceTiles on the production area.
+	 * 
+	 * @return
+	 */
+	public String[] getResourceTilesTypes() {
+		// Get all Resource Tiles
+		final ArrayList<String> result = new ArrayList<String>();
+		final int i = 0;
+
+		// Iterate trough types and array
+		final ArrayList<ResourceTile> resTiles = mBoard.getResourceTiles();
+		for (final ResourceTileType type : ResourceTileType.values()) {
+			for (final ResourceTile tile : resTiles) {
+				if (tile.getType() == type) {
+					// Add to result array
+					result.add(type.toString());
+					// Break to assure just 1 of each type
+					break;
+				}
+			}
+		}
+		// Returns a String[] instead of ArrayList
+		return result.toArray(new String[result.size()]);
 	}
 
 	public boolean hasMarket() {

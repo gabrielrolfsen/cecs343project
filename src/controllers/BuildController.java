@@ -45,7 +45,7 @@ public class BuildController {
 		
 		int i;
 		for (i = 0; i < MAX_BUILDINGS; i++) {
-			playerOptions[i] = BuildingTileType.getStringForInt(i);
+			playerOptions[i] = BuildingTileType.getName(i);
 		}
 		
 		JFrame frame = new JFrame();
@@ -57,7 +57,7 @@ public class BuildController {
 													playerOptions, 
 													playerOptions[0]);
 
-		return BuildingTileType.getTypeForString(playerChoice);
+		return BuildingTileType.getType(playerChoice);
 	}
 	
 	public void playerChose(final int playerChoice) {
@@ -70,7 +70,7 @@ public class BuildController {
 			// Check if player already owns building
 			if (curPlayer.buildingOwned[playerChoice]) {
 
-				if (BuildingTileType.getTypeForInt(playerChoice) != BuildingTileType.HOUSE) {
+				if (BuildingTileType.getType(playerChoice) != BuildingTileType.HOUSE) {
 
 					throw new ArrayStoreException();
 
@@ -92,7 +92,7 @@ public class BuildController {
 			BuildingTile curBuildingTile;
 			curBoard = curPlayer.getBoard();
 			curBuildingTile = new BuildingTile(
-					BuildingTileType.getTypeForInt(playerChoice));
+					BuildingTileType.getType(playerChoice));
 			curBoard.addBuildingTile(curBuildingTile);
 			//final Coordinates c = curBoard.addBuildingTile(curBuildingTile);
 			//MainFrameView.getInstance().addBuildingTileToBoard(curBuildingTile, c.getX(), c.getY());
