@@ -30,6 +30,7 @@ public class MainController {
 	private static MainController mInstance = new MainController();
 	private final MainFrameView mainFrame = MainFrameView.getInstance();
 	private final CardController cardController = CardController.getInstance();
+	private final ResourcesBank resourceBank = ResourcesBank.getInstance();
 
 	/*
 	 * Counter for each type of terrain inside the randomTiles array, each index
@@ -43,13 +44,12 @@ public class MainController {
 
 	private MainController() {
 
-		final ResourcesBank resourceBank = ResourcesBank.getInstance();
-
 		// Initialize Players
 		for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
 			players[i] = new Player();
 		}
 
+		// Send the players to the Card Controller
 		cardController.setPlayers(players);
 
 		// Pops a Dialog so user can pick a culture
@@ -61,14 +61,14 @@ public class MainController {
 		// Do the terrain picking routine
 		TerrainPickerController.getInstance().terrainPickRoutine(players);
 
-		// TODO: Improve this dialog
+		// Show a Dialog showing that the game is ready
 		mainFrame.showGameReadyDialog();
-
 		mainFrame.setVisible(true);
 
+		// Start the turns
 		final TurnController turnController = new TurnController();
-
-		turnController.playTurn(players);
+		turnController.setPlayers(players);
+		turnController.playTurn(Constants.TURNS);
 
 		// Add "Place Victory Cubes" Button functionality
 		mainFrame.addVictoryCardButtonActionListener(new ActionListener() {

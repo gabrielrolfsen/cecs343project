@@ -16,6 +16,7 @@ import models.Card;
 import models.Player;
 import models.ResourcesBank;
 import models.Unit;
+import utils.Constants;
 import utils.Types.BuildingTileType;
 import utils.Types.CardType;
 import utils.Types.CultureType;
@@ -60,7 +61,7 @@ public class CardController {
 				}
 			}
 		}
-		if (i == 0) {
+		if (i == Constants.HUMAN_PLAYER) {
 			boolean allowVictoryCubes = false;
 
 			// If player has greatTemple and has at least 8 favor cubes, let him
@@ -116,7 +117,7 @@ public class CardController {
 		}
 		final ArrayList<Unit> selectedUnits;
 
-		if (i == 0) {
+		if (i == Constants.HUMAN_PLAYER) {
 			// Pops up the Dialog and get selected units
 			selectedUnits = mainFrame
 					.openRecruitDialog(mPlayers[i].getResourceCounter(), qty, availableUnits);
@@ -199,7 +200,7 @@ public class CardController {
 			System.out.println("DEBUG>> House added to board: " + result);
 		}
 
-		MainFrameView.getInstance().setDisplayedBoard(mPlayers[i]);
+		// MainFrameView.getInstance().setDisplayedBoard(mPlayers[i]);
 	}
 
 	/**
@@ -211,12 +212,17 @@ public class CardController {
 	 */
 	private void playGatherCard(final int i, final CardType type, final boolean allowGodPower) {
 		final GatherControl c = new GatherControl(resourceBank);
-		c.play(mPlayers, i, type, allowGodPower);
-		// Norse God Power increments 5 gold when the card is played
-		if (type == CardType.FREYJA) {
-			mPlayers[i].incrementResource(ResourceCubeType.GOLD, 5);
-		} else if (type == CardType.POSEIDON) {
-			mPlayers[i].incrementResource(ResourceCubeType.FOOD, 5);
+		c.play(mPlayers, type, allowGodPower);
+
+		// If player payed for the god power
+		if (allowGodPower) {
+			if (type == CardType.FREYJA) {
+				// Norse God Power increments 5 gold when the card is played
+				mPlayers[i].incrementResource(ResourceCubeType.GOLD, 5);
+			} else if (type == CardType.POSEIDON) {
+				// Greek God Power increments 5 food when the card is played
+				mPlayers[i].incrementResource(ResourceCubeType.FOOD, 5);
+			}
 		}
 	}
 
@@ -233,16 +239,6 @@ public class CardController {
 	}
 
 	/**
-	 * Points the variable to players that are playing. Probably can be
-	 * refactored.
-	 * 
-	 * @param players
-	 */
-	public void setPlayers(final Player[] players) {
-		this.mPlayers = players;
-	}
-
-	/**
 	 * Method that handles both Random Action Cards and Permanent Action Cards.
 	 * Random Action Cards differ form Permanent Action Cards on CardType, so
 	 * each method handles each CardType differently.
@@ -256,10 +252,24 @@ public class CardController {
 		boolean allowGodPower = false;
 
 		// If the card has a godPower, ask the player if he wants to use it
-		if (card.getGodName().length() > 1) {
-			allowGodPower = mainFrame.showPaymentGodPowerDialog(card.getGodName(), card.getCost(),
-					mPlayers[playNum].getResourceCounter());
-			mainFrame.updatePlayerResources(mPlayers[0].getResourceCounter());
+		if (card.getGodName().length() > 1 && playNum == Constants.HUMAN_PLAYER) {
+			// Card.getCost return the cost in favor cubes
+			if (mPlayers[playNum].getResourceCounter()[ResourceCubeType.FAVOR.getValue()] >= card.getCost()) {
+				// If player has enough resources asks if he wants to use the
+				// power
+				allowGodPower = mainFrame.showPaymentGodPowerDialog(card.getGodName(), card.getCost(),
+						mPlayers[playNum].getResourceCounter());
+				mainFrame.updatePlayerResources(mPlayers[0].getResourceCounter());
+			} else {
+				// Otherwise, show a message showing he doesn't have enough
+				// resources
+				mainFrame.showNotEnoughResourcesDialog();
+			}
+		} else if (mPlayers[playNum].getResourceCounter()[ResourceCubeType.FAVOR.getValue()] >= card
+				.getCost()) {
+			// Subtract the card cost from player's resource
+			mPlayers[playNum].decrementResource(ResourceCubeType.FAVOR, card.getCost());
+			allowGodPower = true;
 		}
 
 		switch (card.getType()) {
@@ -305,6 +315,16 @@ public class CardController {
 		}
 		// Update Human Player Resources
 		mainFrame.updatePlayerResources(mPlayers[0].getResourceCounter());
+	}
+
+	/**
+	 * Points the variable to players that are playing. Probably can be
+	 * refactored.
+	 * 
+	 * @param players
+	 */
+	public void setPlayers(final Player[] players) {
+		this.mPlayers = players;
 	}
 
 	public synchronized static CardController getInstance() {

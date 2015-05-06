@@ -302,6 +302,7 @@ public class MainFrameView extends JFrame {
 	 * @return
 	 */
 	public boolean showPaymentGodPowerDialog(final String godName, final int cost, final int[] playerResources) {
+
 		final int result = JOptionPane.showConfirmDialog(null, "Would you like to pay " + cost
 				+ " Favor Cube" + (cost > 1 ? "s" : "") + " to use this cards god Power?", godName
 				+ " God Power", JOptionPane.YES_NO_OPTION);
@@ -311,6 +312,14 @@ public class MainFrameView extends JFrame {
 			r = true;
 		}
 		return r;
+	}
+
+	/**
+	 * 
+	 */
+	public void showNotEnoughResourcesDialog() {
+		JOptionPane.showMessageDialog(this, "You don't have enough resourcs to use this card's God Power.",
+				"Sorry...", JOptionPane.PLAIN_MESSAGE);
 	}
 
 	public static synchronized MainFrameView getInstance() {

@@ -19,7 +19,8 @@ public final class Constants {
 	public static final int MAX_TILES_PICKING_PHASE = 18;
 	public static final int MAX_BUILDINGS = 14;
 
-	public static final int TURNS_PLAYING_CARDS = 1;
+	public static final int TURNS_PLAYING_CARDS = 3;
+	public static final int TURNS = 4;
 
 	public static final int HUMAN_PLAYER = 0;
 

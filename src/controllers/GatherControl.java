@@ -30,24 +30,15 @@ public class GatherControl {
 		mResourceBank = resourceBank;
 	}
 
-	public void play(final Player[] players, final int i, final CardType type, final boolean allowGodPower) {
+	public void play(final Player[] players, final CardType type, final boolean allowGodPower) {
 		this.mAllowGodPower = allowGodPower;
 		this.mPlayers = players;
 
-		// XXX: HARDCODED
-		if (i == 0) {
-			gather(0, type);
-			gather(1, type);
-			gather(2, type);
-		} else if (i == 1) {
-			gather(1, type);
-			gather(2, type);
-			gather(0, type);
-		} else {
-			gather(2, type);
-			gather(0, type);
-			gather(1, type);
+		// All players play the card, regardless who played it
+		for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
+			gather(i, type);
 		}
+
 	}
 
 	private void gather(final int i, final CardType type) {
@@ -73,7 +64,9 @@ public class GatherControl {
 		}
 
 		// Get Resources from Bank
-		getResourcesFromBank(requestedResources, mPlayers[i]);
+
+		mPlayers[i].incrementResources(requestedResources);
+		mResourceBank.decrementResources(requestedResources);
 	}
 
 	private String humanTypeChoice() {
@@ -205,17 +198,14 @@ public class GatherControl {
 		return requested;
 	}
 
-	private void getResourcesFromBank(final int[] requested, final Player curPlayer) {
-		ResourceCubeType curType;
-		int i;
-		for (i = 0; i < 4; i++) {
-			curType = ResourceCubeType.getType(i);
-			curPlayer.incrementResource(curType, mResourceBank.getRequestedResource(curType, requested[i]));
-		}
-	}
-
+	/**
+	 * Dialog for Terrain Type Choice
+	 * 
+	 * @return
+	 */
 	private ResourceTileType humanTerrainChoice() {
 
+		// Get Player Resource Tiles Types to use as possible options
 		final String[] playerOptions = mPlayers[0].getResourceTilesTypes();
 
 		final JFrame frame = new JFrame();
@@ -227,6 +217,11 @@ public class GatherControl {
 		return ResourceTileType.getType(humanResponse);
 	}
 
+	/**
+	 * Dialog for ResourceType choice
+	 * 
+	 * @return
+	 */
 	private ResourceCubeType humanResourceChoice() {
 		final String[] playerOptions = new String[4];
 
