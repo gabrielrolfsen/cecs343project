@@ -116,7 +116,7 @@ public class Types {
 			}
 			throw new IllegalArgumentException("Invalid id");
 		}
-		
+
 		public static BuildingTileType getTypeForString(final String s) {
 			for (final BuildingTileType a : BuildingTileType.values()) {
 				if (a.s == s) {
@@ -250,7 +250,7 @@ public class Types {
 		HEL(RANDOM, CultureType.NORSE, 3, "Hel", 1),
 		FORSETI(RANDOM, CultureType.NORSE, 0, "Forseti", 1);
 
-		private int id = 0;
+		private int id = -1;
 		private CardType type = null;
 		private CultureType culture = null;
 		private String godName = "";

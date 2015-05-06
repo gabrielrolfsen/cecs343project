@@ -1,16 +1,23 @@
 package views;
 
 import java.awt.Color;
+import java.util.Random;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import utils.Constants;
+
 public class ArmyView {
 	private final JLabel[] lblGraphic = new JLabel[5];
 	private final JLabel[] lblValue = new JLabel[5];
 	private String[] intValue = new String[5];
-	private int myLeft, myTop = 0;
+	private final int myLeft;
+	int tempLeft[] = new int[5];
+	int mTop[] = new int[5];
+	int tempTop = 100;
+	boolean crazyVariable = false;
 
 	public ArmyView(final JPanel parentPanel) {
 
@@ -32,16 +39,15 @@ public class ArmyView {
 			lblValue[i].setVisible(true);
 			lblValue[i].setForeground(Color.WHITE);
 			intValue[i] = "";
-			System.out.println("INT VAL:" + intValue[i]);
 		}
-
+		myLeft = Constants.UNITS_X_LOCATION;
 		moveObjects();
 	}
 
 	private void refreshValues() {
 		for (int i = 0; i < 5; i++) {
 			lblValue[i].setText(intValue[i]);
-			System.out.println("BLa: " + intValue[i]);
+			// If there's a unit, enable the graphics
 			if (intValue[i].length() > 0) {
 				lblGraphic[i].setVisible(true);
 			} else {
@@ -51,22 +57,29 @@ public class ArmyView {
 	}
 
 	private void moveObjects() {
-		int tempTop = myTop;
+		final Random r = new Random();
 
 		for (int i = 0; i < 5; i++) {
-			lblGraphic[i].setLocation(myLeft, tempTop);
-			lblValue[i].setLocation(myLeft, tempTop + 70);
-			tempTop += 80;
+			if (crazyVariable == false) {
+				final int rndm = r.nextInt(10);
+				tempLeft[i] = myLeft;
+				if (rndm > 4) {
+					tempTop += 72;
+					tempLeft[i] += r.nextInt(6);
+				} else {
+					tempLeft[i] = r.nextInt((675 - myLeft) + 1) + myLeft;
+				}
+				mTop[i] = tempTop;
+			}
+
+			lblGraphic[i].setLocation(tempLeft[i], mTop[i]);
+			lblValue[i].setLocation(tempLeft[i], mTop[i] + 65);
+
 		}
+		crazyVariable = true;
 	}
 
-	public void setTop(final int newTop) {
-		myTop = newTop;
-		moveObjects();
-	}
-
-	public void setLeft(final int newLeft) {
-		myLeft = newLeft;
+	public void refresh() {
 		moveObjects();
 	}
 

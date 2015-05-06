@@ -8,6 +8,7 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import models.BattleCard;
 import models.BuildingTile;
@@ -43,24 +44,46 @@ public class CardController {
 	private void playTradeCard(final int price, final int i, final CardType type, final boolean allowGodPower) {
 
 		// If player has a market, he doesn't have to pay resources
-		if (!mPlayers[i].hasMarket() || (type == CardType.FORSETI && allowGodPower == true)) {
-			mainFrame.showPaymentDialog(resourceBank.getResourceCounter(), mPlayers[i].getResourceCounter(),
-					price);
-			mainFrame.updatePlayerResources(mPlayers[i].getResourceCounter());
+		if (!mPlayers[i].hasMarket() && (type == CardType.TRADE || type == CardType.UNKNOWN)) {
+			if (i == 0) {
+				mainFrame.showPaymentDialog(resourceBank.getResourceCounter(),
+						mPlayers[i].getResourceCounter(), price);
+				// Update the Player's board with the new resource counter
+				mainFrame.updatePlayerResources(mPlayers[i].getResourceCounter());
+			} else {
+				// Choose the first available resource as payment
+				for (int ii = 0; ii < 4; ii++) {
+					if (mPlayers[i].getResourceCounter()[ii] > 1) {
+						mPlayers[i].decrementResource(ResourceCubeType.getType(ii), 2);
+						break;
+					}
+				}
+			}
 		}
+		if (i == 0) {
+			boolean allowVictoryCubes = false;
 
-		boolean allowVictoryCubes = false;
+			// If player has greatTemple and has at least 8 favor cubes, let him
+			// trade them for victory cubes
+			if (mPlayers[i].hasGreatTemple() && mPlayers[i].getResourceCounter()[0] > 7) {
+				allowVictoryCubes = true;
+			}
 
-		// If player has greatTemple and has at least 8 favor cubes, let him
-		// trade them for victory cubes
-		if (mPlayers[i].hasGreatTemple() && mPlayers[i].getResourceCounter()[0] > 7) {
-			allowVictoryCubes = true;
+			// Open the trade dialog
+			final int[] result = mainFrame.openTradeDialog(resourceBank.getResourceCounter(),
+					mPlayers[i].getResourceCounter(), allowVictoryCubes, type);
+			// Update Resources for the player
+			mPlayers[i].decrementResources(result);
+			// Update Resources for the bank
+			resourceBank.replenishResources(result);
+		} else {
+			final Random r = new Random();
+			// Takes a Random Number to use as Resource to Trade
+			final int resNum = r.nextInt(4);
+			final int qty = mPlayers[i].getResourceCounter()[resNum];
+			mPlayers[i].decrementResource(ResourceCubeType.getType(resNum), qty);
+			resourceBank.replenishResource(ResourceCubeType.getType(resNum), qty);
 		}
-
-		final int[] result = mainFrame.openTradeDialog(resourceBank.getResourceCounter(),
-				mPlayers[i].getResourceCounter(), allowVictoryCubes, type);
-		mPlayers[i].decrementResources(result);
-		resourceBank.decrementResources(result);
 	}
 
 	/**
@@ -91,10 +114,33 @@ public class CardController {
 				availableUnits.add(card);
 			}
 		}
-		System.out.println("# of units to recruit: " + qty);
-		// Pops up the Dialog and get selected units
-		final ArrayList<Unit> selectedUnits = mainFrame.openRecruitDialog(mPlayers[i].getResourceCounter(),
-				qty, availableUnits);
+		final ArrayList<Unit> selectedUnits;
+
+		if (i == 0) {
+			// Pops up the Dialog and get selected units
+			selectedUnits = mainFrame
+					.openRecruitDialog(mPlayers[i].getResourceCounter(), qty, availableUnits);
+		} else {
+			selectedUnits = new ArrayList<Unit>();
+
+			for (final BattleCard b : availableUnits) {
+				for (int ii = 0; ii < 4; ii++) {
+					// If player cannot afford the unit, go to the other one
+					if (b.getCost()[ii] > mPlayers[i].getResourceCounter()[ii]) {
+						break;
+					}
+				}
+				// Otherwise, add to player's selected Units
+				System.out.println("** Player " + i + " recruited Unit: " + b.getName());
+				selectedUnits.add(b.getUnit());
+				// Decrement Player Resources
+				mPlayers[i].decrementResources(b.getCost());
+				// If player has selected the maximum qty, break the loop
+				if (selectedUnits.size() == qty) {
+					break;
+				}
+			}
+		}
 
 		// If player hasn't given up playing the card
 		if (selectedUnits != null) {
@@ -126,8 +172,12 @@ public class CardController {
 			}
 
 			mPlayers[i].addUnits(selectedUnits);
-			// TODO: implement "add" method this one delete all units
-			mainFrame.updatePlayerArmy(selectedUnits);
+
+			// Update the board if it's the human player playing
+			if (i == 0) {
+				mainFrame.updatePlayerArmy(selectedUnits);
+			}
+
 		}
 
 	}
@@ -148,7 +198,7 @@ public class CardController {
 					new BuildingTile(BuildingTileType.HOUSE));
 			System.out.println("DEBUG>> House added to board: " + result);
 		}
-		
+
 		MainFrameView.getInstance().setDisplayedBoard(mPlayers[i]);
 	}
 

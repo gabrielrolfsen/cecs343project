@@ -59,7 +59,7 @@ public class NextAgeController {
 			curPlayer.decrementResources(payment);
 
 			// Transfer resource cube payment to bank
-			bank.incrementResources(payment);
+			bank.replenishResources(payment);
 
 			// Change Player's Age
 			if (curPlayer.currentAge == AgeType.ARCHAIC) {

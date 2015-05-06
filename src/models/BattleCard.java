@@ -17,17 +17,12 @@ public class BattleCard {
 
 	private final String mName;
 	private final Unit mUnit;
-	private final int mDice;
 	private int[] mCost = new int[4];
-	private final String mSpecialPower = "N/A";
-
-	// TODO: Bonus dice for special battle
 
 	public BattleCard(final UnitType type) {
 		this.mUnit = new Unit(type);
 		this.mName = type.getName();
-		// TODO: add dice on type
-		this.mDice = 3;
+
 		this.mCost = type.getCost();
 	}
 

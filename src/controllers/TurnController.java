@@ -14,6 +14,7 @@ import java.util.Random;
 import models.Card;
 import models.Player;
 import models.ResourcesBank;
+import utils.Constants;
 import utils.Types.CardType;
 import utils.Types.ResourceCubeType;
 import views.MainFrameView;
@@ -71,7 +72,7 @@ public class TurnController {
 		for (int i = 1; i < 3; i++) {
 			final ArrayList<Card> hand = new ArrayList<Card>();
 
-			// Create a list with numbers 0 to 7 (types of cards)
+			// Create a list with numbers 0 to 6 (types of cards)
 			final ArrayList<Integer> nums = new ArrayList<Integer>();
 			for (int x = 0; x < 7; x++) {
 				nums.add(x);
@@ -81,7 +82,7 @@ public class TurnController {
 
 			final int maxCardsAllowed = (players[i].getAge().getValue() + 4);
 			final int maxPermActionCards = r.nextInt(maxCardsAllowed - 1) + 2;
-			System.out.println("Player " + i + ":");
+			System.out.println("=== Player " + i + " ===");
 			System.out.println("# Of Perm. Actions Card that will be picked: " + maxPermActionCards);
 
 			// Select the max amount of Perm. Action Card the player's age
@@ -89,22 +90,24 @@ public class TurnController {
 			for (int ii = 0; ii < maxPermActionCards; ii++) {
 				// Get Random Type
 				final CardType type = CardType.getType(nums.get(ii));
-				System.out.println(nums.get(ii));
 				// Add to temporary hand
 				hand.add(new Card(type));
+				System.out.println("Player " + ii + " picked Perm. Action Card: " + type.toString());
 			}
+
 			// Fill the rest of the hand with Random Action Cards.
 			for (int z = maxPermActionCards; z < maxCardsAllowed; z++) {
 				// Add a Random Action to Player's hand
 				hand.add(players[i].getRandomActionCard());
+
 			}
-			System.out.println("# Of cards in player's " + i + " hand: " + hand.size() + "\n");
+
 			// Add the Hand to player's hand
 			players[i].addHand(hand);
 		}
 
 		// 3 Turns of Playing Cards
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < Constants.TURNS_PLAYING_CARDS; i++) {
 			// If Human has at least one card in his hand
 			if (!humanPlayerHand.isEmpty()) {
 				final Card selectedCard = mainFrame.showHandDialog(players[0].getBoard().getType(),
@@ -119,25 +122,22 @@ public class TurnController {
 			}
 
 			// AI Players turn
-			// for (int ii = 1; ii < 3; ii++) {
-			// final Card card = players[ii].getRandomCardFromHand();
-			// for (final Card c : players[ii].getHand()) {
-			// System.out.println("Player " + ii + " picked card: " +
-			// c.getType().toString());
-			// }
-			// cardController.play(card, ii);
-			// System.out.println("===============");
-			// System.out.println("Player " + ii + " played card: " +
-			// card.getType().toString());
-			// System.out.println("===============");
-			// players[ii].removeCardFromHand(card);
-			// }
+			for (int ii = 1; ii < Constants.MAX_PLAYERS; ii++) {
+				final Card card = players[ii].getRandomCardFromHand();
+				// Play the Card Picked
+				cardController.play(card, ii);
+				System.out.println("===============");
+				System.out.println("Player " + ii + " played card: " + card.getType().toString());
+				System.out.println("===============");
+				// Remove it from player's hand
+				players[ii].removeCardFromHand(card);
+			}
 		}
-		// Clear player's cards if there's any
-		humanPlayerHand.clear();
 
 		// Conduct Spoilage
-		for (int i = 0; i < players.length; i++) {
+		for (int i = 0; i < Constants.MAX_PLAYERS; i++) {
+			// Clear players' cards if there's any
+			players[i].getHand().clear();
 			final int[] res = players[i].getResourceCounter();
 			int maxQty = 5;
 

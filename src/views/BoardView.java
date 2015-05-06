@@ -48,10 +48,10 @@ public class BoardView extends JPanel {
 	 *            Army to be displayed on the board
 	 */
 	public void updateArmy(final ArrayList<Unit> army) {
-		final String[] armyNames = { "", "", "", "", "", "" };
+		final String[] armyNames = { "", "", "", "", "" };
 		int i = 0;
 		for (final Unit u : army) {
-			armyNames[i] = u.getType().toString();
+			armyNames[i] = u.getType().toString().replace("_", " ");
 			i++;
 		}
 		armyGrid.updateResources(armyNames);
@@ -139,8 +139,7 @@ public class BoardView extends JPanel {
 		mBoardResStats.setLeft(Constants.CUBES_BAR_X_LOCATION);
 
 		// Set Army View location
-		armyGrid.setTop(Constants.UNITS_Y_LOCATION);
-		armyGrid.setLeft(Constants.UNITS_X_LOCATION);
+		armyGrid.refresh();
 
 		// TODO: Why is it necessary?
 		this.refreshBoard();

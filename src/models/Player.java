@@ -47,7 +47,8 @@ public class Player {
 	 */
 	public Card getRandomCardFromHand() {
 		final Random r = new Random();
-		return mHand.get(r.nextInt(mHand.size()));
+		// Returns a Random Card, but in case the hand is empty, returns null
+		return mHand.size() > 0 ? mHand.get(r.nextInt(mHand.size())) : null;
 	}
 
 	public Card getRandomActionCard() {
@@ -86,15 +87,15 @@ public class Player {
 		return this.army;
 	}
 
-	public void incrementResources(final int[] updatedResources) {
-		for (int i = 0; i < updatedResources.length; i++) {
-			mResources[i] += updatedResources[i];
+	public void incrementResources(final int[] resourcesToAdd) {
+		for (int i = 0; i < resourcesToAdd.length; i++) {
+			mResources[i] += resourcesToAdd[i];
 		}
 	}
 
-	public void decrementResources(final int[] updatedResources) {
-		for (int i = 0; i < updatedResources.length; i++) {
-			mResources[i] -= updatedResources[i];
+	public void decrementResources(final int[] resourcesToSubtract) {
+		for (int i = 0; i < resourcesToSubtract.length; i++) {
+			mResources[i] -= resourcesToSubtract[i];
 		}
 	}
 

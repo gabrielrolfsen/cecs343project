@@ -72,7 +72,7 @@ public class ResourcesBank {
 		}
 	}
 
-	public void incrementResources(final int[] updatedResources) {
+	public void replenishResources(final int[] updatedResources) {
 		for (int i = 0; i < updatedResources.length; i++) {
 			mResources[i] += updatedResources[i];
 		}

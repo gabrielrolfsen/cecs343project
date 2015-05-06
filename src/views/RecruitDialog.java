@@ -119,6 +119,10 @@ public class RecruitDialog extends JDialog implements ListSelectionListener {
 
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public ArrayList<Unit> getSelectedUnits() {
 		final ArrayList<Unit> selectedUnits = new ArrayList<Unit>();
 		for (int i = 0; i < listModel.getSize(); i++) {
@@ -210,7 +214,7 @@ public class RecruitDialog extends JDialog implements ListSelectionListener {
 			final int[] unitCost = getUnitCost(unitName);
 			for (int i = 0; i < 4; i++) {
 				System.out
-						.println("Unit Cost: " + unitCost[i] + " - Player Resource: " + mPlayerResources[i]);
+				.println("Unit Cost: " + unitCost[i] + " - Player Resource: " + mPlayerResources[i]);
 				if (unitCost[i] > mPlayerResources[i]) {
 
 					// Player cannot afford it

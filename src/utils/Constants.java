@@ -19,6 +19,8 @@ public final class Constants {
 	public static final int MAX_TILES_PICKING_PHASE = 18;
 	public static final int MAX_BUILDINGS = 14;
 
+	public static final int TURNS_PLAYING_CARDS = 1;
+
 	// Graphical Dimensions Arrays
 	public static final int BOARD_HEIGHT = 825;
 	public static final int BOARD_WIDTH = 900;
@@ -32,7 +34,7 @@ public final class Constants {
 	public static final int CUBES_BAR_X_LOCATION = Constants.BOARD_WIDTH - 100;
 	public static final int CUBES_BAR_Y_LOCATION = 10;
 
-	public static final int UNITS_X_LOCATION = Constants.BOARD_WIDTH - 250;
-	public static final int UNITS_Y_LOCATION = 10;
+	public static final int UNITS_X_LOCATION = Constants.BOARD_WIDTH / 4;
+	public static final int UNITS_Y_LOCATION = 100;
 
 }
